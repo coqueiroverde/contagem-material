@@ -2,13 +2,11 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Contagem de Material – Coqueiro Verde</title>
+  <title>Contagem de Material – Grupo Coqueiro Verde</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     :root {
       --cv-green: #106c4a;
@@ -24,10 +22,7 @@
       color: #000;
     }
 
-    .page {
-      max-width: 1080px;
-      margin: 0 auto;
-    }
+    .page { max-width: 1080px; margin: 0 auto; }
 
     .card {
       background: #fff;
@@ -37,10 +32,7 @@
       border-top: 4px solid var(--cv-green);
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 18px;
-    }
+    header { text-align: center; margin-bottom: 18px; }
 
     header h1 {
       font-size: 22px;
@@ -61,10 +53,7 @@
       margin-bottom: 14px;
     }
 
-    .field {
-      flex: 1;
-      min-width: 200px;
-    }
+    .field { flex: 1; min-width: 200px; }
 
     label {
       display: block;
@@ -76,8 +65,7 @@
 
     input[type="text"],
     input[type="number"],
-    select,
-    textarea {
+    select {
       width: 100%;
       padding: 8px 10px;
       border-radius: 8px;
@@ -85,10 +73,6 @@
       font-size: 13px;
       background: #fff;
       color: #000;
-    }
-
-    textarea {
-      resize: vertical;
     }
 
     .helper {
@@ -108,20 +92,16 @@
       font-weight: 700;
       margin-bottom: 6px;
       text-transform: uppercase;
-      letter-spacing: .04em;
       color: var(--cv-green-dark);
     }
 
-    .table-wrapper {
-      width: 100%;
-      overflow-x: auto;
-    }
+    .table-wrapper { width: 100%; overflow-x: auto; }
 
     .item-table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 10px;
-      min-width: 480px; /* garante estrutura em telas muito estreitas com scroll horizontal */
+      min-width: 300px;
     }
 
     .item-table th,
@@ -129,7 +109,6 @@
       border: 1px solid #e0e0e0;
       padding: 6px;
       font-size: 12px;
-      vertical-align: middle;
     }
 
     .item-table th {
@@ -138,33 +117,12 @@
       text-align: left;
     }
 
-    /* Mesma largura para todas as colunas de todas as tabelas */
+    /* MESMA LARGURA EM TODAS AS TABELAS - AGORA COM 2 COLUNAS */
     .item-table th:nth-child(1),
-    .item-table td:nth-child(1) {
-      width: 46%;
-    }
+    .item-table td:nth-child(1) { width: 70%; }
 
     .item-table th:nth-child(2),
-    .item-table td:nth-child(2) {
-      width: 18%;
-    }
-
-    .item-table th:nth-child(3),
-    .item-table td:nth-child(3) {
-      width: 36%;
-    }
-
-    .item-table td input {
-      border: none;
-      padding: 4px;
-      width: 100%;
-      font-size: 12px;
-    }
-
-    .item-table td input:focus {
-      outline: none;
-      background: #f7fbf9;
-    }
+    .item-table td:nth-child(2) { width: 30%; }
 
     .actions {
       text-align: center;
@@ -181,20 +139,7 @@
       color: #fff;
     }
 
-    button:disabled {
-      opacity: .7;
-      cursor: default;
-    }
-
-    button:hover:not(:disabled) {
-      background: var(--cv-green-dark);
-    }
-
-    .note {
-      margin-top: 6px;
-      font-size: 11px;
-      color: #777;
-    }
+    button:hover:not(:disabled) { background: var(--cv-green-dark); }
 
     .status-message {
       margin-top: 10px;
@@ -202,42 +147,27 @@
       text-align: center;
     }
 
-    .status-ok {
-      color: #008000;
-    }
+    .status-ok { color: #008000; }
+    .status-error { color: #c00; }
 
-    .status-error {
-      color: #c00;
-    }
-
-    @media (max-width: 640px) {
-      .card {
-        padding: 18px 14px;
-      }
-
-      header h1 {
-        font-size: 18px;
-      }
-
-      .item-table {
-        min-width: 420px;
-      }
-    }
   </style>
 </head>
+
 <body>
   <div class="page">
     <div class="card">
+
       <header>
         <h1>Contagem de Material</h1>
-        <p>Churrascaria Coqueiro Verde – Unidades P10 e P14</p>
+        <p>Grupo Coqueiro Verde</p>
       </header>
 
       <form id="formContagem">
+
         <div class="row">
           <div class="field">
-            <label for="unidade">Unidade *</label>
-            <select id="unidade" name="unidade" required>
+            <label>Unidade *</label>
+            <select name="unidade" required>
               <option value="" disabled selected>Selecione</option>
               <option value="P10">P10</option>
               <option value="P14">P14</option>
@@ -245,54 +175,30 @@
           </div>
 
           <div class="field">
-            <label for="responsavel">Responsável *</label>
-            <input type="text" id="responsavel" name="responsavel" placeholder="Nome completo" required>
+            <label>Responsável *</label>
+            <input type="text" name="responsavel" required>
           </div>
         </div>
 
         <p class="helper">
-          Preencha a quantidade atual de cada item. Campos com * são obrigatórios.
-          A data e o horário serão gravados automaticamente pelo sistema.
+          Preencha todas as quantidades. A data/hora será gravada automaticamente.
         </p>
 
+        <!-- MODELO LIMPO SEM OBSERVAÇÕES -->
         <!-- COPOS -->
         <div class="section">
           <div class="section-title">Copos</div>
           <div class="table-wrapper">
             <table class="item-table">
               <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Quantidade</th>
-                  <th>Observações</th>
-                </tr>
+                <tr><th>Item</th><th>Qtd</th></tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Copo Americano</td>
-                  <td><input type="number" name="copo_americano_qtd" min="0" required></td>
-                  <td><input type="text" name="copo_americano_obs"></td>
-                </tr>
-                <tr>
-                  <td>Copo Avulso</td>
-                  <td><input type="number" name="copo_avulso_qtd" min="0" required></td>
-                  <td><input type="text" name="copo_avulso_obs"></td>
-                </tr>
-                <tr>
-                  <td>Copo de Caipirinha</td>
-                  <td><input type="number" name="copo_caipirinha_qtd" min="0" required></td>
-                  <td><input type="text" name="copo_caipirinha_obs"></td>
-                </tr>
-                <tr>
-                  <td>Copo de Decoração</td>
-                  <td><input type="number" name="copo_decoracao_qtd" min="0" required></td>
-                  <td><input type="text" name="copo_decoracao_obs"></td>
-                </tr>
-                <tr>
-                  <td>Copo para Suco</td>
-                  <td><input type="number" name="copo_suco_qtd" min="0" required></td>
-                  <td><input type="text" name="copo_suco_obs"></td>
-                </tr>
+                <tr><td>Copo Americano</td><td><input type="number" name="copo_americano_qtd" min="0" required></td></tr>
+                <tr><td>Copo Avulso</td><td><input type="number" name="copo_avulso_qtd" min="0" required></td></tr>
+                <tr><td>Copo Caipirinha</td><td><input type="number" name="copo_caipirinha_qtd" min="0" required></td></tr>
+                <tr><td>Copo Decoração</td><td><input type="number" name="copo_decoracao_qtd" min="0" required></td></tr>
+                <tr><td>Copo Suco</td><td><input type="number" name="copo_suco_qtd" min="0" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -303,24 +209,10 @@
           <div class="section-title">Garrafas</div>
           <div class="table-wrapper">
             <table class="item-table">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Quantidade</th>
-                  <th>Observações</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr>
-                  <td>Garrafa Azeite / Pimenta / Vinagre</td>
-                  <td><input type="number" name="garrafa_tempero_qtd" min="0" required></td>
-                  <td><input type="text" name="garrafa_tempero_obs"></td>
-                </tr>
-                <tr>
-                  <td>Garrafa de Manteguinha</td>
-                  <td><input type="number" name="garrafa_manteguinha_qtd" min="0" required></td>
-                  <td><input type="text" name="garrafa_manteguinha_obs"></td>
-                </tr>
+                <tr><td>Garrafa Tempero</td><td><input type="number" name="garrafa_tempero_qtd" min="0" required></td></tr>
+                <tr><td>Garrafa Manteguinha</td><td><input type="number" name="garrafa_manteguinha_qtd" min="0" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -331,24 +223,10 @@
           <div class="section-title">Jarras</div>
           <div class="table-wrapper">
             <table class="item-table">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Quantidade</th>
-                  <th>Observações</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr>
-                  <td>Jarra 1/2 L</td>
-                  <td><input type="number" name="jarra_meio_litro_qtd" min="0" required></td>
-                  <td><input type="text" name="jarra_meio_litro_obs"></td>
-                </tr>
-                <tr>
-                  <td>Jarra 1 L</td>
-                  <td><input type="number" name="jarra_um_litro_qtd" min="0" required></td>
-                  <td><input type="text" name="jarra_um_litro_obs"></td>
-                </tr>
+                <tr><td>Jarra 1/2 L</td><td><input type="number" name="jarra_meio_l_qtd" min="0" required></td></tr>
+                <tr><td>Jarra 1 L</td><td><input type="number" name="jarra_1l_qtd" min="0" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -359,44 +237,14 @@
           <div class="section-title">Outros</div>
           <div class="table-wrapper">
             <table class="item-table">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Quantidade</th>
-                  <th>Observações</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr>
-                  <td>Caneca Colorida Pequena</td>
-                  <td><input type="number" name="caneca_colorida_qtd" min="0" required></td>
-                  <td><input type="text" name="caneca_colorida_obs"></td>
-                </tr>
-                <tr>
-                  <td>Dispenser para Guardanapo</td>
-                  <td><input type="number" name="dispenser_guardanapo_qtd" min="0" required></td>
-                  <td><input type="text" name="dispenser_guardanapo_obs"></td>
-                </tr>
-                <tr>
-                  <td>Pires Grande (3 Corações)</td>
-                  <td><input type="number" name="pires_grande_qtd" min="0" required></td>
-                  <td><input type="text" name="pires_grande_obs"></td>
-                </tr>
-                <tr>
-                  <td>Pires Pequeno (3 Corações)</td>
-                  <td><input type="number" name="pires_pequeno_qtd" min="0" required></td>
-                  <td><input type="text" name="pires_pequeno_obs"></td>
-                </tr>
-                <tr>
-                  <td>Xícara Grande (3 Corações)</td>
-                  <td><input type="number" name="xicara_grande_qtd" min="0" required></td>
-                  <td><input type="text" name="xicara_grande_obs"></td>
-                </tr>
-                <tr>
-                  <td>Xícara Pequena (3 Corações)</td>
-                  <td><input type="number" name="xicara_pequena_qtd" min="0" required></td>
-                  <td><input type="text" name="xicara_pequena_obs"></td>
-                </tr>
+                <tr><td>Caneca Pequena</td><td><input type="number" name="caneca_pequena_qtd" min="0" required></td></tr>
+                <tr><td>Dispenser Guardanapo</td><td><input type="number" name="disp_guardanapo_qtd" min="0" required></td></tr>
+                <tr><td>Pires Grande</td><td><input type="number" name="pires_grande_qtd" min="0" required></td></tr>
+                <tr><td>Pires Pequeno</td><td><input type="number" name="pires_pequeno_qtd" min="0" required></td></tr>
+                <tr><td>Xícara Grande</td><td><input type="number" name="xicara_grande_qtd" min="0" required></td></tr>
+                <tr><td>Xícara Pequena</td><td><input type="number" name="xicara_pequena_qtd" min="0" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -407,29 +255,11 @@
           <div class="section-title">Pratos</div>
           <div class="table-wrapper">
             <table class="item-table">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Quantidade</th>
-                  <th>Observações</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr>
-                  <td>Prato Branco Grande</td>
-                  <td><input type="number" name="prato_branco_grande_qtd" min="0" required></td>
-                  <td><input type="text" name="prato_branco_grande_obs"></td>
-                </tr>
-                <tr>
-                  <td>Prato Branco Pequeno</td>
-                  <td><input type="number" name="prato_branco_pequeno_qtd" min="0" required></td>
-                  <td><input type="text" name="prato_branco_pequeno_obs"></td>
-                </tr>
-                <tr>
-                  <td>Prato Marrom</td>
-                  <td><input type="number" name="prato_marrom_qtd" min="0" required></td>
-                  <td><input type="text" name="prato_marrom_obs"></td>
-                </tr>
+                <tr><td>Prato Branco Grande</td><td><input type="number" name="prato_grande_qtd" min="0" required></td></tr>
+                <tr><td>Prato Branco Pequeno</td><td><input type="number" name="prato_pequeno_qtd" min="0" required></td></tr>
+                <tr><td>Prato Marrom</td><td><input type="number" name="prato_marrom_qtd" min="0" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -440,34 +270,12 @@
           <div class="section-title">Talheres</div>
           <div class="table-wrapper">
             <table class="item-table">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Quantidade</th>
-                  <th>Observações</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr>
-                  <td>Colher</td>
-                  <td><input type="number" name="colher_qtd" min="0" required></td>
-                  <td><input type="text" name="colher_obs"></td>
-                </tr>
-                <tr>
-                  <td>Colher de Sobremesa</td>
-                  <td><input type="number" name="colher_sobremesa_qtd" min="0" required></td>
-                  <td><input type="text" name="colher_sobremesa_obs"></td>
-                </tr>
-                <tr>
-                  <td>Faca</td>
-                  <td><input type="number" name="faca_qtd" min="0" required></td>
-                  <td><input type="text" name="faca_obs"></td>
-                </tr>
-                <tr>
-                  <td>Garfo</td>
-                  <td><input type="number" name="garfo_qtd" min="0" required></td>
-                  <td><input type="text" name="garfo_obs"></td>
-                </tr>
+                <tr><td>Colher</td><td><input type="number" name="colher_qtd" min="0" required></td></tr>
+                <tr><td>Colher Sobremesa</td><td><input type="number" name="colher_sobremesa_qtd" min="0" required></td></tr>
+                <tr><td>Faca</td><td><input type="number" name="faca_qtd" min="0" required></td></tr>
+                <tr><td>Garfo</td><td><input type="number" name="garfo_qtd" min="0" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -478,75 +286,29 @@
           <div class="section-title">Taças</div>
           <div class="table-wrapper">
             <table class="item-table">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Quantidade</th>
-                  <th>Observações</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr>
-                  <td>Taça de Cerveja</td>
-                  <td><input type="number" name="taca_cerveja_qtd" min="0" required></td>
-                  <td><input type="text" name="taca_cerveja_obs"></td>
-                </tr>
-                <tr>
-                  <td>Taça de Champagne</td>
-                  <td><input type="number" name="taca_champagne_qtd" min="0" required></td>
-                  <td><input type="text" name="taca_champagne_obs"></td>
-                </tr>
-                <tr>
-                  <td>Taça de Gin</td>
-                  <td><input type="number" name="taca_gin_qtd" min="0" required></td>
-                  <td><input type="text" name="taca_gin_obs"></td>
-                </tr>
-                <tr>
-                  <td>Taça de Licor</td>
-                  <td><input type="number" name="taca_licor_qtd" min="0" required></td>
-                  <td><input type="text" name="taca_licor_obs"></td>
-                </tr>
-                <tr>
-                  <td>Taça de Sobremesa</td>
-                  <td><input type="number" name="taca_sobremesa_qtd" min="0" required></td>
-                  <td><input type="text" name="taca_sobremesa_obs"></td>
-                </tr>
-                <tr>
-                  <td>Taça de Vinho</td>
-                  <td><input type="number" name="taca_vinho_qtd" min="0" required></td>
-                  <td><input type="text" name="taca_vinho_obs"></td>
-                </tr>
+                <tr><td>Taça Cerveja</td><td><input type="number" name="taca_cerveja_qtd" min="0" required></td></tr>
+                <tr><td>Taça Champagne</td><td><input type="number" name="taca_champagne_qtd" min="0" required></td></tr>
+                <tr><td>Taça Gin</td><td><input type="number" name="taca_gin_qtd" min="0" required></td></tr>
+                <tr><td>Taça Licor</td><td><input type="number" name="taca_licor_qtd" min="0" required></td></tr>
+                <tr><td>Taça Sobremesa</td><td><input type="number" name="taca_sobremesa_qtd" min="0" required></td></tr>
+                <tr><td>Taça Vinho</td><td><input type="number" name="taca_vinho_qtd" min="0" required></td></tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- ITENS NÃO LISTADOS -->
+        <!-- ITENS NÃO LISTADOS – 3 LINHAS -->
         <div class="section">
           <div class="section-title">Itens não listados</div>
           <div class="table-wrapper">
             <table class="item-table">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Categoria</th>
-                  <th>Quantidade</th>
-                  <th>Observações</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr>
-                  <td><input type="text" name="extra_item1"></td>
-                  <td><input type="text" name="extra_cat1"></td>
-                  <td><input type="number" name="extra_qtd1" min="0"></td>
-                  <td><input type="text" name="extra_obs1"></td>
-                </tr>
-                <tr>
-                  <td><input type="text" name="extra_item2"></td>
-                  <td><input type="text" name="extra_cat2"></td>
-                  <td><input type="number" name="extra_qtd2" min="0"></td>
-                  <td><input type="text" name="extra_obs2"></td>
-                </tr>
+                <tr><td><input type="text" name="extra_item1"></td><td><input type="number" name="extra_qtd1" min="0"></td></tr>
+                <tr><td><input type="text" name="extra_item2"></td><td><input type="number" name="extra_qtd2" min="0"></td></tr>
+                <tr><td><input type="text" name="extra_item3"></td><td><input type="number" name="extra_qtd3" min="0"></td></tr>
               </tbody>
             </table>
           </div>
@@ -554,17 +316,16 @@
 
         <div class="actions">
           <button type="submit" id="btnEnviar">Enviar contagem</button>
-          <div class="note">
-            Após o envio, confira a planilha “CONTAGEM DE MATERIAL” para confirmar o registro.
-          </div>
           <div id="status" class="status-message"></div>
         </div>
+
       </form>
     </div>
   </div>
 
   <script>
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxgpM6QHewnY4LLmioVGsVfp5zqI4I8aCNfSdqHfAMOS9EiAjQMTQXY2M6qMTalPlvb0g/exec';
+    const WEB_APP_URL =
+      'https://script.google.com/macros/s/AKfycbxgpM6QHewnY4LLmioVGsVfp5zqI4I8aCNfSdqHfAMOS9EiAjQMTQXY2M6qMTalPlvb0g/exec';
 
     const form = document.getElementById('formContagem');
     const statusEl = document.getElementById('status');
@@ -572,51 +333,35 @@
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
-      statusEl.textContent = '';
-      statusEl.className = 'status-message';
 
-      // Garante que todos os números obrigatórios estejam preenchidos
-      const requiredNumbers = form.querySelectorAll('input[type="number"][required]');
-      for (const input of requiredNumbers) {
-        if (input.value === '') {
-          alert('Preencha a quantidade de todos os itens antes de enviar.');
-          input.focus();
-          return;
-        }
-      }
-
-      // Monta objeto com todos os campos
       const data = {};
-      const fields = form.querySelectorAll('input[name], select[name], textarea[name]');
-      fields.forEach(el => {
-        data[el.name] = el.value;
-      });
+      const fields = form.querySelectorAll('[name]');
+      fields.forEach(el => data[el.name] = el.value);
 
-      // timestamp automático (data/hora do sistema)
       data.timestamp_cliente = new Date().toISOString();
 
-      try {
-        btnEnviar.disabled = true;
-        btnEnviar.textContent = 'Enviando...';
+      btnEnviar.disabled = true;
+      btnEnviar.textContent = "Enviando…";
 
+      try {
         await fetch(WEB_APP_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
         });
 
-        statusEl.textContent = 'Contagem enviada (confira a planilha para confirmar).';
-        statusEl.classList.add('status-ok');
+        statusEl.textContent = "Contagem enviada!";
+        statusEl.className = "status-ok";
         form.reset();
 
       } catch (err) {
-        statusEl.textContent = 'Erro de comunicação com o servidor: ' + err;
-        statusEl.classList.add('status-error');
-      } finally {
-        btnEnviar.disabled = false;
-        btnEnviar.textContent = 'Enviar contagem';
+        statusEl.textContent = "Erro ao enviar.";
+        statusEl.className = "status-error";
       }
+
+      btnEnviar.disabled = false;
+      btnEnviar.textContent = "Enviar contagem";
     });
   </script>
 </body>
