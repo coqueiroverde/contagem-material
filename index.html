@@ -43,6 +43,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
+      gap: 12px;
     }
     label {
       font-size: 13px;
@@ -74,11 +75,11 @@
       text-align: center;
       font-size: 13px;
     }
-
     @media (max-width: 480px) {
       label, input, select {
         font-size: 12px;
       }
+      h1 { font-size: 18px; }
     }
   </style>
 </head>
@@ -87,6 +88,7 @@
     <h1>Inventário – Salão</h1>
     <p>Grupo Coqueiro Verde</p>
     <form id="formContagem">
+
       <div class="grid">
         <label>Data</label>
         <input type="date" name="data" required>
@@ -127,7 +129,7 @@
       <div class="grid"><label>Dispenser Guardanapo</label><input type="number" name="disp_guardanapo"></div>
       <div class="grid"><label>Caneca Pequena</label><input type="number" name="caneca_pequena"></div>
 
-      <h3>Extras</h3>
+      <h3>Item Extra</h3>
       <div class="grid"><label>Item não listado</label><input type="text" name="extra_item1"></div>
       <div class="grid"><label>Qtd item extra</label><input type="number" name="extra_qtd1"></div>
 
@@ -135,5 +137,41 @@
       <div id="status" class="status"></div>
     </form>
   </div>
+
+  <script>
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzld5WBl5h_X_r8ajDAK3hjCiKcK346k1v7N3ZawLgSOYjdB0rlFq7qG8_NGvI0yJYPKQ/exec';
+    const form = document.getElementById('formContagem');
+    const statusEl = document.getElementById('status');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const data = {};
+      const fields = form.querySelectorAll('[name]');
+      fields.forEach(el => data[el.name] = el.value);
+
+      data.timestamp_cliente = new Date().toISOString();
+
+      statusEl.textContent = 'Enviando...';
+      statusEl.style.color = '#555';
+
+      try {
+        await fetch(WEB_APP_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        statusEl.textContent = "Contagem enviada com sucesso!";
+        statusEl.style.color = "green";
+        form.reset();
+
+      } catch (err) {
+        statusEl.textContent = "Erro ao enviar.";
+        statusEl.style.color = "red";
+      }
+    });
+  </script>
 </body>
 </html>
