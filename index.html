@@ -101,7 +101,7 @@
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 10px;
-      table-layout: fixed;           /* força a tabela a caber na tela */
+      table-layout: fixed;
     }
 
     .item-table th,
@@ -109,7 +109,7 @@
       border: 1px solid #e0e0e0;
       padding: 6px;
       font-size: 12px;
-      word-wrap: break-word;         /* deixa o texto quebrar linha */
+      word-wrap: break-word;
     }
 
     .item-table th {
@@ -118,7 +118,7 @@
       text-align: left;
     }
 
-    /* MESMA LARGURA EM TODAS AS TABELAS - 2 COLUNAS */
+    /* Mesma largura para todas as tabelas - 2 colunas */
     .item-table th:nth-child(1),
     .item-table td:nth-child(1) { width: 70%; }
 
@@ -337,6 +337,20 @@
     const statusEl = document.getElementById('status');
     const btnEnviar = document.getElementById('btnEnviar');
 
+    // Campo Responsável em Title Case (primeira letra maiúscula de cada palavra)
+    const campoResponsavel = form.querySelector('input[name="responsavel"]');
+    if (campoResponsavel) {
+      campoResponsavel.addEventListener('input', function () {
+        let valor = campoResponsavel.value
+          .toLowerCase()
+          .replace(/\b\w/g, function (letra) {
+            return letra.toUpperCase();
+          });
+
+        campoResponsavel.value = valor;
+      });
+    }
+
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
 
@@ -348,6 +362,8 @@
 
       btnEnviar.disabled = true;
       btnEnviar.textContent = "Enviando…";
+      statusEl.textContent = '';
+      statusEl.className = 'status-message';
 
       try {
         await fetch(WEB_APP_URL, {
