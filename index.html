@@ -134,7 +134,7 @@
     .item-table th:nth-child(2),
     .item-table td:nth-child(2) { width: 25%; text-align: center; }
 
-    /* Input da quantidade – super compacto */
+    /* Input da quantidade – super compacto (3 dígitos) */
     .item-table td:nth-child(2) input.qtd {
       max-width: 64px;
       font-size: 18px;
@@ -144,8 +144,9 @@
       display: block;
     }
 
-    /* FONTE GRANDE PARA CELULAR */
     @media (max-width: 600px) {
+      header h1 { font-size: 20px; }
+      .card { padding: 12px !ant; }
 
       input[type="text"],
       input[type="number"],
@@ -177,8 +178,6 @@
         font-size: 22px !important;
         margin: 14px 0 !important;
       }
-
-      .card { padding: 12px !important; }
     }
 
     .actions {
@@ -246,7 +245,7 @@
           </div>
         </div>
 
-        <!-- RESPONSÁVEL 60% DA LARGURA -->
+        <!-- Responsável com largura reduzida -->
         <div class="row">
           <div class="field" style="flex: 1 1 60%; max-width: 60%;">
             <label for="responsavel">Responsável *</label>
@@ -258,4 +257,208 @@
           Preencha todas as quantidades. A data/hora do envio também será gravada automaticamente.
         </p>
 
-        <!-- Seções dos itens (mantidas iguais) -->
+        <!-- COPOS -->
+        <div class="section">
+          <div class="section-title">Copos</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead>
+                <tr><th>Item</th><th>Qtd</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Copo Americano</td><td><input class="qtd" type="number" name="copo_americano_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Copo Avulso</td><td><input class="qtd" type="number" name="copo_avulso_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Copo Caipirinha</td><td><input class="qtd" type="number" name="copo_caipirinha_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Copo Decoração</td><td><input class="qtd" type="number" name="copo_decoracao_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Copo Suco</td><td><input class="qtd" type="number" name="copo_suco_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- GARRAFAS -->
+        <div class="section">
+          <div class="section-title">Garrafas</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Garrafa Tempero</td><td><input class="qtd" type="number" name="garrafa_tempero_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Garrafa Manteguinha</td><td><input class="qtd" type="number" name="garrafa_manteguinha_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- JARRAS -->
+        <div class="section">
+          <div class="section-title">Jarras</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Jarra 1/2 L</td><td><input class="qtd" type="number" name="jarra_meio_l_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Jarra 1 L</td><td><input class="qtd" type="number" name="jarra_1l_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- OUTROS -->
+        <div class="section">
+          <div class="section-title">Outros</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Caneca Pequena</td><td><input class="qtd" type="number" name="caneca_pequena_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Dispenser Guardanapo</td><td><input class="qtd" type="number" name="disp_guardanapo_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Pires Grande</td><td><input class="qtd" type="number" name="pires_grande_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Pires Pequeno</td><td><input class="qtd" type="number" name="pires_pequeno_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Xícara Grande</td><td><input class="qtd" type="number" name="xicara_grande_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Xícara Pequena</td><td><input class="qtd" type="number" name="xicara_pequena_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PRATOS -->
+        <div class="section">
+          <div class="section-title">Pratos</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Prato Branco Grande</td><td><input class="qtd" type="number" name="prato_grande_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Prato Branco Pequeno</td><td><input class="qtd" type="number" name="prato_pequeno_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Prato Marrom</td><td><input class="qtd" type="number" name="prato_marrom_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TALHERES -->
+        <div class="section">
+          <div class="section-title">Talheres</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Colher</td><td><input class="qtd" type="number" name="colher_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Colher Sobremesa</td><td><input class="qtd" type="number" name="colher_sobremesa_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Faca</td><td><input class="qtd" type="number" name="faca_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Garfo</td><td><input class="qtd" type="number" name="garfo_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAÇAS -->
+        <div class="section">
+          <div class="section-title">Taças</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Taça Cerveja</td><td><input class="qtd" type="number" name="taca_cerveja_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Champagne</td><td><input class="qtd" type="number" name="taca_champagne_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Gin</td><td><input class="qtd" type="number" name="taca_gin_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Licor</td><td><input class="qtd" type="number" name="taca_licor_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Sobremesa</td><td><input class="qtd" type="number" name="taca_sobremesa_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Vinho</td><td><input class="qtd" type="number" name="taca_vinho_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ITENS NÃO LISTADOS -->
+        <div class="section">
+          <div class="section-title">Itens não listados</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td><input type="text" name="extra_item1"></td><td><input class="qtd" type="number" name="extra_qtd1" min="0" step="1" inputmode="numeric"></td></tr>
+                <tr><td><input type="text" name="extra_item2"></td><td><input class="qtd" type="number" name="extra_qtd2" min="0" step="1" inputmode="numeric"></td></tr>
+                <tr><td><input type="text" name="extra_item3"></td><td><input class="qtd" type="number" name="extra_qtd3" min="0" step="1" inputmode="numeric"></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="btnEnviar">Enviar contagem</button>
+          <div id="status" class="status-message"></div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const WEB_APP_URL =
+      'https://script.google.com/macros/s/AKfycbzld5WBl5h_X_r8ajDAK3hjCiKcK346k1v7N3ZawLgSOYjdB0rlFq7qG8_NGvI0yJYPKQ/exec';
+
+    const form = document.getElementById('formContagem');
+    const statusEl = document.getElementById('status');
+    const btnEnviar = document.getElementById('btnEnviar');
+
+    // Preenche automaticamente a data de hoje
+    const campoData = form.querySelector('input[name="data"]');
+    if (campoData && !campoData.value) {
+      const hoje = new Date();
+      campoData.value = hoje.toISOString().split("T")[0];
+    }
+
+    // Campo Responsável → Title Case
+    const campoResponsavel = form.querySelector('input[name="responsavel"]');
+    if (campoResponsavel) {
+      campoResponsavel.addEventListener('input', function () {
+        let valor = campoResponsavel.value
+          .toLowerCase()
+          .replace(/\b\w/g, letra => letra.toUpperCase());
+        campoResponsavel.value = valor;
+      });
+    }
+
+    // Envio do formulário
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const data = {};
+      form.querySelectorAll('[name]').forEach(el => data[el.name] = el.value);
+      data.timestamp_cliente = new Date().toISOString();
+
+      btnEnviar.disabled = true;
+      btnEnviar.textContent = "Enviando…";
+      statusEl.textContent = '';
+      statusEl.className = 'status-message';
+
+      try {
+        await fetch(WEB_APP_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        statusEl.textContent = "Contagem enviada!";
+        statusEl.className = 'status-message status-ok';
+        form.reset();
+
+        // Reaplica data de hoje após reset
+        if (campoData) {
+          campoData.value = new Date().toISOString().split("T")[0];
+        }
+
+      } catch (err) {
+        statusEl.textContent = "Erro ao enviar.";
+        statusEl.className = 'status-message status-error';
+      }
+
+      btnEnviar.disabled = false;
+      btnEnviar.textContent = "Enviar contagem";
+    });
+  </script>
+</body>
+</html>
