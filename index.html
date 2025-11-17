@@ -1,199 +1,475 @@
-<style>
-  * { box-sizing: border-box; }
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>INVENTÁRIO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  :root {
-    --cv-green: #106c4a;
-    --cv-green-dark: #0b4b33;
-    --cv-bg: #f4f8f6;
-  }
+  <style>
+    * { box-sizing: border-box; }
 
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: var(--cv-bg);
-    margin: 0;
-    padding: 16px;
-    color: #000;
-    font-size: 18px;
-  }
+    :root {
+      --cv-green: #106c4a;
+      --cv-green-dark: #0b4b33;
+      --cv-bg: #f4f8f6;
+    }
 
-  .page { max-width: 900px; margin: 0 auto; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--cv-bg);
+      margin: 0;
+      padding: 16px;
+      color: #000;
+      font-size: 18px;
+    }
 
-  .card {
-    background: #fff;
-    border-radius: 14px;
-    padding: 26px 22px;
-    box-shadow: 0 0 18px rgba(0,0,0,0.08);
-    border-top: 4px solid var(--cv-green);
-  }
+    .page { max-width: 900px; margin: 0 auto; }
 
-  header { text-align: center; margin-bottom: 18px; }
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 26px 22px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.08);
+      border-top: 4px solid var(--cv-green);
+    }
 
-  header h1 {
-    font-size: 32px;
-    margin: 0 0 6px;
-    color: var(--cv-green-dark);
-    text-transform: uppercase;
-    font-weight: 900;
-  }
-
-  header p {
-    margin: 0;
-    font-size: 16px;
-    color: #555;
-  }
-
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-bottom: 14px;
-  }
-
-  .field {
-    flex: 1;
-    min-width: 120px;
-  }
-
-  label {
-    display: block;
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 6px;
-    color: #222;
-  }
-
-  input[type="text"],
-  input[type="number"],
-  input[type="date"],
-  select {
-    width: 100%;
-    padding: 14px 14px;
-    border-radius: 10px;
-    border: 1px solid #bbb;
-    font-size: 20px;
-    background: #fff;
-    color: #000;
-  }
-
-  .helper {
-    font-size: 15px;
-    color: #777;
-    margin: 4px 0 12px;
-  }
-
-  .section {
-    margin-top: 18px;
-    border-top: 1px solid #e3e3e3;
-    padding-top: 12px;
-  }
-
-  .section-title {
-    font-size: 26px;
-    font-weight: 900;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    color: var(--cv-green-dark);
-    text-align: center;
-    letter-spacing: 1px;
-  }
-
-  .item-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 10px;
-    table-layout: fixed;
-  }
-
-  .item-table th,
-  .item-table td {
-    border: 1px solid #e0e0e0;
-    padding: 10px;
-    font-size: 22px;
-  }
-
-  .item-table th {
-    background: #e8f2ee;
-    font-weight: 800;
-  }
-
-  .item-table th:nth-child(1),
-  .item-table td:nth-child(1) { width: 78%; }
-
-  .item-table th:nth-child(2),
-  .item-table td:nth-child(2) { width: 22%; text-align: center; }
-
-  /* quantidade (até 3 dígitos) */
-  .item-table td:nth-child(2) input.qtd {
-    max-width: 90px;
-    font-size: 24px;
-    padding: 10px;
-    text-align: center;
-    margin: 0 auto;
-    display: block;
-    border-radius: 10px;
-    border: 1px solid #aaa;
-  }
-
-  /* TELEFONE — versão mobile */
-  @media (max-width: 600px) {
+    header { text-align: center; margin-bottom: 18px; }
 
     header h1 {
-      font-size: 28px;
+      font-size: 32px;
+      margin: 0 0 6px;
+      color: var(--cv-green-dark);
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 16px;
+      color: #555;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .field {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    label {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #222;
     }
 
     input[type="text"],
     input[type="number"],
     input[type="date"],
     select {
-      font-size: 24px !important;
-      padding: 16px !important;
+      width: 100%;
+      padding: 14px 14px;
+      border-radius: 10px;
+      border: 1px solid #bbb;
+      font-size: 20px;
+      background: #fff;
+      color: #000;
+    }
+
+    .helper {
+      font-size: 15px;
+      color: #777;
+      margin: 4px 0 12px;
+    }
+
+    .section {
+      margin-top: 18px;
+      border-top: 1px solid #e3e3e3;
+      padding-top: 12px;
+    }
+
+    .section-title {
+      font-size: 26px;
+      font-weight: 900;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      color: var(--cv-green-dark);
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    .table-wrapper {
+      width: 100%;
+    }
+
+    .item-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+      table-layout: fixed;
     }
 
     .item-table th,
     .item-table td {
-      font-size: 24px !important;
-      padding: 10px !important;
+      border: 1px solid #e0e0e0;
+      padding: 10px;
+      font-size: 22px;
     }
 
+    .item-table th {
+      background: #e8f2ee;
+      font-weight: 800;
+    }
+
+    .item-table th:nth-child(1),
+    .item-table td:nth-child(1) { width: 78%; }
+
+    .item-table th:nth-child(2),
+    .item-table td:nth-child(2) { width: 22%; text-align: center; }
+
+    /* quantidade (até 3 dígitos) */
     .item-table td:nth-child(2) input.qtd {
-      max-width: 80px !important;
-      font-size: 26px !important;
-      padding: 12px !important;
+      max-width: 90px;
+      font-size: 24px;
+      padding: 10px;
+      text-align: center;
+      margin: 0 auto;
+      display: block;
+      border-radius: 10px;
+      border: 1px solid #aaa;
     }
 
-    .section-title {
-      font-size: 28px !important;
-      margin-bottom: 16px !important;
+    /* MOBILE */
+    @media (max-width: 600px) {
+
+      header h1 {
+        font-size: 28px;
+      }
+
+      .card {
+        padding: 20px 14px;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      select {
+        font-size: 24px !important;
+        padding: 16px !important;
+      }
+
+      .item-table th,
+      .item-table td {
+        font-size: 24px !important;
+        padding: 10px !important;
+      }
+
+      .item-table th:nth-child(1),
+      .item-table td:nth-child(1) { width: 80% !important; }
+
+      .item-table th:nth-child(2),
+      .item-table td:nth-child(2) { width: 20% !important; }
+
+      .item-table td:nth-child(2) input.qtd {
+        max-width: 80px !important;
+        font-size: 26px !important;
+        padding: 12px !important;
+      }
+
+      .section-title {
+        font-size: 28px !important;
+        margin-bottom: 16px !important;
+      }
     }
-  }
 
-  button {
-    padding: 14px 32px;
-    border-radius: 999px;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    background: var(--cv-green);
-    color: #fff;
-    font-weight: 700;
-  }
+    button {
+      padding: 14px 32px;
+      border-radius: 999px;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      background: var(--cv-green);
+      color: #fff;
+      font-weight: 700;
+    }
 
-  button:hover:not(:disabled) {
-    background: var(--cv-green-dark);
-  }
+    button:hover:not(:disabled) {
+      background: var(--cv-green-dark);
+    }
 
-  .actions {
-    text-align: center;
-    margin-top: 20px;
-  }
+    .actions {
+      text-align: center;
+      margin-top: 20px;
+    }
 
-  .status-message {
-    margin-top: 14px;
-    font-size: 18px;
-    text-align: center;
-  }
+    .status-message {
+      margin-top: 14px;
+      font-size: 18px;
+      text-align: center;
+    }
 
-  .status-ok { color: #008000; }
-  .status-error { color: #c00; }
+    .status-ok { color: #008000; }
+    .status-error { color: #c00; }
+  </style>
+</head>
 
-</style>
+<body>
+  <div class="page">
+    <div class="card">
+
+      <header>
+        <h1>INVENTÁRIO</h1>
+        <p>Grupo Coqueiro Verde</p>
+      </header>
+
+      <form id="formContagem">
+
+        <!-- Cabeçalho: Unidade, Setor e Data lado a lado -->
+        <div class="row">
+          <div class="field">
+            <label for="unidade">Unidade *</label>
+            <select id="unidade" name="unidade" required>
+              <option value="" disabled selected>Selecione</option>
+              <option value="P10">P10</option>
+              <option value="P14">P14</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="setor">Setor *</label>
+            <select id="setor" name="setor" required>
+              <option value="" disabled selected>Selecione</option>
+              <option value="SALÃO">SALÃO</option>
+              <option value="COZINHA">COZINHA</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="data">Data *</label>
+            <input type="date" id="data" name="data" required>
+          </div>
+        </div>
+
+        <!-- Responsável com largura reduzida -->
+        <div class="row">
+          <div class="field" style="flex: 1 1 60%; max-width: 60%;">
+            <label for="responsavel">Responsável *</label>
+            <input type="text" id="responsavel" name="responsavel" required>
+          </div>
+        </div>
+
+        <p class="helper">
+          Preencha todas as quantidades. A data/hora do envio também será gravada automaticamente.
+        </p>
+
+        <!-- COPOS -->
+        <div class="section">
+          <div class="section-title">Copos</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead>
+                <tr><th>Item</th><th>Qtd</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Copo Americano</td><td><input class="qtd" type="number" name="copo_americano_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Copo Avulso</td><td><input class="qtd" type="number" name="copo_avulso_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Copo Caipirinha</td><td><input class="qtd" type="number" name="copo_caipirinha_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Copo Decoração</td><td><input class="qtd" type="number" name="copo_decoracao_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Copo Suco</td><td><input class="qtd" type="number" name="copo_suco_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- GARRAFAS -->
+        <div class="section">
+          <div class="section-title">Garrafas</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Garrafa Tempero</td><td><input class="qtd" type="number" name="garrafa_tempero_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Garrafa Manteguinha</td><td><input class="qtd" type="number" name="garrafa_manteguinha_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- JARRAS -->
+        <div class="section">
+          <div class="section-title">Jarras</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Jarra 1/2 L</td><td><input class="qtd" type="number" name="jarra_meio_l_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Jarra 1 L</td><td><input class="qtd" type="number" name="jarra_1l_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- OUTROS -->
+        <div class="section">
+          <div class="section-title">Outros</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Caneca Pequena</td><td><input class="qtd" type="number" name="caneca_pequena_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Dispenser Guardanapo</td><td><input class="qtd" type="number" name="disp_guardanapo_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Pires Grande</td><td><input class="qtd" type="number" name="pires_grande_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Pires Pequeno</td><td><input class="qtd" type="number" name="pires_pequeno_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Xícara Grande</td><td><input class="qtd" type="number" name="xicara_grande_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Xícara Pequena</td><td><input class="qtd" type="number" name="xicara_pequena_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PRATOS -->
+        <div class="section">
+          <div class="section-title">Pratos</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Prato Branco Grande</td><td><input class="qtd" type="number" name="prato_grande_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Prato Branco Pequeno</td><td><input class="qtd" type="number" name="prato_pequeno_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Prato Marrom</td><td><input class="qtd" type="number" name="prato_marrom_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TALHERES -->
+        <div class="section">
+          <div class="section-title">Talheres</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Colher</td><td><input class="qtd" type="number" name="colher_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Colher Sobremesa</td><td><input class="qtd" type="number" name="colher_sobremesa_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Faca</td><td><input class="qtd" type="number" name="faca_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Garfo</td><td><input class="qtd" type="number" name="garfo_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAÇAS -->
+        <div class="section">
+          <div class="section-title">Taças</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Taça Cerveja</td><td><input class="qtd" type="number" name="taca_cerveja_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Champagne</td><td><input class="qtd" type="number" name="taca_champagne_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Gin</td><td><input class="qtd" type="number" name="taca_gin_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Licor</td><td><input class="qtd" type="number" name="taca_licor_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Sobremesa</td><td><input class="qtd" type="number" name="taca_sobremesa_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Vinho</td><td><input class="qtd" type="number" name="taca_vinho_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ITENS NÃO LISTADOS -->
+        <div class="section">
+          <div class="section-title">Itens não listados</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td><input type="text" name="extra_item1"></td><td><input class="qtd" type="number" name="extra_qtd1" min="0" step="1" inputmode="numeric"></td></tr>
+                <tr><td><input type="text" name="extra_item2"></td><td><input class="qtd" type="number" name="extra_qtd2" min="0" step="1" inputmode="numeric"></td></tr>
+                <tr><td><input type="text" name="extra_item3"></td><td><input class="qtd" type="number" name="extra_qtd3" min="0" step="1" inputmode="numeric"></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="btnEnviar">Enviar contagem</button>
+          <div id="status" class="status-message"></div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const WEB_APP_URL =
+      'https://script.google.com/macros/s/AKfycbzld5WBl5h_X_r8ajDAK3hjCiKcK346k1v7N3ZawLgSOYjdB0rlFq7qG8_NGvI0yJYPKQ/exec';
+
+    const form = document.getElementById('formContagem');
+    const statusEl = document.getElementById('status');
+    const btnEnviar = document.getElementById('btnEnviar');
+
+    // Preenche automaticamente a data de hoje
+    const campoData = form.querySelector('input[name="data"]');
+    if (campoData && !campoData.value) {
+      const hoje = new Date();
+      campoData.value = hoje.toISOString().split("T")[0];
+    }
+
+    // Campo Responsável → Title Case
+    const campoResponsavel = form.querySelector('input[name="responsavel"]');
+    if (campoResponsavel) {
+      campoResponsavel.addEventListener('input', function () {
+        let valor = campoResponsavel.value
+          .toLowerCase()
+          .replace(/\b\w/g, letra => letra.toUpperCase());
+        campoResponsavel.value = valor;
+      });
+    }
+
+    // Envio do formulário
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const data = {};
+      form.querySelectorAll('[name]').forEach(el => data[el.name] = el.value);
+      data.timestamp_cliente = new Date().toISOString();
+
+      btnEnviar.disabled = true;
+      btnEnviar.textContent = "Enviando…";
+      statusEl.textContent = '';
+      statusEl.className = 'status-message';
+
+      try {
+        await fetch(WEB_APP_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        statusEl.textContent = "Contagem enviada!";
+        statusEl.className = 'status-message status-ok';
+        form.reset();
+
+        // Reaplica data de hoje após reset
+        if (campoData) {
+          campoData.value = new Date().toISOString().split("T")[0];
+        }
+
+      } catch (err) {
+        statusEl.textContent = "Erro ao enviar.";
+        statusEl.className = 'status-message status-error';
+      }
+
+      btnEnviar.disabled = false;
+      btnEnviar.textContent = "Enviar contagem";
+    });
+  </script>
+</body>
+</html>
