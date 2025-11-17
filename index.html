@@ -20,6 +20,7 @@
       margin: 0;
       padding: 16px;
       color: #000;
+      font-size: 15px;
     }
 
     .page { max-width: 900px; margin: 0 auto; }
@@ -35,7 +36,7 @@
     header { text-align: center; margin-bottom: 18px; }
 
     header h1 {
-      font-size: 22px;
+      font-size: 24px;
       margin: 0 0 4px;
       color: var(--cv-green-dark);
       text-transform: uppercase;
@@ -51,17 +52,17 @@
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
 
     .field {
-      flex: 1 1 100%;
+      flex: 1;
       min-width: 160px;
     }
 
     label {
       display: block;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 600;
       margin-bottom: 4px;
       color: #222;
@@ -75,50 +76,48 @@
       padding: 8px 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
-      font-size: 15px;
+      font-size: 16px;
       background: #fff;
       color: #000;
     }
 
     .helper {
-      font-size: 11px;
+      font-size: 12px;
       color: #777;
-      margin-bottom: 10px;
+      margin: 4px 0 10px;
     }
 
     .section {
-      margin-top: 18px;
+      margin-top: 14px;
       border-top: 1px solid #e3e3e3;
-      padding-top: 12px;
+      padding-top: 8px;
     }
 
     .section-title {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
       margin-bottom: 6px;
       text-transform: uppercase;
       color: var(--cv-green-dark);
+      text-align: center; /* centraliza título da classe */
     }
 
     .table-wrapper {
       width: 100%;
-      display: flex;
-      justify-content: center;
     }
 
     .item-table {
       width: 100%;
-      max-width: 560px; /* deixa a tabela mais estreita no desktop */
       border-collapse: collapse;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
       table-layout: fixed;
     }
 
     .item-table th,
     .item-table td {
       border: 1px solid #e0e0e0;
-      padding: 5px;
-      font-size: 14px;
+      padding: 4px 5px;
+      font-size: 15px;
       word-wrap: break-word;
     }
 
@@ -128,23 +127,23 @@
       text-align: left;
     }
 
-    /* Colunas mais compactas */
+    /* Colunas mais compactas (item | quantidade lado a lado) */
     .item-table th:nth-child(1),
-    .item-table td:nth-child(1) { width: 58%; }
+    .item-table td:nth-child(1) { width: 55%; }
 
     .item-table th:nth-child(2),
-    .item-table td:nth-child(2) { width: 42%; }
+    .item-table td:nth-child(2) { width: 45%; }
 
     .actions {
       text-align: center;
-      margin-top: 22px;
+      margin-top: 18px;
     }
 
     button {
       padding: 10px 24px;
       border-radius: 999px;
       border: none;
-      font-size: 14px;
+      font-size: 15px;
       cursor: pointer;
       background: var(--cv-green);
       color: #fff;
@@ -153,7 +152,7 @@
     button:hover:not(:disabled) { background: var(--cv-green-dark); }
 
     .status-message {
-      margin-top: 10px;
+      margin-top: 8px;
       font-size: 13px;
       text-align: center;
     }
@@ -162,20 +161,20 @@
     .status-error { color: #c00; }
 
     @media (max-width: 600px) {
-      header h1 { font-size: 18px; }
-      .card { padding: 18px 14px; }
+      header h1 { font-size: 20px; }
+      .card { padding: 18px 12px; }
 
       .item-table th,
       .item-table td {
-        font-size: 13px;
+        font-size: 14px;
         padding: 4px;
       }
 
       .item-table th:nth-child(1),
-      .item-table td:nth-child(1) { width: 55%; }
+      .item-table td:nth-child(1) { width: 52%; }
 
       .item-table th:nth-child(2),
-      .item-table td:nth-child(2) { width: 45%; }
+      .item-table td:nth-child(2) { width: 48%; }
     }
   </style>
 </head>
@@ -191,7 +190,7 @@
 
       <form id="formContagem">
 
-        <!-- Cabeçalho em coluna: Unidade, Responsável, Data -->
+        <!-- Cabeçalho: Unidade e Data lado a lado -->
         <div class="row">
           <div class="field">
             <label for="unidade">Unidade *</label>
@@ -201,19 +200,18 @@
               <option value="P14">P14</option>
             </select>
           </div>
-        </div>
 
-        <div class="row">
-          <div class="field">
-            <label for="responsavel">Responsável *</label>
-            <input type="text" id="responsavel" name="responsavel" required>
-          </div>
-        </div>
-
-        <div class="row">
           <div class="field">
             <label for="data">Data *</label>
             <input type="date" id="data" name="data" required>
+          </div>
+        </div>
+
+        <!-- Responsável abaixo, largura inteira -->
+        <div class="row">
+          <div class="field" style="flex: 1 1 100%;">
+            <label for="responsavel">Responsável *</label>
+            <input type="text" id="responsavel" name="responsavel" required>
           </div>
         </div>
 
