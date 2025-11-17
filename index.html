@@ -1,215 +1,174 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contagem de Material – Grupo Coqueiro Verde</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    :root {
-      --preto: #000;
-      --branco: #fff;
-      --cinza-claro: #f5f5f5;
-      --cinza: #ccc;
-      --cinza-escuro: #333;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: Arial, sans-serif;
-      background-color: var(--cinza-claro);
+      background: #f1f1f1;
       margin: 0;
-      padding: 20px;
-      color: var(--preto);
+      padding: 16px;
+      color: #000;
     }
 
     .container {
-      max-width: 960px;
-      margin: auto;
-      background-color: var(--branco);
-      padding: 24px;
-      border-radius: 12px;
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    h1, h2 {
+    h1 {
       text-align: center;
-      margin-bottom: 8px;
-    }
-
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    .field {
-      flex: 1;
-      min-width: 200px;
+      color: #333;
+      font-size: 20px;
+      margin-bottom: 10px;
     }
 
     label {
-      display: block;
       font-weight: bold;
-      margin-bottom: 4px;
+      font-size: 14px;
+      display: block;
+      margin: 12px 0 4px;
     }
 
-    input, select {
+    select, input[type="text"], input[type="number"] {
       width: 100%;
       padding: 8px;
-      border: 1px solid var(--cinza);
       border-radius: 6px;
+      border: 1px solid #ccc;
       font-size: 14px;
+      margin-bottom: 10px;
     }
 
-    table {
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .item-row input[type="number"] {
+      width: 100px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: bold;
+      margin-top: 20px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4px;
+      color: #444;
+    }
+
+    .submit-btn {
+      display: block;
       width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 24px;
-    }
-
-    th, td {
-      padding: 8px;
-      border: 1px solid var(--cinza);
-    }
-
-    th {
-      background: var(--cinza-claro);
-      text-align: left;
-    }
-
-    button {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: var(--cinza-escuro);
-      color: var(--branco);
+      padding: 12px;
+      background-color: #333;
+      color: #fff;
+      font-size: 15px;
+      font-weight: bold;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
+      margin-top: 20px;
       cursor: pointer;
-      font-size: 14px;
     }
 
-    button:hover {
+    .submit-btn:hover {
       background-color: #111;
     }
 
-    .status-message {
+    .extra-note {
+      font-size: 13px;
+      color: #666;
       text-align: center;
       margin-top: 10px;
-      font-size: 14px;
     }
 
-    .status-ok { color: green; }
-    .status-error { color: red; }
+    @media (max-width: 480px) {
+      .item-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .item-row input[type="number"] {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
+
   <div class="container">
     <h1>Contagem de Material</h1>
-    <h2>Grupo Coqueiro Verde</h2>
 
     <form id="formContagem">
-      <div class="row">
-        <div class="field">
-          <label>Unidade</label>
-          <select name="unidade" required>
-            <option value="" disabled selected>Selecione</option>
-            <option value="P10">P10</option>
-            <option value="P14">P14</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Responsável</label>
-          <input type="text" name="responsavel" required>
-        </div>
-      </div>
+      <label for="unidade">Unidade</label>
+      <select name="unidade" id="unidade" required>
+        <option value="" disabled selected>Selecione</option>
+        <option value="P10">P10</option>
+        <option value="P14">P14</option>
+      </select>
 
-      <!-- Seções por categoria -->
-      <div id="categorias"></div>
+      <label for="responsavel">Responsável</label>
+      <input type="text" name="responsavel" id="responsavel" required />
 
-      <h3>Itens não listados</h3>
-      <table>
-        <tr><th>Item</th><th>Qtd</th></tr>
-        <tr><td><input name="extra_item1" type="text"></td><td><input name="extra_qtd1" type="number" min="0"></td></tr>
-        <tr><td><input name="extra_item2" type="text"></td><td><input name="extra_qtd2" type="number" min="0"></td></tr>
-        <tr><td><input name="extra_item3" type="text"></td><td><input name="extra_qtd3" type="number" min="0"></td></tr>
-      </table>
+      <!-- COPOS -->
+      <div class="section-title">Copos</div>
+      <div class="item-row"><span>Copo Americano</span><input type="number" name="copo_americano_qtd" min="0" required /></div>
+      <div class="item-row"><span>Copo Avulso</span><input type="number" name="copo_avulso_qtd" min="0" required /></div>
+      <div class="item-row"><span>Copo Caipirinha</span><input type="number" name="copo_caipirinha_qtd" min="0" required /></div>
+      <div class="item-row"><span>Copo Decoração</span><input type="number" name="copo_decoracao_qtd" min="0" required /></div>
+      <div class="item-row"><span>Copo Suco</span><input type="number" name="copo_suco_qtd" min="0" required /></div>
 
-      <div style="text-align: center;">
-        <button type="submit" id="btnEnviar">Enviar contagem</button>
-        <a href="https://script.google.com/macros/s/AKfycbzld5WBl5h_X_r8ajDAK3hjCiKcK346k1v7N3ZawLgSOYjdB0rlFq7qG8_NGvI0yJYPKQ/exec?pdf=1" target="_blank" style="margin-left: 10px;">
-          <button type="button">Clique aqui para baixar PDF profissional</button>
-        </a>
-      </div>
+      <!-- TAÇAS -->
+      <div class="section-title">Taças</div>
+      <div class="item-row"><span>Taça Cerveja</span><input type="number" name="taca_cerveja_qtd" min="0" required /></div>
+      <div class="item-row"><span>Taça Champagne</span><input type="number" name="taca_champagne_qtd" min="0" required /></div>
+      <div class="item-row"><span>Taça Gin</span><input type="number" name="taca_gin_qtd" min="0" required /></div>
+      <div class="item-row"><span>Taça Licor</span><input type="number" name="taca_licor_qtd" min="0" required /></div>
+      <div class="item-row"><span>Taça Sobremesa</span><input type="number" name="taca_sobremesa_qtd" min="0" required /></div>
+      <div class="item-row"><span>Taça Vinho</span><input type="number" name="taca_vinho_qtd" min="0" required /></div>
 
-      <div id="status" class="status-message"></div>
+      <!-- TALHERES -->
+      <div class="section-title">Talheres</div>
+      <div class="item-row"><span>Colher</span><input type="number" name="colher_qtd" min="0" required /></div>
+      <div class="item-row"><span>Colher Sobremesa</span><input type="number" name="colher_sobremesa_qtd" min="0" required /></div>
+      <div class="item-row"><span>Faca</span><input type="number" name="faca_qtd" min="0" required /></div>
+      <div class="item-row"><span>Garfo</span><input type="number" name="garfo_qtd" min="0" required /></div>
+
+      <!-- PRATOS -->
+      <div class="section-title">Pratos</div>
+      <div class="item-row"><span>Prato Branco Grande</span><input type="number" name="prato_grande_qtd" min="0" required /></div>
+      <div class="item-row"><span>Prato Branco Pequeno</span><input type="number" name="prato_pequeno_qtd" min="0" required /></div>
+      <div class="item-row"><span>Prato Marrom</span><input type="number" name="prato_marrom_qtd" min="0" required /></div>
+
+      <!-- OUTROS -->
+      <div class="section-title">Outros</div>
+      <div class="item-row"><span>Caneca Pequena</span><input type="number" name="caneca_pequena_qtd" min="0" required /></div>
+      <div class="item-row"><span>Dispenser Guardanapo</span><input type="number" name="disp_guardanapo_qtd" min="0" required /></div>
+      <div class="item-row"><span>Xícara Pequena</span><input type="number" name="xicara_pequena_qtd" min="0" required /></div>
+      <div class="item-row"><span>Xícara Grande</span><input type="number" name="xicara_grande_qtd" min="0" required /></div>
+      <div class="item-row"><span>Pires Pequeno</span><input type="number" name="pires_pequeno_qtd" min="0" required /></div>
+      <div class="item-row"><span>Pires Grande</span><input type="number" name="pires_grande_qtd" min="0" required /></div>
+
+      <!-- EXTRAS -->
+      <div class="section-title">Itens não listados</div>
+      <div class="item-row"><input type="text" name="extra_item1" placeholder="Item" /><input type="number" name="extra_qtd1" min="0" placeholder="Qtd" /></div>
+      <div class="item-row"><input type="text" name="extra_item2" placeholder="Item" /><input type="number" name="extra_qtd2" min="0" placeholder="Qtd" /></div>
+      <div class="item-row"><input type="text" name="extra_item3" placeholder="Item" /><input type="number" name="extra_qtd3" min="0" placeholder="Qtd" /></div>
+
+      <button type="submit" class="submit-btn">Enviar contagem</button>
+      <p class="extra-note">A contagem será registrada com data e hora automaticamente.</p>
     </form>
   </div>
 
-  <script>
-    const categorias = {
-      "Copos": ["Copo Americano", "Copo Avulso", "Copo Caipirinha", "Copo Decoração", "Copo Suco"],
-      "Talheres": ["Garfo", "Faca", "Colher", "Colher Sobremesa"],
-      "Pratos": ["Prato Branco Grande", "Prato Branco Pequeno", "Prato Marrom"],
-      "Taças": ["Taça Cerveja", "Taça Champagne", "Taça Gin", "Taça Licor", "Taça Vinho", "Taça Sobremesa"],
-      "Outros": ["Dispenser Guardanapo", "Caneca Pequena", "Pires Grande", "Pires Pequeno", "Xícara Grande", "Xícara Pequena", "Jarra 1 L", "Jarra 1/2 L", "Garrafa Tempero", "Garrafa Manteguinha"]
-    };
-
-    const container = document.getElementById("categorias");
-
-    for (const [categoria, itens] of Object.entries(categorias)) {
-      const section = document.createElement("section");
-      section.innerHTML = `<h3>${categoria}</h3><table><tr><th>Item</th><th>Qtd</th></tr></table>`;
-      const tabela = section.querySelector("table");
-
-      itens.forEach(item => {
-        const nomeCampo = item.toLowerCase().replace(/[\s\/]/g, "_");
-        const linha = document.createElement("tr");
-        linha.innerHTML = `<td>${item}</td><td><input name="${nomeCampo}_qtd" type="number" min="0" required></td>`;
-        tabela.appendChild(linha);
-      });
-
-      container.appendChild(section);
-    }
-
-    const form = document.getElementById('formContagem');
-    const statusEl = document.getElementById('status');
-    const btnEnviar = document.getElementById('btnEnviar');
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzld5WBl5h_X_r8ajDAK3hjCiKcK346k1v7N3ZawLgSOYjdB0rlFq7qG8_NGvI0yJYPKQ/exec';
-
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
-
-      const data = {};
-      const fields = form.querySelectorAll('[name]');
-      fields.forEach(el => data[el.name] = el.value);
-
-      data.timestamp_cliente = new Date().toISOString();
-
-      btnEnviar.disabled = true;
-      btnEnviar.textContent = "Enviando…";
-      statusEl.textContent = '';
-      statusEl.className = 'status-message';
-
-      try {
-        await fetch(WEB_APP_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-
-        statusEl.textContent = "Contagem enviada com sucesso!";
-        statusEl.className = "status-message status-ok";
-        form.reset();
-
-      } catch (err) {
-        statusEl.textContent = "Erro ao enviar os dados.";
-        statusEl.className = "status-message status-error";
-      }
-
-      btnEnviar.disabled = false;
-      btnEnviar.textContent = "Enviar contagem";
-    });
-  </script>
 </body>
 </html>
