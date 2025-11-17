@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>INVENTÁRIO SALÃO</title>
+  <title>INVENTÁRIO</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -57,7 +57,7 @@
 
     .field {
       flex: 1;
-      min-width: 160px;
+      min-width: 120px;
     }
 
     label {
@@ -117,7 +117,7 @@
     .item-table td {
       border: 1px solid #e0e0e0;
       padding: 4px 5px;
-      font-size: 15px;
+      font-size: 16px;
       word-wrap: break-word;
     }
 
@@ -127,12 +127,20 @@
       text-align: left;
     }
 
-    /* Colunas mais compactas (item | quantidade lado a lado) */
+    /* Colunas: mais espaço pro item, quantidade compacta */
     .item-table th:nth-child(1),
-    .item-table td:nth-child(1) { width: 55%; }
+    .item-table td:nth-child(1) { width: 75%; }
 
     .item-table th:nth-child(2),
-    .item-table td:nth-child(2) { width: 45%; }
+    .item-table td:nth-child(2) { width: 25%; }
+
+    /* Input de quantidade: largura só pra 3 dígitos */
+    .item-table td:nth-child(2) input.qtd {
+      max-width: 64px;
+      text-align: center;
+      margin: 0 auto;
+      display: block;
+    }
 
     .actions {
       text-align: center;
@@ -164,17 +172,31 @@
       header h1 { font-size: 20px; }
       .card { padding: 18px 12px; }
 
+      /* Fonte maior no celular */
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      select {
+        font-size: 18px;
+        padding: 9px 10px;
+      }
+
       .item-table th,
       .item-table td {
-        font-size: 14px;
+        font-size: 17px;
         padding: 4px;
       }
 
+      /* Ainda mais espaço pro item, quantidade enxuta */
       .item-table th:nth-child(1),
-      .item-table td:nth-child(1) { width: 52%; }
+      .item-table td:nth-child(1) { width: 78%; }
 
       .item-table th:nth-child(2),
-      .item-table td:nth-child(2) { width: 48%; }
+      .item-table td:nth-child(2) { width: 22%; }
+
+      .item-table td:nth-child(2) input.qtd {
+        max-width: 60px;
+      }
     }
   </style>
 </head>
@@ -184,13 +206,13 @@
     <div class="card">
 
       <header>
-        <h1>INVENTÁRIO SALÃO</h1>
+        <h1>INVENTÁRIO</h1>
         <p>Grupo Coqueiro Verde</p>
       </header>
 
       <form id="formContagem">
 
-        <!-- Cabeçalho: Unidade e Data lado a lado -->
+        <!-- Cabeçalho: Unidade, Setor e Data lado a lado -->
         <div class="row">
           <div class="field">
             <label for="unidade">Unidade *</label>
@@ -198,6 +220,15 @@
               <option value="" disabled selected>Selecione</option>
               <option value="P10">P10</option>
               <option value="P14">P14</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="setor">Setor *</label>
+            <select id="setor" name="setor" required>
+              <option value="" disabled selected>Selecione</option>
+              <option value="SALÃO">SALÃO</option>
+              <option value="COZINHA">COZINHA</option>
             </select>
           </div>
 
@@ -228,11 +259,11 @@
                 <tr><th>Item</th><th>Qtd</th></tr>
               </thead>
               <tbody>
-                <tr><td>Copo Americano</td><td><input type="number" name="copo_americano_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Copo Avulso</td><td><input type="number" name="copo_avulso_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Copo Caipirinha</td><td><input type="number" name="copo_caipirinha_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Copo Decoração</td><td><input type="number" name="copo_decoracao_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Copo Suco</td><td><input type="number" name="copo_suco_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Copo Americano</td><td><input class="qtd" type="number" name="copo_americano_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Copo Avulso</td><td><input class="qtd" type="number" name="copo_avulso_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Copo Caipirinha</td><td><input class="qtd" type="number" name="copo_caipirinha_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Copo Decoração</td><td><input class="qtd" type="number" name="copo_decoracao_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Copo Suco</td><td><input class="qtd" type="number" name="copo_suco_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -245,8 +276,8 @@
             <table class="item-table">
               <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr><td>Garrafa Tempero</td><td><input type="number" name="garrafa_tempero_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Garrafa Manteguinha</td><td><input type="number" name="garrafa_manteguinha_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Garrafa Tempero</td><td><input class="qtd" type="number" name="garrafa_tempero_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Garrafa Manteguinha</td><td><input class="qtd" type="number" name="garrafa_manteguinha_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -259,8 +290,8 @@
             <table class="item-table">
               <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr><td>Jarra 1/2 L</td><td><input type="number" name="jarra_meio_l_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Jarra 1 L</td><td><input type="number" name="jarra_1l_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Jarra 1/2 L</td><td><input class="qtd" type="number" name="jarra_meio_l_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Jarra 1 L</td><td><input class="qtd" type="number" name="jarra_1l_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -273,12 +304,12 @@
             <table class="item-table">
               <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr><td>Caneca Pequena</td><td><input type="number" name="caneca_pequena_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Dispenser Guardanapo</td><td><input type="number" name="disp_guardanapo_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Pires Grande</td><td><input type="number" name="pires_grande_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Pires Pequeno</td><td><input type="number" name="pires_pequeno_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Xícara Grande</td><td><input type="number" name="xicara_grande_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Xícara Pequena</td><td><input type="number" name="xicara_pequena_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Caneca Pequena</td><td><input class="qtd" type="number" name="caneca_pequena_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Dispenser Guardanapo</td><td><input class="qtd" type="number" name="disp_guardanapo_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Pires Grande</td><td><input class="qtd" type="number" name="pires_grande_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Pires Pequeno</td><td><input class="qtd" type="number" name="pires_pequeno_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Xícara Grande</td><td><input class="qtd" type="number" name="xicara_grande_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Xícara Pequena</td><td><input class="qtd" type="number" name="xicara_pequena_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -291,9 +322,9 @@
             <table class="item-table">
               <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr><td>Prato Branco Grande</td><td><input type="number" name="prato_grande_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Prato Branco Pequeno</td><td><input type="number" name="prato_pequeno_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Prato Marrom</td><td><input type="number" name="prato_marrom_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Prato Branco Grande</td><td><input class="qtd" type="number" name="prato_grande_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Prato Branco Pequeno</td><td><input class="qtd" type="number" name="prato_pequeno_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Prato Marrom</td><td><input class="qtd" type="number" name="prato_marrom_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -306,10 +337,10 @@
             <table class="item-table">
               <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr><td>Colher</td><td><input type="number" name="colher_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Colher Sobremesa</td><td><input type="number" name="colher_sobremesa_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Faca</td><td><input type="number" name="faca_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Garfo</td><td><input type="number" name="garfo_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Colher</td><td><input class="qtd" type="number" name="colher_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Colher Sobremesa</td><td><input class="qtd" type="number" name="colher_sobremesa_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Faca</td><td><input class="qtd" type="number" name="faca_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Garfo</td><td><input class="qtd" type="number" name="garfo_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -322,12 +353,12 @@
             <table class="item-table">
               <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr><td>Taça Cerveja</td><td><input type="number" name="taca_cerveja_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Taça Champagne</td><td><input type="number" name="taca_champagne_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Taça Gin</td><td><input type="number" name="taca_gin_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Taça Licor</td><td><input type="number" name="taca_licor_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Taça Sobremesa</td><td><input type="number" name="taca_sobremesa_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
-                <tr><td>Taça Vinho</td><td><input type="number" name="taca_vinho_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Cerveja</td><td><input class="qtd" type="number" name="taca_cerveja_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Champagne</td><td><input class="qtd" type="number" name="taca_champagne_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Gin</td><td><input class="qtd" type="number" name="taca_gin_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Licor</td><td><input class="qtd" type="number" name="taca_licor_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Sobremesa</td><td><input class="qtd" type="number" name="taca_sobremesa_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
+                <tr><td>Taça Vinho</td><td><input class="qtd" type="number" name="taca_vinho_qtd" min="0" step="1" inputmode="numeric" required></td></tr>
               </tbody>
             </table>
           </div>
@@ -340,9 +371,9 @@
             <table class="item-table">
               <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr><td><input type="text" name="extra_item1"></td><td><input type="number" name="extra_qtd1" min="0" step="1" inputmode="numeric"></td></tr>
-                <tr><td><input type="text" name="extra_item2"></td><td><input type="number" name="extra_qtd2" min="0" step="1" inputmode="numeric"></td></tr>
-                <tr><td><input type="text" name="extra_item3"></td><td><input type="number" name="extra_qtd3" min="0" step="1" inputmode="numeric"></td></tr>
+                <tr><td><input type="text" name="extra_item1"></td><td><input class="qtd" type="number" name="extra_qtd1" min="0" step="1" inputmode="numeric"></td></tr>
+                <tr><td><input type="text" name="extra_item2"></td><td><input class="qtd" type="number" name="extra_qtd2" min="0" step="1" inputmode="numeric"></td></tr>
+                <tr><td><input type="text" name="extra_item3"></td><td><input class="qtd" type="number" name="extra_qtd3" min="0" step="1" inputmode="numeric"></td></tr>
               </tbody>
             </table>
           </div>
@@ -405,7 +436,7 @@
         });
 
         statusEl.textContent = "Contagem enviada!";
-        statusEl.className = "status-message status-ok";
+        statusEl.className = 'status-message status-ok';
         form.reset();
 
         // Reaplica data de hoje após reset
@@ -415,7 +446,7 @@
 
       } catch (err) {
         statusEl.textContent = "Erro ao enviar.";
-        statusEl.className = "status-message status-error";
+        statusEl.className = 'status-message status-error';
       }
 
       btnEnviar.disabled = false;
