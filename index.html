@@ -22,7 +22,7 @@
       color: #000;
     }
 
-    .page { max-width: 1080px; margin: 0 auto; }
+    .page { max-width: 900px; margin: 0 auto; }
 
     .card {
       background: #fff;
@@ -55,7 +55,7 @@
     }
 
     .field {
-      flex: 1;
+      flex: 1 1 100%;
       min-width: 160px;
     }
 
@@ -100,10 +100,15 @@
       color: var(--cv-green-dark);
     }
 
-    .table-wrapper { width: 100%; }
+    .table-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
 
     .item-table {
       width: 100%;
+      max-width: 560px; /* deixa a tabela mais estreita no desktop */
       border-collapse: collapse;
       margin-bottom: 10px;
       table-layout: fixed;
@@ -112,7 +117,7 @@
     .item-table th,
     .item-table td {
       border: 1px solid #e0e0e0;
-      padding: 6px;
+      padding: 5px;
       font-size: 14px;
       word-wrap: break-word;
     }
@@ -123,12 +128,12 @@
       text-align: left;
     }
 
-    /* Colunas mais estreitas e equilibradas */
+    /* Colunas mais compactas */
     .item-table th:nth-child(1),
-    .item-table td:nth-child(1) { width: 60%; }
+    .item-table td:nth-child(1) { width: 58%; }
 
     .item-table th:nth-child(2),
-    .item-table td:nth-child(2) { width: 40%; }
+    .item-table td:nth-child(2) { width: 42%; }
 
     .actions {
       text-align: center;
@@ -163,7 +168,7 @@
       .item-table th,
       .item-table td {
         font-size: 13px;
-        padding: 5px;
+        padding: 4px;
       }
 
       .item-table th:nth-child(1),
@@ -186,7 +191,7 @@
 
       <form id="formContagem">
 
-        <!-- Linha 1: Unidade + Data -->
+        <!-- Cabeçalho em coluna: Unidade, Responsável, Data -->
         <div class="row">
           <div class="field">
             <label for="unidade">Unidade *</label>
@@ -196,18 +201,19 @@
               <option value="P14">P14</option>
             </select>
           </div>
+        </div>
 
+        <div class="row">
           <div class="field">
-            <label for="data">Data *</label>
-            <input type="date" id="data" name="data" required>
+            <label for="responsavel">Responsável *</label>
+            <input type="text" id="responsavel" name="responsavel" required>
           </div>
         </div>
 
-        <!-- Linha 2: Responsável -->
         <div class="row">
-          <div class="field" style="flex: 1 1 100%;">
-            <label for="responsavel">Responsável *</label>
-            <input type="text" id="responsavel" name="responsavel" required>
+          <div class="field">
+            <label for="data">Data *</label>
+            <input type="date" id="data" name="data" required>
           </div>
         </div>
 
