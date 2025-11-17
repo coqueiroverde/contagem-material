@@ -2,225 +2,179 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Contagem de Material – Coqueiro Verde</title>
+  <title>Contagem de Material – Grupo Coqueiro Verde</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
-    * { box-sizing: border-box; }
-
     :root {
-      --cor-primaria: #333;
-      --cor-bg: #f5f5f5;
-      --cor-borda: #ccc;
-      --cor-header: #222;
+      --preto: #000;
+      --branco: #fff;
+      --cinza-claro: #f5f5f5;
+      --cinza: #ccc;
+      --cinza-escuro: #333;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--cor-bg);
-      color: #000;
+      font-family: Arial, sans-serif;
+      background-color: var(--cinza-claro);
       margin: 0;
       padding: 20px;
+      color: var(--preto);
     }
 
     .container {
       max-width: 960px;
       margin: auto;
-      background: #fff;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      background-color: var(--branco);
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    h1 {
+    h1, h2 {
       text-align: center;
-      color: var(--cor-header);
-      margin-bottom: 5px;
+      margin-bottom: 8px;
     }
 
-    p.subtitulo {
-      text-align: center;
-      font-size: 13px;
-      color: #666;
-      margin-top: 0;
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .field {
+      flex: 1;
+      min-width: 200px;
     }
 
     label {
       display: block;
-      margin: 10px 0 4px;
-      font-weight: 600;
+      font-weight: bold;
+      margin-bottom: 4px;
     }
 
     input, select {
       width: 100%;
       padding: 8px;
-      border: 1px solid var(--cor-borda);
-      border-radius: 5px;
+      border: 1px solid var(--cinza);
+      border-radius: 6px;
       font-size: 14px;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 12px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-bottom: 24px;
     }
 
-    table th, table td {
-      border: 1px solid #ddd;
+    th, td {
       padding: 8px;
-      font-size: 13px;
+      border: 1px solid var(--cinza);
     }
 
-    table th {
-      background-color: #eee;
+    th {
+      background: var(--cinza-claro);
       text-align: left;
     }
 
     button {
-      background-color: var(--cor-header);
-      color: white;
-      border: none;
+      display: inline-block;
       padding: 10px 20px;
-      font-size: 14px;
-      border-radius: 4px;
+      background-color: var(--cinza-escuro);
+      color: var(--branco);
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
-      margin-top: 20px;
+      font-size: 14px;
     }
 
     button:hover {
-      background-color: #000;
+      background-color: #111;
     }
 
     .status-message {
-      margin-top: 12px;
-      font-size: 14px;
       text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
     }
 
     .status-ok { color: green; }
     .status-error { color: red; }
-
-    .link-pdf {
-      display: block;
-      text-align: center;
-      margin-top: 30px;
-    }
-
-    .link-pdf a {
-      color: #000;
-      font-weight: bold;
-      text-decoration: underline;
-    }
-
-    @media (max-width: 600px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
   </style>
 </head>
 <body>
-
   <div class="container">
     <h1>Contagem de Material</h1>
-    <p class="subtitulo">Unidade – Grupo Coqueiro Verde</p>
+    <h2>Grupo Coqueiro Verde</h2>
 
     <form id="formContagem">
-
-      <div class="grid">
-        <div class="form-group">
-          <label>Unidade *</label>
+      <div class="row">
+        <div class="field">
+          <label>Unidade</label>
           <select name="unidade" required>
             <option value="" disabled selected>Selecione</option>
             <option value="P10">P10</option>
             <option value="P14">P14</option>
           </select>
         </div>
-
-        <div class="form-group">
-          <label>Responsável *</label>
+        <div class="field">
+          <label>Responsável</label>
           <input type="text" name="responsavel" required>
         </div>
       </div>
 
-      <div class="form-group">
-        <label>Taça de sobremesa</label>
-        <input type="number" name="taca_sobremesa_qtd" min="0" required>
+      <!-- Seções por categoria -->
+      <div id="categorias"></div>
+
+      <h3>Itens não listados</h3>
+      <table>
+        <tr><th>Item</th><th>Qtd</th></tr>
+        <tr><td><input name="extra_item1" type="text"></td><td><input name="extra_qtd1" type="number" min="0"></td></tr>
+        <tr><td><input name="extra_item2" type="text"></td><td><input name="extra_qtd2" type="number" min="0"></td></tr>
+        <tr><td><input name="extra_item3" type="text"></td><td><input name="extra_qtd3" type="number" min="0"></td></tr>
+      </table>
+
+      <div style="text-align: center;">
+        <button type="submit" id="btnEnviar">Enviar contagem</button>
+        <a href="https://script.google.com/macros/s/AKfycbzld5WBl5h_X_r8ajDAK3hjCiKcK346k1v7N3ZawLgSOYjdB0rlFq7qG8_NGvI0yJYPKQ/exec?pdf=1" target="_blank" style="margin-left: 10px;">
+          <button type="button">Clique aqui para baixar PDF profissional</button>
+        </a>
       </div>
 
-      <div class="form-group">
-        <label>Prato branco grande</label>
-        <input type="number" name="prato_grande_qtd" min="0" required>
-      </div>
-
-      <div class="form-group">
-        <label>Prato branco pequeno</label>
-        <input type="number" name="prato_pequeno_qtd" min="0" required>
-      </div>
-
-      <div class="form-group">
-        <label>Colher</label>
-        <input type="number" name="colher_qtd" min="0" required>
-      </div>
-
-      <div class="form-group">
-        <label>Garfo</label>
-        <input type="number" name="garfo_qtd" min="0" required>
-      </div>
-
-      <div class="form-group">
-        <label>Faca</label>
-        <input type="number" name="faca_qtd" min="0" required>
-      </div>
-
-      <div class="form-group">
-        <label>Taça de gin</label>
-        <input type="number" name="taca_gin_qtd" min="0" required>
-      </div>
-
-      <div class="form-group">
-        <label>Copo americano</label>
-        <input type="number" name="copo_americano_qtd" min="0" required>
-      </div>
-
-      <div class="form-group">
-        <label>Dispenser guardanapo</label>
-        <input type="number" name="disp_guardanapo_qtd" min="0">
-      </div>
-
-      <div class="form-group">
-        <label>Item extra</label>
-        <input type="text" name="extra_item">
-        <label>Quantidade</label>
-        <input type="number" name="extra_qtd" min="0">
-      </div>
-
-      <button type="submit" id="btnEnviar">Enviar contagem</button>
       <div id="status" class="status-message"></div>
-
     </form>
-
-    <div class="link-pdf">
-      <a href="URL_DO_PDF.pdf" target="_blank">📄 Clique aqui para baixar PDF profissional</a>
-    </div>
   </div>
 
   <script>
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxc7AKVEcAJSjPYvJdUC13z1d4RJgLOFa1w1dQuhF3w1lnH8mhutfN0QfIAW8JluZ0H/exec';
+    const categorias = {
+      "Copos": ["Copo Americano", "Copo Avulso", "Copo Caipirinha", "Copo Decoração", "Copo Suco"],
+      "Talheres": ["Garfo", "Faca", "Colher", "Colher Sobremesa"],
+      "Pratos": ["Prato Branco Grande", "Prato Branco Pequeno", "Prato Marrom"],
+      "Taças": ["Taça Cerveja", "Taça Champagne", "Taça Gin", "Taça Licor", "Taça Vinho", "Taça Sobremesa"],
+      "Outros": ["Dispenser Guardanapo", "Caneca Pequena", "Pires Grande", "Pires Pequeno", "Xícara Grande", "Xícara Pequena", "Jarra 1 L", "Jarra 1/2 L", "Garrafa Tempero", "Garrafa Manteguinha"]
+    };
+
+    const container = document.getElementById("categorias");
+
+    for (const [categoria, itens] of Object.entries(categorias)) {
+      const section = document.createElement("section");
+      section.innerHTML = `<h3>${categoria}</h3><table><tr><th>Item</th><th>Qtd</th></tr></table>`;
+      const tabela = section.querySelector("table");
+
+      itens.forEach(item => {
+        const nomeCampo = item.toLowerCase().replace(/[\s\/]/g, "_");
+        const linha = document.createElement("tr");
+        linha.innerHTML = `<td>${item}</td><td><input name="${nomeCampo}_qtd" type="number" min="0" required></td>`;
+        tabela.appendChild(linha);
+      });
+
+      container.appendChild(section);
+    }
 
     const form = document.getElementById('formContagem');
     const statusEl = document.getElementById('status');
     const btnEnviar = document.getElementById('btnEnviar');
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzld5WBl5h_X_r8ajDAK3hjCiKcK346k1v7N3ZawLgSOYjdB0rlFq7qG8_NGvI0yJYPKQ/exec';
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -244,12 +198,12 @@
           body: JSON.stringify(data)
         });
 
-        statusEl.textContent = "✅ Contagem enviada!";
+        statusEl.textContent = "Contagem enviada com sucesso!";
         statusEl.className = "status-message status-ok";
         form.reset();
 
       } catch (err) {
-        statusEl.textContent = "❌ Erro ao enviar.";
+        statusEl.textContent = "Erro ao enviar os dados.";
         statusEl.className = "status-message status-error";
       }
 
@@ -257,8 +211,5 @@
       btnEnviar.textContent = "Enviar contagem";
     });
   </script>
-
 </body>
 </html>
-
-
