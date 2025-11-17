@@ -95,13 +95,13 @@
       color: var(--cv-green-dark);
     }
 
-    .table-wrapper { width: 100%; overflow-x: auto; }
+    .table-wrapper { width: 100%; }
 
     .item-table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 10px;
-      min-width: 300px;
+      table-layout: fixed;           /* força a tabela a caber na tela */
     }
 
     .item-table th,
@@ -109,6 +109,7 @@
       border: 1px solid #e0e0e0;
       padding: 6px;
       font-size: 12px;
+      word-wrap: break-word;         /* deixa o texto quebrar linha */
     }
 
     .item-table th {
@@ -117,7 +118,7 @@
       text-align: left;
     }
 
-    /* MESMA LARGURA EM TODAS AS TABELAS - AGORA COM 2 COLUNAS */
+    /* MESMA LARGURA EM TODAS AS TABELAS - 2 COLUNAS */
     .item-table th:nth-child(1),
     .item-table td:nth-child(1) { width: 70%; }
 
@@ -150,6 +151,12 @@
     .status-ok { color: #008000; }
     .status-error { color: #c00; }
 
+    @media (max-width: 600px) {
+      header h1 { font-size: 18px; }
+      .card { padding: 18px 14px; }
+      .item-table th,
+      .item-table td { font-size: 11px; padding: 5px; }
+    }
   </style>
 </head>
 
@@ -184,7 +191,6 @@
           Preencha todas as quantidades. A data/hora será gravada automaticamente.
         </p>
 
-        <!-- MODELO LIMPO SEM OBSERVAÇÕES -->
         <!-- COPOS -->
         <div class="section">
           <div class="section-title">Copos</div>
@@ -352,12 +358,12 @@
         });
 
         statusEl.textContent = "Contagem enviada!";
-        statusEl.className = "status-ok";
+        statusEl.className = "status-message status-ok";
         form.reset();
 
       } catch (err) {
         statusEl.textContent = "Erro ao enviar.";
-        statusEl.className = "status-error";
+        statusEl.className = "status-message status-error";
       }
 
       btnEnviar.disabled = false;
