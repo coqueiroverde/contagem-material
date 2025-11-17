@@ -1,236 +1,75 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>SALÃO – Coqueiro Verde</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+const SPREADSHEET_ID = '1caeGLL2XixEvjXf6HbpG6R8P7ri0TK5qhSRK1loijJ0';
 
-  <style>
-    :root {
-      --cv-green: #106c4a;
-      --cv-green-dark: #0b4b33;
-      --cv-bg: #f8f8f8;
+/**
+ * GET para teste simples
+ */
+function doGet() {
+  return ContentService
+    .createTextOutput('Web App ativo para Contagem de Material (SALÃO).')
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+
+/**
+ * POST – Recebe dados do formulário e grava na aba correspondente
+ */
+function doPost(e) {
+  try {
+    if (!e || !e.postData || !e.postData.contents) {
+      throw new Error('Nenhum dado recebido.');
     }
 
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: var(--cv-bg);
-      padding: 16px;
-      color: #000;
+    const data = JSON.parse(e.postData.contents);
+
+    if (!data.unidade) {
+      throw new Error('Campo "unidade" não informado.');
     }
 
-    .page {
-      max-width: 900px;
-      margin: auto;
-      background: #fff;
-      border-radius: 8px;
-      padding: 24px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    }
+    // Define nome da aba com base na unidade
+    const abaDestino = data.unidade.trim().toUpperCase() + ' SALÃO';
 
-    header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    let sheet = ss.getSheetByName(abaDestino);
+    if (!sheet) throw new Error(`Aba "${abaDestino}" não encontrada.`);
 
-    header h1 {
-      margin: 0;
-      font-size: 22px;
-      color: var(--cv-green-dark);
-    }
+    // Cabeçalho existente
+    let lastCol = sheet.getLastColumn();
+    if (lastCol < 1) lastCol = 1;
 
-    header p {
-      font-size: 13px;
-      color: #666;
-    }
+    let headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+    if (headers[0] === '') headers = [];
 
-    .row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
+    const keys = Object.keys(data);
+    let updatedHeaders = false;
 
-    .field {
-      flex: 1;
-      min-width: 200px;
-    }
-
-    label {
-      font-size: 13px;
-      font-weight: bold;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    select {
-      width: 100%;
-      padding: 8px;
-      font-size: 13px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    .section {
-      margin-top: 20px;
-    }
-
-    .section-title {
-      font-size: 14px;
-      font-weight: bold;
-      color: var(--cv-green-dark);
-      margin-bottom: 8px;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 4px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 16px;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 6px;
-      font-size: 13px;
-      border: 1px solid #eee;
-    }
-
-    th {
-      background: #f0f0f0;
-    }
-
-    .actions {
-      text-align: center;
-    }
-
-    button {
-      background: var(--cv-green);
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      font-size: 14px;
-      border-radius: 30px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: var(--cv-green-dark);
-    }
-
-    .status-message {
-      font-size: 13px;
-      margin-top: 10px;
-    }
-
-    .status-ok { color: green; }
-    .status-error { color: red; }
-  </style>
-</head>
-<body>
-  <div class="page">
-    <header>
-      <h1>Contagem de Material – SALÃO</h1>
-      <p>Grupo Coqueiro Verde</p>
-    </header>
-
-    <form id="formContagem">
-
-      <div class="row">
-        <div class="field">
-          <label>Unidade *</label>
-          <select name="unidade" required>
-            <option value="" disabled selected>Selecione</option>
-            <option value="P10 SALÃO">P10</option>
-            <option value="P14 SALÃO">P14</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Responsável *</label>
-          <input type="text" name="responsavel" required>
-        </div>
-      </div>
-
-      <!-- Exemplo de categoria -->
-      <div class="section">
-        <div class="section-title">Copos</div>
-        <table>
-          <tr><th>Item</th><th>Qtd</th></tr>
-          <tr><td>Copo Americano</td><td><input type="number" name="copo_americano" min="0"></td></tr>
-          <tr><td>Copo Suco</td><td><input type="number" name="copo_suco" min="0"></td></tr>
-          <tr><td>Copo Avulso</td><td><input type="number" name="copo_avulso" min="0"></td></tr>
-        </table>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Talheres</div>
-        <table>
-          <tr><th>Item</th><th>Qtd</th></tr>
-          <tr><td>Garfo</td><td><input type="number" name="garfo" min="0"></td></tr>
-          <tr><td>Faca</td><td><input type="number" name="faca" min="0"></td></tr>
-          <tr><td>Colher</td><td><input type="number" name="colher" min="0"></td></tr>
-          <tr><td>Colher Sobremesa</td><td><input type="number" name="colher_sobremesa" min="0"></td></tr>
-        </table>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Pratos</div>
-        <table>
-          <tr><th>Item</th><th>Qtd</th></tr>
-          <tr><td>Prato Branco Grande</td><td><input type="number" name="prato_grande" min="0"></td></tr>
-          <tr><td>Prato Branco Pequeno</td><td><input type="number" name="prato_pequeno" min="0"></td></tr>
-        </table>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Itens não listados</div>
-        <table>
-          <tr><th>Item</th><th>Qtd</th></tr>
-          <tr><td><input type="text" name="extra1"></td><td><input type="number" name="extra1_qtd" min="0"></td></tr>
-          <tr><td><input type="text" name="extra2"></td><td><input type="number" name="extra2_qtd" min="0"></td></tr>
-        </table>
-      </div>
-
-      <div class="actions">
-        <button type="submit">Enviar Contagem</button>
-        <div id="status" class="status-message"></div>
-      </div>
-    </form>
-  </div>
-
-  <script>
-    const form = document.getElementById('formContagem');
-    const statusEl = document.getElementById('status');
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzld5WBl5h_X_r8ajDAK3hjCiKcK346k1v7N3ZawLgSOYjdB0rlFq7qG8_NGvI0yJYPKQ/exec';
-
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-
-      const data = {};
-      const fields = form.querySelectorAll('[name]');
-      fields.forEach(el => data[el.name] = el.value);
-
-      data.timestamp = new Date().toISOString();
-
-      try {
-        const res = await fetch(WEB_APP_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-
-        statusEl.textContent = '✅ Contagem enviada com sucesso!';
-        statusEl.className = 'status-message status-ok';
-        form.reset();
-      } catch (err) {
-        statusEl.textContent = '❌ Erro ao enviar contagem.';
-        statusEl.className = 'status-message status-error';
+    // Garante que todos os campos existam no cabeçalho
+    keys.forEach(key => {
+      if (!headers.includes(key)) {
+        headers.push(key);
+        updatedHeaders = true;
       }
     });
-  </script>
-</body>
-</html>
+
+    // Atualiza cabeçalho se houve mudança
+    if (updatedHeaders) {
+      sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    }
+
+    // Monta a nova linha
+    const row = new Array(headers.length).fill('');
+    keys.forEach(key => {
+      const idx = headers.indexOf(key);
+      if (idx > -1) row[idx] = data[key];
+    });
+
+    sheet.appendRow(row);
+
+    return ContentService.createTextOutput(
+      JSON.stringify({ status: 'success', message: 'Dados salvos com sucesso.' })
+    ).setMimeType(ContentService.MimeType.JSON);
+
+  } catch (err) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ status: 'error', message: err.message })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+}
