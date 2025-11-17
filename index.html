@@ -20,7 +20,7 @@
       margin: 0;
       padding: 16px;
       color: #000;
-      font-size: 18px;
+      font-size: 23px; /* base maior */
     }
 
     .page { max-width: 900px; margin: 0 auto; }
@@ -28,16 +28,16 @@
     .card {
       background: #fff;
       border-radius: 14px;
-      padding: 26px 22px;
+      padding: 28px 24px;
       box-shadow: 0 0 18px rgba(0,0,0,0.08);
       border-top: 4px solid var(--cv-green);
     }
 
-    header { text-align: center; margin-bottom: 18px; }
+    header { text-align: center; margin-bottom: 22px; }
 
     header h1 {
-      font-size: 32px;
-      margin: 0 0 6px;
+      font-size: 37px;
+      margin: 0 0 8px;
       color: var(--cv-green-dark);
       text-transform: uppercase;
       font-weight: 900;
@@ -45,15 +45,15 @@
 
     header p {
       margin: 0;
-      font-size: 16px;
+      font-size: 21px;
       color: #555;
     }
 
     .row {
       display: flex;
       flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 14px;
+      gap: 16px;
+      margin-bottom: 16px;
     }
 
     .field {
@@ -63,7 +63,7 @@
 
     label {
       display: block;
-      font-size: 18px;
+      font-size: 23px;
       font-weight: 700;
       margin-bottom: 6px;
       color: #222;
@@ -74,30 +74,30 @@
     input[type="date"],
     select {
       width: 100%;
-      padding: 14px 14px;
+      padding: 18px 18px;
       border-radius: 10px;
       border: 1px solid #bbb;
-      font-size: 20px;
+      font-size: 25px;
       background: #fff;
       color: #000;
     }
 
     .helper {
-      font-size: 15px;
+      font-size: 20px;
       color: #777;
-      margin: 4px 0 12px;
+      margin: 4px 0 14px;
     }
 
     .section {
-      margin-top: 18px;
+      margin-top: 22px;
       border-top: 1px solid #e3e3e3;
-      padding-top: 12px;
+      padding-top: 14px;
     }
 
     .section-title {
-      font-size: 26px;
+      font-size: 31px;
       font-weight: 900;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       text-transform: uppercase;
       color: var(--cv-green-dark);
       text-align: center;
@@ -111,15 +111,15 @@
     .item-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       table-layout: fixed;
     }
 
     .item-table th,
     .item-table td {
       border: 1px solid #e0e0e0;
-      padding: 10px;
-      font-size: 22px;
+      padding: 12px;
+      font-size: 27px;
     }
 
     .item-table th {
@@ -133,11 +133,10 @@
     .item-table th:nth-child(2),
     .item-table td:nth-child(2) { width: 22%; text-align: center; }
 
-    /* quantidade (até 3 dígitos) */
     .item-table td:nth-child(2) input.qtd {
-      max-width: 90px;
-      font-size: 24px;
-      padding: 10px;
+      max-width: 95px;
+      font-size: 29px;
+      padding: 12px;
       text-align: center;
       margin: 0 auto;
       display: block;
@@ -145,29 +144,28 @@
       border: 1px solid #aaa;
     }
 
-    /* MOBILE */
     @media (max-width: 600px) {
 
       header h1 {
-        font-size: 28px;
+        font-size: 33px;
       }
 
       .card {
-        padding: 20px 14px;
+        padding: 22px 16px;
       }
 
       input[type="text"],
       input[type="number"],
       input[type="date"],
       select {
-        font-size: 24px !important;
-        padding: 16px !important;
+        font-size: 29px !important;
+        padding: 18px !important;
       }
 
       .item-table th,
       .item-table td {
-        font-size: 24px !important;
-        padding: 10px !important;
+        font-size: 29px !important;
+        padding: 12px !important;
       }
 
       .item-table th:nth-child(1),
@@ -177,22 +175,22 @@
       .item-table td:nth-child(2) { width: 20% !important; }
 
       .item-table td:nth-child(2) input.qtd {
-        max-width: 80px !important;
-        font-size: 26px !important;
-        padding: 12px !important;
+        max-width: 90px !important;
+        font-size: 31px !important;
+        padding: 14px !important;
       }
 
       .section-title {
-        font-size: 28px !important;
-        margin-bottom: 16px !important;
+        font-size: 33px !important;
+        margin-bottom: 18px !important;
       }
     }
 
     button {
-      padding: 14px 32px;
+      padding: 18px 34px;
       border-radius: 999px;
       border: none;
-      font-size: 20px;
+      font-size: 25px;
       cursor: pointer;
       background: var(--cv-green);
       color: #fff;
@@ -209,13 +207,14 @@
     }
 
     .status-message {
-      margin-top: 14px;
-      font-size: 18px;
+      margin-top: 16px;
+      font-size: 23px;
       text-align: center;
     }
 
     .status-ok { color: #008000; }
     .status-error { color: #c00; }
+
   </style>
 </head>
 
@@ -230,7 +229,7 @@
 
       <form id="formContagem">
 
-        <!-- Cabeçalho: Unidade, Setor e Data lado a lado -->
+        <!-- Cabeçalho: Unidade, Setor, Data -->
         <div class="row">
           <div class="field">
             <label for="unidade">Unidade *</label>
@@ -256,7 +255,7 @@
           </div>
         </div>
 
-        <!-- Responsável com largura reduzida -->
+        <!-- Responsável -->
         <div class="row">
           <div class="field" style="flex: 1 1 60%; max-width: 60%;">
             <label for="responsavel">Responsável *</label>
@@ -389,9 +388,18 @@
             <table class="item-table">
               <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
               <tbody>
-                <tr><td><input type="text" name="extra_item1"></td><td><input class="qtd" type="number" name="extra_qtd1" min="0" step="1" inputmode="numeric"></td></tr>
-                <tr><td><input type="text" name="extra_item2"></td><td><input class="qtd" type="number" name="extra_qtd2" min="0" step="1" inputmode="numeric"></td></tr>
-                <tr><td><input type="text" name="extra_item3"></td><td><input class="qtd" type="number" name="extra_qtd3" min="0" step="1" inputmode="numeric"></td></tr>
+                <tr>
+                  <td><input type="text" name="extra_item1"></td>
+                  <td><input class="qtd" type="number" name="extra_qtd1" min="0" step="1" inputmode="numeric"></td>
+                </tr>
+                <tr>
+                  <td><input type="text" name="extra_item2"></td>
+                  <td><input class="qtd" type="number" name="extra_qtd2" min="0" step="1" inputmode="numeric"></td>
+                </tr>
+                <tr>
+                  <td><input type="text" name="extra_item3"></td>
+                  <td><input class="qtd" type="number" name="extra_qtd3" min="0" step="1" inputmode="numeric"></td>
+                </tr>
               </tbody>
             </table>
           </div>
