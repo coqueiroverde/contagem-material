@@ -2,8 +2,9 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Contagem de Material – Grupo Coqueiro Verde</title>
+  <title>Contagem de Material – Coqueiro Verde</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     :root {
       --cv-green: #106c4a;
@@ -15,106 +16,100 @@
       font-family: Arial, Helvetica, sans-serif;
       background: var(--cv-bg);
       margin: 0;
-      padding: 20px;
+      padding: 14px;
       color: #000;
     }
 
     .container {
+      background: white;
       max-width: 900px;
       margin: 0 auto;
-      background: white;
+      padding: 16px;
       border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.06);
     }
 
     h1 {
-      color: var(--cv-green-dark);
-      font-size: 22px;
       text-align: center;
-      margin-bottom: 6px;
+      font-size: 20px;
+      color: var(--cv-green-dark);
+      margin-bottom: 4px;
     }
 
     p {
-      font-size: 13px;
       text-align: center;
-      color: #555;
-      margin-bottom: 20px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 100px;
-      gap: 12px 20px;
-      align-items: center;
+      font-size: 12px;
+      color: #666;
       margin-bottom: 16px;
     }
 
-    label {
-      font-size: 14px;
-      font-weight: bold;
-      color: #333;
+    .grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 12px;
     }
 
-    input[type="number"],
-    input[type="text"],
-    select {
-      width: 100%;
-      padding: 8px;
+    .grid label {
+      flex: 1;
       font-size: 14px;
+      font-weight: 500;
+    }
+
+    .grid input,
+    .grid select {
+      width: 100px;
+      padding: 6px 8px;
+      font-size: 13px;
       border: 1px solid #ccc;
       border-radius: 8px;
     }
 
     .submit-btn {
-      background-color: var(--cv-green);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 16px;
-      border-radius: 999px;
-      cursor: pointer;
       width: 100%;
-      margin-top: 24px;
+      background: var(--cv-green);
+      color: white;
+      padding: 12px;
+      font-size: 15px;
+      border: none;
+      border-radius: 999px;
+      margin-top: 20px;
+      cursor: pointer;
     }
 
     .submit-btn:hover {
-      background-color: var(--cv-green-dark);
+      background: var(--cv-green-dark);
     }
 
     .status {
-      margin-top: 12px;
-      font-size: 14px;
       text-align: center;
+      font-size: 13px;
+      margin-top: 10px;
     }
 
     .status-ok { color: green; }
     .status-error { color: red; }
 
     @media (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
-
-      h1 {
-        font-size: 18px;
-      }
-
       .grid {
-        grid-template-columns: 1fr 80px;
-        gap: 10px;
+        flex-direction: row;
+        gap: 6px;
       }
 
-      input[type="text"],
-      input[type="number"],
-      select {
+      .grid label {
         font-size: 13px;
-        padding: 8px;
+      }
+
+      .grid input,
+      .grid select {
+        font-size: 12px;
+        padding: 5px;
+        width: 90px;
       }
 
       .submit-btn {
         font-size: 14px;
-        padding: 10px;
       }
     }
   </style>
@@ -139,6 +134,7 @@
         <input type="text" name="responsavel" required>
       </div>
 
+      <!-- Itens -->
       <div class="grid"><label>Copo Americano</label><input type="number" name="copo_americano" min="0"></div>
       <div class="grid"><label>Copo Caipirinha</label><input type="number" name="copo_caipirinha" min="0"></div>
       <div class="grid"><label>Copo Suco</label><input type="number" name="copo_suco" min="0"></div>
@@ -153,11 +149,11 @@
       <div class="grid"><label>Dispenser Guardanapo</label><input type="number" name="disp_guardanapo" min="0"></div>
       <div class="grid"><label>Caneca Pequena</label><input type="number" name="caneca_pequena" min="0"></div>
 
-      <!-- Campo extra -->
+      <!-- Extra -->
       <div class="grid"><label>Item não listado</label><input type="text" name="extra_item1"></div>
       <div class="grid"><label>Qtd item extra</label><input type="number" name="extra_qtd1" min="0"></div>
 
-      <button class="submit-btn" type="submit">Enviar contagem</button>
+      <button type="submit" class="submit-btn">Enviar contagem</button>
       <div id="status" class="status"></div>
     </form>
   </div>
@@ -170,25 +166,24 @@
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
-
       const data = {};
       const fields = form.querySelectorAll('[name]');
       fields.forEach(el => data[el.name] = el.value);
       data.timestamp = new Date().toISOString();
 
       try {
-        const response = await fetch(WEB_APP_URL, {
+        await fetch(WEB_APP_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
 
-        statusEl.textContent = "✅ Contagem enviada com sucesso.";
-        statusEl.className = "status status-ok";
+        statusEl.textContent = '✅ Contagem enviada!';
+        statusEl.className = 'status status-ok';
         form.reset();
       } catch (err) {
-        statusEl.textContent = "❌ Erro ao enviar contagem.";
-        statusEl.className = "status status-error";
+        statusEl.textContent = '❌ Erro ao enviar.';
+        statusEl.className = 'status status-error';
       }
     });
   </script>
