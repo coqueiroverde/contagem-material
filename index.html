@@ -2,146 +2,354 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Inventário – Salão</title>
+  <title>SALÃO</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     * { box-sizing: border-box; }
+
+    :root {
+      --cv-green: #106c4a;
+      --cv-green-dark: #0b4b33;
+      --cv-bg: #f4f8f6;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f8f6;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--cv-bg);
       margin: 0;
       padding: 16px;
+      color: #000;
     }
-    .container {
-      max-width: 600px;
-      margin: auto;
+
+    .page { max-width: 1080px; margin: 0 auto; }
+
+    .card {
       background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      border-radius: 14px;
+      padding: 24px 20px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.08);
+      border-top: 4px solid var(--cv-green);
     }
-    h1 {
-      text-align: center;
-      color: #106c4a;
-      margin-bottom: 4px;
+
+    header { text-align: center; margin-bottom: 18px; }
+
+    header h1 {
+      font-size: 22px;
+      margin: 0 0 4px;
+      color: var(--cv-green-dark);
     }
-    p {
-      text-align: center;
+
+    header p {
+      margin: 0;
       font-size: 13px;
       color: #555;
-      margin-top: 0;
     }
-    h3 {
-      font-size: 15px;
-      margin-top: 22px;
-      color: #0b4b33;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 4px;
-    }
-    .grid {
+
+    .row {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
+      flex-wrap: wrap;
       gap: 12px;
+      margin-bottom: 14px;
     }
+
+    .field { flex: 1; min-width: 200px; }
+
     label {
+      display: block;
       font-size: 13px;
-      flex: 1;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #222;
     }
-    input, select {
-      flex: 1;
-      padding: 6px 8px;
-      font-size: 13px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .submit-btn {
+
+    input[type="text"],
+    input[type="number"],
+    select {
       width: 100%;
-      background: #106c4a;
-      color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 20px;
-      font-size: 14px;
-      margin-top: 20px;
-      cursor: pointer;
-    }
-    .submit-btn:hover {
-      background: #0b4b33;
-    }
-    .status {
-      margin-top: 10px;
-      text-align: center;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
       font-size: 13px;
+      background: #fff;
+      color: #000;
     }
-    @media (max-width: 480px) {
-      label, input, select {
-        font-size: 12px;
-      }
-      h1 { font-size: 18px; }
+
+    .helper {
+      font-size: 11px;
+      color: #777;
+      margin-bottom: 10px;
+    }
+
+    .section {
+      margin-top: 18px;
+      border-top: 1px solid #e3e3e3;
+      padding-top: 12px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      color: var(--cv-green-dark);
+    }
+
+    .table-wrapper { width: 100%; }
+
+    .item-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+      table-layout: fixed;
+    }
+
+    .item-table th,
+    .item-table td {
+      border: 1px solid #e0e0e0;
+      padding: 6px;
+      font-size: 12px;
+      word-wrap: break-word;
+    }
+
+    .item-table th {
+      background: #e8f2ee;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    /* Mesma largura para todas as tabelas - 2 colunas */
+    .item-table th:nth-child(1),
+    .item-table td:nth-child(1) { width: 70%; }
+
+    .item-table th:nth-child(2),
+    .item-table td:nth-child(2) { width: 30%; }
+
+    .actions {
+      text-align: center;
+      margin-top: 22px;
+    }
+
+    button {
+      padding: 10px 24px;
+      border-radius: 999px;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      background: var(--cv-green);
+      color: #fff;
+    }
+
+    button:hover:not(:disabled) { background: var(--cv-green-dark); }
+
+    .status-message {
+      margin-top: 10px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .status-ok { color: #008000; }
+    .status-error { color: #c00; }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 18px; }
+      .card { padding: 18px 14px; }
+      .item-table th,
+      .item-table td { font-size: 11px; padding: 5px; }
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>Inventário – Salão</h1>
-    <p>Grupo Coqueiro Verde</p>
-    <form id="formContagem">
+  <div class="page">
+    <div class="card">
 
-      <div class="grid">
-        <label>Data</label>
-        <input type="date" name="data" required>
-      </div>
-      <div class="grid">
-        <label>Unidade *</label>
-        <select name="unidade" required>
-          <option value="">Selecione</option>
-          <option value="P10">P10</option>
-          <option value="P14">P14</option>
-        </select>
-      </div>
-      <div class="grid">
-        <label>Responsável *</label>
-        <input type="text" name="responsavel" required>
-      </div>
+      <header>
+        <h1>Contagem de Material</h1>
+        <p>Grupo Coqueiro Verde</p>
+      </header>
 
-      <h3>Copos</h3>
-      <div class="grid"><label>Copo Americano</label><input type="number" name="copo_americano"></div>
-      <div class="grid"><label>Copo Caipirinha</label><input type="number" name="copo_caipirinha"></div>
-      <div class="grid"><label>Copo Suco</label><input type="number" name="copo_suco"></div>
+      <form id="formContagem">
 
-      <h3>Taças</h3>
-      <div class="grid"><label>Taça Vinho</label><input type="number" name="taca_vinho"></div>
-      <div class="grid"><label>Taça Gin</label><input type="number" name="taca_gin"></div>
-      <div class="grid"><label>Taça Sobremesa</label><input type="number" name="taca_sobremesa"></div>
+        <div class="row">
+          <div class="field">
+            <label>Unidade *</label>
+            <select name="unidade" required>
+              <option value="" disabled selected>Selecione</option>
+              <option value="P10">P10</option>
+              <option value="P14">P14</option>
+            </select>
+          </div>
 
-      <h3>Pratos</h3>
-      <div class="grid"><label>Prato Branco Grande</label><input type="number" name="prato_branco_grande"></div>
-      <div class="grid"><label>Prato Branco Pequeno</label><input type="number" name="prato_branco_pequeno"></div>
+          <div class="field">
+            <label>Responsável *</label>
+            <input type="text" name="responsavel" required>
+          </div>
+        </div>
 
-      <h3>Talheres</h3>
-      <div class="grid"><label>Garfo</label><input type="number" name="garfo"></div>
-      <div class="grid"><label>Colher</label><input type="number" name="colher"></div>
-      <div class="grid"><label>Faca</label><input type="number" name="faca"></div>
+        <p class="helper">
+          Preencha todas as quantidades. A data/hora será gravada automaticamente.
+        </p>
 
-      <h3>Outros</h3>
-      <div class="grid"><label>Dispenser Guardanapo</label><input type="number" name="disp_guardanapo"></div>
-      <div class="grid"><label>Caneca Pequena</label><input type="number" name="caneca_pequena"></div>
+        <!-- COPOS -->
+        <div class="section">
+          <div class="section-title">Copos</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead>
+                <tr><th>Item</th><th>Qtd</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Copo Americano</td><td><input type="number" name="copo_americano_qtd" min="0" required></td></tr>
+                <tr><td>Copo Avulso</td><td><input type="number" name="copo_avulso_qtd" min="0" required></td></tr>
+                <tr><td>Copo Caipirinha</td><td><input type="number" name="copo_caipirinha_qtd" min="0" required></td></tr>
+                <tr><td>Copo Decoração</td><td><input type="number" name="copo_decoracao_qtd" min="0" required></td></tr>
+                <tr><td>Copo Suco</td><td><input type="number" name="copo_suco_qtd" min="0" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-      <h3>Item Extra</h3>
-      <div class="grid"><label>Item não listado</label><input type="text" name="extra_item1"></div>
-      <div class="grid"><label>Qtd item extra</label><input type="number" name="extra_qtd1"></div>
+        <!-- GARRAFAS -->
+        <div class="section">
+          <div class="section-title">Garrafas</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Garrafa Tempero</td><td><input type="number" name="garrafa_tempero_qtd" min="0" required></td></tr>
+                <tr><td>Garrafa Manteguinha</td><td><input type="number" name="garrafa_manteguinha_qtd" min="0" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-      <button type="submit" class="submit-btn">Enviar contagem</button>
-      <div id="status" class="status"></div>
-    </form>
+        <!-- JARRAS -->
+        <div class="section">
+          <div class="section-title">Jarras</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Jarra 1/2 L</td><td><input type="number" name="jarra_meio_l_qtd" min="0" required></td></tr>
+                <tr><td>Jarra 1 L</td><td><input type="number" name="jarra_1l_qtd" min="0" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- OUTROS -->
+        <div class="section">
+          <div class="section-title">Outros</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Caneca Pequena</td><td><input type="number" name="caneca_pequena_qtd" min="0" required></td></tr>
+                <tr><td>Dispenser Guardanapo</td><td><input type="number" name="disp_guardanapo_qtd" min="0" required></td></tr>
+                <tr><td>Pires Grande</td><td><input type="number" name="pires_grande_qtd" min="0" required></td></tr>
+                <tr><td>Pires Pequeno</td><td><input type="number" name="pires_pequeno_qtd" min="0" required></td></tr>
+                <tr><td>Xícara Grande</td><td><input type="number" name="xicara_grande_qtd" min="0" required></td></tr>
+                <tr><td>Xícara Pequena</td><td><input type="number" name="xicara_pequena_qtd" min="0" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PRATOS -->
+        <div class="section">
+          <div class="section-title">Pratos</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Prato Branco Grande</td><td><input type="number" name="prato_grande_qtd" min="0" required></td></tr>
+                <tr><td>Prato Branco Pequeno</td><td><input type="number" name="prato_pequeno_qtd" min="0" required></td></tr>
+                <tr><td>Prato Marrom</td><td><input type="number" name="prato_marrom_qtd" min="0" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TALHERES -->
+        <div class="section">
+          <div class="section-title">Talheres</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Colher</td><td><input type="number" name="colher_qtd" min="0" required></td></tr>
+                <tr><td>Colher Sobremesa</td><td><input type="number" name="colher_sobremesa_qtd" min="0" required></td></tr>
+                <tr><td>Faca</td><td><input type="number" name="faca_qtd" min="0" required></td></tr>
+                <tr><td>Garfo</td><td><input type="number" name="garfo_qtd" min="0" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAÇAS -->
+        <div class="section">
+          <div class="section-title">Taças</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td>Taça Cerveja</td><td><input type="number" name="taca_cerveja_qtd" min="0" required></td></tr>
+                <tr><td>Taça Champagne</td><td><input type="number" name="taca_champagne_qtd" min="0" required></td></tr>
+                <tr><td>Taça Gin</td><td><input type="number" name="taca_gin_qtd" min="0" required></td></tr>
+                <tr><td>Taça Licor</td><td><input type="number" name="taca_licor_qtd" min="0" required></td></tr>
+                <tr><td>Taça Sobremesa</td><td><input type="number" name="taca_sobremesa_qtd" min="0" required></td></tr>
+                <tr><td>Taça Vinho</td><td><input type="number" name="taca_vinho_qtd" min="0" required></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ITENS NÃO LISTADOS – 3 LINHAS -->
+        <div class="section">
+          <div class="section-title">Itens não listados</div>
+          <div class="table-wrapper">
+            <table class="item-table">
+              <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+              <tbody>
+                <tr><td><input type="text" name="extra_item1"></td><td><input type="number" name="extra_qtd1" min="0"></td></tr>
+                <tr><td><input type="text" name="extra_item2"></td><td><input type="number" name="extra_qtd2" min="0"></td></tr>
+                <tr><td><input type="text" name="extra_item3"></td><td><input type="number" name="extra_qtd3" min="0"></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="btnEnviar">Enviar contagem</button>
+          <div id="status" class="status-message"></div>
+        </div>
+
+      </form>
+    </div>
   </div>
 
   <script>
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzld5WBl5h_X_r8ajDAK3hjCiKcK346k1v7N3ZawLgSOYjdB0rlFq7qG8_NGvI0yJYPKQ/exec';
+    const WEB_APP_URL =
+      'https://script.google.com/macros/s/AKfycbzld5WBl5h_X_r8ajDAK3hjCiKcK346k1v7N3ZawLgSOYjdB0rlFq7qG8_NGvI0yJYPKQ/exec';
+
     const form = document.getElementById('formContagem');
     const statusEl = document.getElementById('status');
+    const btnEnviar = document.getElementById('btnEnviar');
+
+    // Campo Responsável em Title Case (primeira letra maiúscula de cada palavra)
+    const campoResponsavel = form.querySelector('input[name="responsavel"]');
+    if (campoResponsavel) {
+      campoResponsavel.addEventListener('input', function () {
+        let valor = campoResponsavel.value
+          .toLowerCase()
+          .replace(/\b\w/g, function (letra) {
+            return letra.toUpperCase();
+          });
+
+        campoResponsavel.value = valor;
+      });
+    }
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -152,8 +360,10 @@
 
       data.timestamp_cliente = new Date().toISOString();
 
-      statusEl.textContent = 'Enviando...';
-      statusEl.style.color = '#555';
+      btnEnviar.disabled = true;
+      btnEnviar.textContent = "Enviando…";
+      statusEl.textContent = '';
+      statusEl.className = 'status-message';
 
       try {
         await fetch(WEB_APP_URL, {
@@ -163,14 +373,17 @@
           body: JSON.stringify(data)
         });
 
-        statusEl.textContent = "Contagem enviada com sucesso!";
-        statusEl.style.color = "green";
+        statusEl.textContent = "Contagem enviada!";
+        statusEl.className = "status-message status-ok";
         form.reset();
 
       } catch (err) {
         statusEl.textContent = "Erro ao enviar.";
-        statusEl.style.color = "red";
+        statusEl.className = "status-message status-error";
       }
+
+      btnEnviar.disabled = false;
+      btnEnviar.textContent = "Enviar contagem";
     });
   </script>
 </body>
