@@ -75,7 +75,7 @@
       padding: 8px 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
-      font-size: 13px;
+      font-size: 15px;
       background: #fff;
       color: #000;
     }
@@ -113,7 +113,7 @@
     .item-table td {
       border: 1px solid #e0e0e0;
       padding: 6px;
-      font-size: 12px;
+      font-size: 14px;
       word-wrap: break-word;
     }
 
@@ -123,12 +123,12 @@
       text-align: left;
     }
 
-    /* Colunas equilibradas */
+    /* Colunas mais estreitas e equilibradas */
     .item-table th:nth-child(1),
-    .item-table td:nth-child(1) { width: 65%; }
+    .item-table td:nth-child(1) { width: 60%; }
 
     .item-table th:nth-child(2),
-    .item-table td:nth-child(2) { width: 35%; }
+    .item-table td:nth-child(2) { width: 40%; }
 
     .actions {
       text-align: center;
@@ -161,14 +161,16 @@
       .card { padding: 18px 14px; }
 
       .item-table th,
-      .item-table td { font-size: 11px; padding: 5px; }
+      .item-table td {
+        font-size: 13px;
+        padding: 5px;
+      }
 
       .item-table th:nth-child(1),
-      .item-table td:nth-child(1),
+      .item-table td:nth-child(1) { width: 55%; }
+
       .item-table th:nth-child(2),
-      .item-table td:nth-child(2) {
-        width: 50%;
-      }
+      .item-table td:nth-child(2) { width: 45%; }
     }
   </style>
 </head>
@@ -212,10 +214,6 @@
         <p class="helper">
           Preencha todas as quantidades. A data/hora do envio também será gravada automaticamente.
         </p>
-
-        <!-- ==========================
-             SEÇÕES DO INVENTÁRIO
-             ========================== -->
 
         <!-- COPOS -->
         <div class="section">
@@ -392,6 +390,7 @@
       btnEnviar.disabled = true;
       btnEnviar.textContent = "Enviando…";
       statusEl.textContent = '';
+      statusEl.className = 'status-message';
 
       try {
         await fetch(WEB_APP_URL, {
@@ -406,7 +405,9 @@
         form.reset();
 
         // Reaplica data de hoje após reset
-        campoData.value = new Date().toISOString().split("T")[0];
+        if (campoData) {
+          campoData.value = new Date().toISOString().split("T")[0];
+        }
 
       } catch (err) {
         statusEl.textContent = "Erro ao enviar.";
