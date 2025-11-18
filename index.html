@@ -51,13 +51,13 @@
 
     .row {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 28px;
       margin-bottom: 26px;
     }
 
     .field {
-      flex: 1;
+      width: 100%;
     }
 
     label {
@@ -139,30 +139,70 @@
       border: 2px solid #aaa;
     }
 
+    .actions {
+      text-align: center;
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+    }
+
     button {
-      padding: 30px 48px;
+      padding: 24px 40px;
       border-radius: 999px;
       border: none;
-      font-size: 50px;
+      font-size: 46px;
       font-weight: 700;
       background: var(--cv-green);
       color: #fff;
-      margin-top: 20px;
       cursor: pointer;
+      min-width: 380px;
     }
 
     button:hover:not(:disabled) {
       background: var(--cv-green-dark);
     }
 
+    #btnPdf {
+      background: #444;
+    }
+
+    #btnPdf:hover:not(:disabled) {
+      background: #222;
+    }
+
     .status-message {
-      margin-top: 28px;
-      font-size: 46px;
+      margin-top: 10px;
+      font-size: 40px;
       text-align: center;
     }
 
     .status-ok { color: #008000; }
     .status-error { color: #c00; }
+
+    /* PDF */
+    @media print {
+      body {
+        background: #fff;
+        font-size: 32px;
+        margin: 0;
+        padding: 0;
+      }
+
+      .card {
+        box-shadow: none;
+        border-top: 4px solid var(--cv-green);
+        border-radius: 0;
+        padding: 20px;
+      }
+
+      .actions,
+      #status {
+        display: none !important;
+      }
+    }
 
   </style>
 </head>
@@ -178,8 +218,8 @@
 
       <form id="formContagem">
 
-        <!-- Unidade / Setor / Data - um abaixo do outro -->
-        <div class="row" style="flex-direction: column; gap: 28px;">
+        <!-- Unidade / Setor / Data -->
+        <div class="row">
           <div class="field">
             <label>Unidade *</label>
             <select name="unidade" required>
@@ -204,9 +244,9 @@
           </div>
         </div>
 
-        <!-- Responsável -->
+        <!-- Responsável 100% largura -->
         <div class="row">
-          <div class="field" style="flex: 1 1 80%; max-width: 80%;">
+          <div class="field">
             <label>Responsável *</label>
             <input type="text" name="responsavel" required>
           </div>
@@ -312,7 +352,7 @@
           </table>
         </div>
 
-        <!-- Itens Extras -->
+        <!-- ITENS EXTRAS -->
         <div class="section">
           <div class="section-title">Itens não listados</div>
           <table class="item-table">
@@ -327,6 +367,7 @@
 
         <div class="actions">
           <button type="submit" id="btnEnviar">Enviar Contagem</button>
+          <button type="button" id="btnPdf">Salvar em PDF</button>
           <div id="status" class="status-message"></div>
         </div>
 
@@ -339,22 +380,26 @@
       'https://script.google.com/macros/s/AKfycbzld5WBl5h_X_r8ajDAK3hjCiKcK346k1v7N3ZawLgSOYjdB0rlFq7qG8_NGvI0yJYPKQ/exec';
 
     const form = document.getElementById('formContagem');
-    const statusEl = document.getElementById('status');
     const btnEnviar = document.getElementById('btnEnviar');
+    const btnPdf = document.getElementById('btnPdf');
+    const statusEl = document.getElementById('status');
 
+    // Salvar em PDF
+    btnPdf.addEventListener('click', () => {
+      window.print();
+    });
+
+    // Envio ao Google Sheet
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const data = {};
-      const fields = form.querySelectorAll('[name]');
-      fields.forEach(el => data[el.name] = el.value);
-
+      form.querySelectorAll('[name]').forEach(el => data[el.name] = el.value);
       data.timestamp = new Date().toISOString();
 
       btnEnviar.disabled = true;
       btnEnviar.textContent = "Enviando…";
       statusEl.textContent = '';
-      statusEl.className = 'status-message';
 
       try {
         await fetch(WEB_APP_URL, {
