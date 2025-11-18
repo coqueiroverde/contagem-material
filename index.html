@@ -18,26 +18,32 @@
       font-family: Arial, Helvetica, sans-serif;
       background: var(--cv-bg);
       margin: 0;
-      padding: 16px;
+      padding: 12px;
       color: #000;
-      font-size: 42px; /* fonte grande */
+      font-size: 16px; /* base desktop */
     }
 
-    .page { max-width: 920px; margin: 0 auto; }
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+    }
 
     .card {
       background: #fff;
       border-radius: 14px;
-      padding: 40px 28px;
+      padding: 24px 18px;
       box-shadow: 0 0 18px rgba(0,0,0,0.08);
-      border-top: 8px solid var(--cv-green);
+      border-top: 6px solid var(--cv-green);
     }
 
-    header { text-align: center; margin-bottom: 32px; }
+    header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
 
     header h1 {
-      font-size: 64px;
-      margin: 0 0 14px;
+      font-size: 26px;
+      margin: 0 0 6px;
       color: var(--cv-green-dark);
       font-weight: 900;
       text-transform: uppercase;
@@ -45,15 +51,15 @@
 
     header p {
       margin: 0;
-      font-size: 46px;
+      font-size: 16px;
       color: #555;
     }
 
     .row {
       display: flex;
       flex-direction: column;
-      gap: 28px;
-      margin-bottom: 26px;
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
     .field {
@@ -62,9 +68,9 @@
 
     label {
       display: block;
-      font-size: 48px;
+      font-size: 16px;
       font-weight: 700;
-      margin-bottom: 10px;
+      margin-bottom: 4px;
       color: #222;
     }
 
@@ -73,92 +79,95 @@
     input[type="number"],
     input[type="date"] {
       width: 100%;
-      padding: 28px;
-      border-radius: 18px;
-      border: 2px solid #BBB;
-      font-size: 50px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #bbb;
+      font-size: 16px;
       background: #fff;
       color: #000;
     }
 
     .helper {
-      font-size: 38px;
+      font-size: 14px;
       color: #666;
-      margin-top: -10px;
-      margin-bottom: 30px;
+      margin: 4px 0 18px;
     }
 
     .section {
-      margin-top: 42px;
-      border-top: 3px solid #dddddd;
-      padding-top: 26px;
+      margin-top: 18px;
+      border-top: 1px solid #dddddd;
+      padding-top: 12px;
     }
 
     .section-title {
-      font-size: 58px;
+      font-size: 18px;
       text-align: center;
       font-weight: 900;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       color: var(--cv-green-dark);
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
 
     .item-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 30px;
+      margin-bottom: 18px;
       table-layout: fixed;
     }
 
     .item-table th,
     .item-table td {
       border: 1px solid #d0d0d0;
-      padding: 22px;
-      font-size: 50px;
+      padding: 8px;
+      font-size: 14px;
     }
 
     .item-table th {
       background: #e8f2ee;
-      font-weight: 900;
+      font-weight: 700;
       text-align: left;
     }
 
     .item-table th:nth-child(1),
-    .item-table td:nth-child(1) { width: 78%; }
+    .item-table td:nth-child(1) { width: 75%; }
 
     .item-table th:nth-child(2),
-    .item-table td:nth-child(2) { width: 22%; text-align: center; }
+    .item-table td:nth-child(2) {
+      width: 25%;
+      text-align: center;
+    }
 
     .item-table td:nth-child(2) input {
       width: 100%;
-      max-width: 150px;
-      font-size: 55px;
-      padding: 22px;
+      max-width: 80px;
+      font-size: 16px;
+      padding: 6px;
       text-align: center;
-      border-radius: 18px;
-      border: 2px solid #aaa;
+      border-radius: 8px;
+      border: 1px solid #aaa;
     }
 
     .actions {
       text-align: center;
-      margin-top: 30px;
+      margin-top: 18px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 10px;
       align-items: center;
       justify-content: center;
     }
 
     button {
-      padding: 24px 40px;
+      padding: 10px 26px;
       border-radius: 999px;
       border: none;
-      font-size: 46px;
+      font-size: 16px;
       font-weight: 700;
       background: var(--cv-green);
       color: #fff;
       cursor: pointer;
-      min-width: 380px;
+      min-width: 220px;
     }
 
     button:hover:not(:disabled) {
@@ -174,28 +183,179 @@
     }
 
     .status-message {
-      margin-top: 10px;
-      font-size: 40px;
+      margin-top: 6px;
+      font-size: 14px;
       text-align: center;
     }
 
     .status-ok { color: #008000; }
     .status-error { color: #c00; }
 
-    /* PDF */
+    /* ======== RESPONSIVIDADE ======== */
+
+    /* Tablets */
+    @media (max-width: 992px) {
+      body { font-size: 17px; }
+
+      header h1 { font-size: 24px; }
+      header p { font-size: 15px; }
+
+      label { font-size: 17px; }
+      select,
+      input[type="text"],
+      input[type="number"],
+      input[type="date"] {
+        font-size: 17px;
+        padding: 12px 14px;
+      }
+
+      .item-table th,
+      .item-table td {
+        font-size: 15px;
+        padding: 8px;
+      }
+
+      .item-table td:nth-child(2) input {
+        max-width: 88px;
+        font-size: 17px;
+      }
+
+      button {
+        font-size: 17px;
+        padding: 12px 28px;
+      }
+    }
+
+    /* Celular */
+    @media (max-width: 600px) {
+      body { font-size: 18px; padding: 8px; }
+
+      .card {
+        padding: 18px 10px;
+        border-radius: 10px;
+      }
+
+      header h1 { font-size: 22px; }
+      header p { font-size: 14px; }
+
+      label { font-size: 17px; }
+
+      select,
+      input[type="text"],
+      input[type="number"],
+      input[type="date"] {
+        font-size: 18px;
+        padding: 10px 12px;
+      }
+
+      .section-title { font-size: 17px; }
+
+      .item-table th,
+      .item-table td {
+        font-size: 14px;
+        padding: 6px;
+      }
+
+      .item-table td:nth-child(2) input {
+        max-width: 70px;
+        font-size: 17px;
+        padding: 6px;
+      }
+
+      button {
+        font-size: 18px;
+        padding: 12px 22px;
+        min-width: 200px;
+      }
+    }
+
+    /* ======== IMPRESSÃO EM A4 ======== */
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+
     @media print {
       body {
         background: #fff;
-        font-size: 32px;
         margin: 0;
         padding: 0;
+        font-size: 10pt;
+      }
+
+      .page {
+        max-width: 100%;
+        margin: 0;
       }
 
       .card {
         box-shadow: none;
-        border-top: 4px solid var(--cv-green);
         border-radius: 0;
-        padding: 20px;
+        border-top: 3px solid var(--cv-green);
+        padding: 4mm;
+      }
+
+      header {
+        margin-bottom: 4mm;
+      }
+
+      header h1 {
+        font-size: 14pt;
+      }
+
+      header p {
+        font-size: 9pt;
+      }
+
+      .row {
+        margin-bottom: 3mm;
+        gap: 2mm;
+      }
+
+      label {
+        font-size: 9pt;
+        margin-bottom: 1mm;
+      }
+
+      select,
+      input[type="text"],
+      input[type="number"],
+      input[type="date"] {
+        font-size: 9pt;
+        padding: 2mm;
+        border-radius: 3px;
+      }
+
+      .helper {
+        font-size: 8pt;
+        margin-bottom: 3mm;
+      }
+
+      .section {
+        margin-top: 3mm;
+        padding-top: 2mm;
+        border-top: 0.5pt solid #ccc;
+      }
+
+      .section-title {
+        font-size: 10pt;
+        margin-bottom: 2mm;
+      }
+
+      .item-table {
+        margin-bottom: 3mm;
+      }
+
+      .item-table th,
+      .item-table td {
+        font-size: 8pt;
+        padding: 1.5mm;
+      }
+
+      .item-table td:nth-child(2) input {
+        max-width: 18mm;
+        font-size: 8pt;
+        padding: 1mm;
       }
 
       .actions,
@@ -244,7 +404,7 @@
           </div>
         </div>
 
-        <!-- Responsável 100% largura -->
+        <!-- Responsável -->
         <div class="row">
           <div class="field">
             <label>Responsável *</label>
@@ -384,12 +544,12 @@
     const btnPdf = document.getElementById('btnPdf');
     const statusEl = document.getElementById('status');
 
-    // Salvar em PDF
+    // Salvar em PDF (abre janela de impressão)
     btnPdf.addEventListener('click', () => {
       window.print();
     });
 
-    // Envio ao Google Sheet
+    // Envio ao Google Apps Script
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
 
@@ -400,6 +560,7 @@
       btnEnviar.disabled = true;
       btnEnviar.textContent = "Enviando…";
       statusEl.textContent = '';
+      statusEl.className = 'status-message';
 
       try {
         await fetch(WEB_APP_URL, {
