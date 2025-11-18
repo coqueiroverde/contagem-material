@@ -20,7 +20,7 @@
       margin: 0;
       padding: 16px;
       color: #000;
-      font-size: 33px; /* bem grande */
+      font-size: 43px;  /* bem grande */
     }
 
     .page { max-width: 900px; margin: 0 auto; }
@@ -28,16 +28,16 @@
     .card {
       background: #fff;
       border-radius: 14px;
-      padding: 30px 24px;
+      padding: 36px 28px;
       box-shadow: 0 0 18px rgba(0,0,0,0.08);
-      border-top: 4px solid var(--cv-green);
+      border-top: 6px solid var(--cv-green);
     }
 
-    header { text-align: center; margin-bottom: 26px; }
+    header { text-align: center; margin-bottom: 32px; }
 
     header h1 {
-      font-size: 47px;
-      margin: 0 0 10px;
+      font-size: 57px;
+      margin: 0 0 14px;
       color: var(--cv-green-dark);
       text-transform: uppercase;
       font-weight: 900;
@@ -45,15 +45,15 @@
 
     header p {
       margin: 0;
-      font-size: 31px;
+      font-size: 41px;
       color: #555;
     }
 
     .row {
       display: flex;
       flex-wrap: wrap;
-      gap: 18px;
-      margin-bottom: 18px;
+      gap: 24px;
+      margin-bottom: 22px;
     }
 
     .field {
@@ -63,152 +63,139 @@
 
     label {
       display: block;
-      font-size: 33px;
+      font-size: 43px;
       font-weight: 700;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
       color: #222;
     }
 
+    select,
     input[type="text"],
     input[type="number"],
-    input[type="date"],
-    select {
+    input[type="date"] {
       width: 100%;
-      padding: 20px 20px;
-      border-radius: 12px;
+      padding: 26px 26px;
+      border-radius: 16px;
       border: 1px solid #bbb;
-      font-size: 35px;
+      font-size: 45px;
       background: #fff;
       color: #000;
     }
 
     .helper {
-      font-size: 30px;
+      font-size: 38px;
       color: #777;
-      margin: 4px 0 16px;
+      margin: 6px 0 22px;
     }
 
     .section {
-      margin-top: 26px;
-      border-top: 1px solid #e3e3e3;
-      padding-top: 16px;
+      margin-top: 32px;
+      border-top: 2px solid #d3d3d3;
+      padding-top: 22px;
     }
 
     .section-title {
-      font-size: 41px;
+      font-size: 51px;
       font-weight: 900;
-      margin-bottom: 14px;
+      margin-bottom: 18px;
       text-transform: uppercase;
       color: var(--cv-green-dark);
       text-align: center;
       letter-spacing: 1px;
     }
 
-    .table-wrapper {
-      width: 100%;
-    }
+    .table-wrapper { width: 100%; }
 
     .item-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 14px;
+      margin-bottom: 18px;
       table-layout: fixed;
     }
 
     .item-table th,
     .item-table td {
-      border: 1px solid #e0e0e0;
-      padding: 14px;
-      font-size: 37px;
+      border: 1px solid #d0d0d0;
+      padding: 20px;
+      font-size: 49px;
     }
 
     .item-table th {
       background: #e8f2ee;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .item-table th:nth-child(1),
     .item-table td:nth-child(1) { width: 78%; }
 
     .item-table th:nth-child(2),
-    .item-table td:nth-child(2) { width: 22%; text-align: center; }
+    .item-table td:nth-child(2) {
+      width: 22%;
+      text-align: center;
+    }
 
     .item-table td:nth-child(2) input.qtd {
-      max-width: 110px;
-      font-size: 39px;
-      padding: 14px;
+      max-width: 140px;
+      font-size: 52px;
+      padding: 20px;
       text-align: center;
+      border-radius: 16px;
+      border: 1px solid #aaa;
       margin: 0 auto;
       display: block;
-      border-radius: 12px;
-      border: 1px solid #aaa;
     }
 
     @media (max-width: 600px) {
+      header h1 { font-size: 53px; }
+      .card { padding: 30px 18px; }
 
-      header h1 {
-        font-size: 43px;
-      }
-
-      .card {
-        padding: 24px 16px;
-      }
-
+      select,
       input[type="text"],
       input[type="number"],
-      input[type="date"],
-      select {
-        font-size: 39px !important;
-        padding: 20px !important;
+      input[type="date"] {
+        font-size: 50px !important;
+        padding: 26px !important;
       }
 
       .item-table th,
       .item-table td {
-        font-size: 39px !important;
-        padding: 14px !important;
+        font-size: 52px !important;
+        padding: 22px !important;
       }
 
-      .item-table th:nth-child(1),
-      .item-table td:nth-child(1) { width: 80% !important; }
-
-      .item-table th:nth-child(2),
-      .item-table td:nth-child(2) { width: 20% !important; }
-
       .item-table td:nth-child(2) input.qtd {
-        max-width: 100px !important;
-        font-size: 41px !important;
-        padding: 16px !important;
+        max-width: 150px !important;
+        font-size: 55px !important;
+        padding: 22px !important;
       }
 
       .section-title {
-        font-size: 43px !important;
-        margin-bottom: 20px !important;
+        font-size: 55px !important;
+        margin-bottom: 22px !important;
       }
     }
 
     button {
-      padding: 20px 38px;
+      padding: 26px 42px;
       border-radius: 999px;
       border: none;
-      font-size: 35px;
+      font-size: 45px;
       cursor: pointer;
       background: var(--cv-green);
       color: #fff;
       font-weight: 700;
     }
 
-    button:hover:not(:disabled) {
-      background: var(--cv-green-dark);
-    }
+    button:hover:not(:disabled) { background: var(--cv-green-dark); }
 
     .actions {
       text-align: center;
-      margin-top: 24px;
+      margin-top: 30px;
     }
 
     .status-message {
-      margin-top: 18px;
-      font-size: 33px;
+      margin-top: 24px;
+      font-size: 43px;
       text-align: center;
     }
 
@@ -264,7 +251,7 @@
         </div>
 
         <p class="helper">
-          Preencha todas as quantidades. A data/hora do envio também será gravada automaticamente.
+          Preencha todas as quantidades. A data/hora do envio será gravada automaticamente.
         </p>
 
         <!-- COPOS -->
@@ -465,6 +452,7 @@
         statusEl.className = 'status-message status-ok';
         form.reset();
 
+        // Reaplica data de hoje
         if (campoData) {
           campoData.value = new Date().toISOString().split("T")[0];
         }
