@@ -544,18 +544,18 @@
     const btnPdf = document.getElementById('btnPdf');
     const statusEl = document.getElementById('status');
 
-    // Salvar em PDF (abre janela de impressão)
+    // Botão "Salvar em PDF" → abre janela de impressão (A4)
     btnPdf.addEventListener('click', () => {
       window.print();
     });
 
-    // Envio ao Google Apps Script
+    // Envio ao Google Apps Script – ITEM 3 COMPLETO (JSON + timestamp_cliente)
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const data = {};
       form.querySelectorAll('[name]').forEach(el => data[el.name] = el.value);
-      data.timestamp = new Date().toISOString();
+      data.timestamp_cliente = new Date().toISOString();
 
       btnEnviar.disabled = true;
       btnEnviar.textContent = "Enviando…";
