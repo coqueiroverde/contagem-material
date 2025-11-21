@@ -61,7 +61,7 @@
 
     .form-field {
       flex: 1 1 160px;
-      min-width: 140px;
+      min-width: 150px;
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -75,7 +75,6 @@
 
     select,
     input[type="text"],
-    input[type="date"],
     input[type="number"] {
       border-radius: 8px;
       border: 1px solid var(--cv-border);
@@ -83,6 +82,7 @@
       font-size: 14px;
       outline: none;
       width: 100%;
+      background: #fff;
     }
 
     select:focus,
@@ -116,6 +116,7 @@
     .itens-status {
       font-size: 11px;
       color: #777;
+      text-align: right;
     }
 
     .grupo-title {
@@ -240,7 +241,7 @@
       </div>
 
       <form id="form-inventario" method="post">
-        <!-- METADADOS PRINCIPAIS -->
+        <!-- LINHA 1: UNIDADE + SETOR -->
         <div class="form-row">
           <div class="form-field">
             <label for="unidade">Unidade</label>
@@ -248,7 +249,6 @@
               <option value="" disabled selected>Selecione...</option>
               <option value="P10">P10 – Parque 10</option>
               <option value="P14">P14 – Praça 14</option>
-              <!-- Adicione mais unidades aqui se precisar -->
             </select>
           </div>
 
@@ -256,18 +256,12 @@
             <label for="setor">Setor</label>
             <select id="setor" name="setor" required>
               <option value="SALÃO" selected>SALÃO</option>
-              <!-- Se no futuro usar COZINHA/BAR:
-              <option value="COZINHA">COZINHA</option>
-              <option value="BAR">BAR</option>
-              -->
             </select>
           </div>
+        </div>
 
-          <div class="form-field">
-            <label for="data">Data</label>
-            <input type="date" id="data" name="data" required />
-          </div>
-
+        <!-- LINHA 2: RESPONSÁVEL + DATA -->
+        <div class="form-row">
           <div class="form-field">
             <label for="responsavel">Responsável</label>
             <input
@@ -275,6 +269,18 @@
               id="responsavel"
               name="responsavel"
               placeholder="Nome de quem está contando"
+              required
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="data">Data (dd/mm/aaaa)</label>
+            <input
+              type="text"
+              id="data"
+              name="data"
+              placeholder="dd/mm/aaaa"
+              inputmode="numeric"
               required
             />
           </div>
@@ -293,7 +299,7 @@
           </div>
 
           <div id="itens-container">
-            <!-- Os grupos e itens serão inseridos aqui via JavaScript -->
+            <!-- Grupos e itens entram aqui via JavaScript -->
           </div>
         </div>
 
@@ -312,7 +318,7 @@
   </div>
 
   <script>
-    // 🔗 URL publicada do seu Web App INVENTÁRIO
+    // URL do Web App (Apps Script)
     const WEBAPP_BASE_URL = 'https://script.google.com/macros/s/AKfycbx7zO5sh3j9bmfnsKCxtKYOmKdXw-3Cnm11XfWCMOPjCRw9Ks1vWf5Y3YLdxxpWITTbMQ/exec';
 
     const form = document.getElementById('form-inventario');
@@ -322,27 +328,59 @@
     const setorSelect = document.getElementById('setor');
     const timestampInput = document.getElementById('timestamp_cliente');
     const btnLimpar = document.getElementById('btn-limpar');
+    const inputData = document.getElementById('data');
+    const inputResponsavel = document.getElementById('responsavel');
 
-    // Define o action do formulário
     form.action = WEBAPP_BASE_URL;
 
-    // Ajusta a data padrão para hoje
-    function defineDataHoje() {
+    function hojeEmBr() {
       const hoje = new Date();
-      const ano = hoje.getFullYear();
-      const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-      const dia = String(hoje.getDate()).padStart(2, '0');
-      document.getElementById('data').value = `${ano}-${mes}-${dia}`;
+      const d = String(hoje.getDate()).padStart(2, '0');
+      const m = String(hoje.getMonth() + 1).padStart(2, '0');
+      const a = hoje.getFullYear();
+      return `${d}/${m}/${a}`;
     }
-    defineDataHoje();
 
-    // Atualiza o timestamp_cliente sempre que a página carrega
+    function preencherDataHoje() {
+      inputData.value = hojeEmBr();
+    }
+
     function atualizarTimestampCliente() {
       timestampInput.value = new Date().toISOString();
     }
-    atualizarTimestampCliente();
 
-    // Normaliza texto (igual ao backend), se precisar
+    // Validação básica dd/mm/aaaa
+    function dataBrValida(str) {
+      const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(str);
+      if (!m) return false;
+      const d = parseInt(m[1], 10);
+      const mo = parseInt(m[2], 10) - 1;
+      const y = parseInt(m[3], 10);
+      const dt = new Date(y, mo, d);
+      return (
+        dt.getFullYear() === y &&
+        dt.getMonth() === mo &&
+        dt.getDate() === d
+      );
+    }
+
+    // Coloca primeira letra de cada palavra em maiúscula
+    function titleCaseNome(str) {
+      return String(str)
+        .trim()
+        .toLowerCase()
+        .split(/\s+/)
+        .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+        .join(' ');
+    }
+
+    inputResponsavel.addEventListener('blur', () => {
+      if (inputResponsavel.value.trim()) {
+        inputResponsavel.value = titleCaseNome(inputResponsavel.value);
+      }
+    });
+
+    // Normaliza texto (igual ao backend, se precisar)
     function normalizarTexto(texto) {
       let s = String(texto).toLowerCase();
       s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -351,15 +389,12 @@
       return s;
     }
 
-    // Carrega itens a partir do BACKEND para um setor específico
     async function carregarItensDoSetor(setor) {
       itensContainer.innerHTML = '';
       itensStatusText.textContent = 'Carregando itens do setor...';
 
       try {
-        const url = `${WEBAPP_BASE_URL}?mode=itens&setor=${encodeURIComponent(
-          setor
-        )}`;
+        const url = `${WEBAPP_BASE_URL}?mode=itens&setor=${encodeURIComponent(setor)}`;
         const resp = await fetch(url, { method: 'GET', cache: 'no-cache' });
 
         if (!resp.ok) {
@@ -370,22 +405,20 @@
         const itens = data.itens || [];
 
         if (!itens.length) {
-          itensStatusText.textContent =
-            'Nenhum item configurado para este setor.';
+          itensStatusText.textContent = 'Nenhum item configurado para este setor.';
           return;
         }
 
         itensStatusText.textContent = `Total de itens: ${itens.length}`;
 
-        // Agrupa itens por "grupo" e ordena por "ordem"
         const grupos = {};
-        itens.forEach(it => {
+        itens.forEach((it) => {
           const grupo = it.grupo || 'Sem grupo';
           if (!grupos[grupo]) grupos[grupo] = [];
           grupos[grupo].push(it);
         });
 
-        Object.keys(grupos).forEach(grupo => {
+        Object.keys(grupos).forEach((grupo) => {
           grupos[grupo].sort((a, b) => {
             const oa = Number(a.ordem || 0);
             const ob = Number(b.ordem || 0);
@@ -393,15 +426,13 @@
           });
         });
 
-        // Monta o HTML dos grupos e itens
-        Object.keys(grupos).forEach(grupo => {
-          // Título do grupo
+        Object.keys(grupos).forEach((grupo) => {
           const grupoTitle = document.createElement('div');
           grupoTitle.className = 'grupo-title';
           grupoTitle.textContent = grupo;
           itensContainer.appendChild(grupoTitle);
 
-          grupos[grupo].forEach(it => {
+          grupos[grupo].forEach((it) => {
             const labelTexto = it.label || it.campo || 'Item';
             const nomeCampo = it.campo || normalizarTexto(labelTexto);
 
@@ -426,48 +457,48 @@
             inputDiv.appendChild(input);
             row.appendChild(labelDiv);
             row.appendChild(inputDiv);
-
             itensContainer.appendChild(row);
           });
         });
       } catch (erro) {
         console.error(erro);
-        itensStatusText.textContent =
-          'Erro ao carregar itens. Verifique o BACKEND.';
+        itensStatusText.textContent = 'Erro ao carregar itens. Verifique o backend.';
       }
     }
 
-    // Recarrega itens quando o setor mudar (se no futuro tiver mais de um)
     setorSelect.addEventListener('change', () => {
       const setor = setorSelect.value || 'SALÃO';
       carregarItensDoSetor(setor);
     });
 
-    // Limpar formulário
     btnLimpar.addEventListener('click', () => {
       form.reset();
-      defineDataHoje();
+      preencherDataHoje();
       atualizarTimestampCliente();
       msgBox.style.display = 'none';
       const setor = setorSelect.value || 'SALÃO';
       carregarItensDoSetor(setor);
     });
 
-    // Intercepta o submit para enviar via fetch e mostrar mensagem,
-    // mantendo o POST exatamente como o backend espera.
-    form.addEventListener('submit', async event => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
       msgBox.style.display = 'none';
 
-      // Atualiza timestamp do cliente
       atualizarTimestampCliente();
 
-      // Validação simples
-      if (!form.unidade.value || !form.setor.value || !form.data.value || !form.responsavel.value) {
+      if (!form.unidade.value || !form.setor.value || !inputResponsavel.value.trim() || !inputData.value.trim()) {
         msgBox.textContent = 'Preencha todos os campos obrigatórios.';
         msgBox.className = 'message error';
         return;
       }
+
+      if (!dataBrValida(inputData.value.trim())) {
+        msgBox.textContent = 'Data inválida. Use o formato dd/mm/aaaa.';
+        msgBox.className = 'message error';
+        return;
+      }
+
+      inputResponsavel.value = titleCaseNome(inputResponsavel.value);
 
       itensStatusText.textContent = 'Enviando inventário...';
 
@@ -484,7 +515,6 @@
         try {
           data = JSON.parse(texto);
         } catch (e) {
-          // Caso o backend não devolva JSON certinho
           data = { status: 'desconhecido', message: texto };
         }
 
@@ -492,28 +522,26 @@
           msgBox.textContent = data.message || 'Inventário registrado com sucesso.';
           msgBox.className = 'message ok';
           form.reset();
-          defineDataHoje();
+          preencherDataHoje();
           atualizarTimestampCliente();
-          // recarrega itens para garantir inputs limpos
           const setor = setorSelect.value || 'SALÃO';
           carregarItensDoSetor(setor);
         } else {
-          msgBox.textContent =
-            data.message || 'Ocorreu um erro ao registrar o inventário.';
+          msgBox.textContent = data.message || 'Ocorreu um erro ao registrar o inventário.';
           msgBox.className = 'message error';
         }
       } catch (erro) {
         console.error(erro);
-        msgBox.textContent =
-          'Erro de conexão ao enviar o inventário. Tente novamente.';
+        msgBox.textContent = 'Erro de conexão ao enviar o inventário. Tente novamente.';
         msgBox.className = 'message error';
       } finally {
         itensStatusText.textContent = 'Itens do inventário carregados.';
       }
     });
 
-    // Inicialização ao carregar a página
     window.addEventListener('DOMContentLoaded', () => {
+      preencherDataHoje();
+      atualizarTimestampCliente();
       const setorInicial = setorSelect.value || 'SALÃO';
       carregarItensDoSetor(setorInicial);
     });
