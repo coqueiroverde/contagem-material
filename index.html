@@ -60,7 +60,7 @@
     }
 
     .form-field {
-      flex: 1 1 160px;
+      flex: 1 1 170px;
       min-width: 150px;
       display: flex;
       flex-direction: column;
@@ -96,7 +96,6 @@
       border-radius: 12px;
       border: 1px solid var(--cv-border);
       padding: 12px 10px 4px;
-      background: #ffffff;
     }
 
     .itens-header {
@@ -104,19 +103,12 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
-      gap: 8px;
     }
 
     .itens-title {
       font-size: 15px;
       font-weight: 600;
       color: var(--cv-green-dark);
-    }
-
-    .itens-status {
-      font-size: 11px;
-      color: #777;
-      text-align: right;
     }
 
     .grupo-title {
@@ -134,7 +126,7 @@
       gap: 6px 10px;
       align-items: center;
       margin-bottom: 4px;
-      padding: 4px 4px;
+      padding: 4px;
       border-radius: 6px;
     }
 
@@ -145,7 +137,6 @@
     .item-label {
       font-size: 13px;
       color: #333;
-      padding-right: 6px;
     }
 
     .item-input input[type="number"] {
@@ -156,7 +147,7 @@
       margin-top: 18px;
       display: flex;
       justify-content: flex-end;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
@@ -167,10 +158,6 @@
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
     }
 
     .btn-primary {
@@ -210,28 +197,13 @@
     }
 
     @media (max-width: 600px) {
-      body {
-        font-size: 14px;
-      }
-
-      h1 {
-        font-size: 19px;
-      }
-
-      .card {
-        padding: 20px 14px;
-      }
-
       .item-grid {
         grid-template-columns: 2.5fr 1fr;
-      }
-
-      .item-label {
-        font-size: 12px;
       }
     }
   </style>
 </head>
+
 <body>
   <div class="page">
     <div class="card">
@@ -241,7 +213,8 @@
       </div>
 
       <form id="form-inventario" method="post">
-        <!-- LINHA 1: UNIDADE + SETOR -->
+
+        <!-- LINHA 1 -->
         <div class="form-row">
           <div class="form-field">
             <label for="unidade">Unidade</label>
@@ -254,62 +227,39 @@
 
           <div class="form-field">
             <label for="setor">Setor</label>
-            <select id="setor" name="setor" required>
+            <select id="setor" name="setor">
               <option value="SALÃO" selected>SALÃO</option>
             </select>
           </div>
         </div>
 
-        <!-- LINHA 2: RESPONSÁVEL + DATA -->
+        <!-- LINHA 2 -->
         <div class="form-row">
           <div class="form-field">
             <label for="responsavel">Responsável</label>
-            <input
-              type="text"
-              id="responsavel"
-              name="responsavel"
-              placeholder="Nome de quem está contando"
-              required
-            />
+            <input type="text" id="responsavel" name="responsavel" required />
           </div>
 
           <div class="form-field">
             <label for="data">Data (dd/mm/aaaa)</label>
-            <input
-              type="text"
-              id="data"
-              name="data"
-              placeholder="dd/mm/aaaa"
-              inputmode="numeric"
-              required
-            />
+            <input type="text" id="data" name="data" required />
           </div>
         </div>
 
-        <!-- Campo oculto para timestamp do cliente -->
         <input type="hidden" id="timestamp_cliente" name="timestamp_cliente" />
 
-        <!-- ITENS DO INVENTÁRIO (DINÂMICOS) -->
         <div class="itens-card">
           <div class="itens-header">
             <div class="itens-title">Itens do inventário</div>
-            <div class="itens-status" id="itens-status-text">
-              Carregando itens do setor...
-            </div>
+            <div id="itens-status-text" style="font-size:12px;">Carregando...</div>
           </div>
 
-          <div id="itens-container">
-            <!-- Grupos e itens entram aqui via JavaScript -->
-          </div>
+          <div id="itens-container"></div>
         </div>
 
         <div class="actions">
-          <button type="button" class="btn btn-secondary" id="btn-limpar">
-            Limpar
-          </button>
-          <button type="submit" class="btn btn-primary">
-            Enviar contagem
-          </button>
+          <button type="button" class="btn btn-secondary" id="btn-limpar">Limpar</button>
+          <button type="submit" class="btn btn-primary">Enviar contagem</button>
         </div>
 
         <div id="mensagem-retorno" class="message"></div>
@@ -318,233 +268,83 @@
   </div>
 
   <script>
-    // URL do Web App (Apps Script)
-    const WEBAPP_BASE_URL = 'https://script.google.com/macros/s/AKfycbx7zO5sh3j9bmfnsKCxtKYOmKdXw-3Cnm11XfWCMOPjCRw9Ks1vWf5Y3YLdxxpWITTbMQ/exec';
+    const preposicoes = ['de', 'da', 'do', 'das', 'dos', 'e', 'em', 'para', 'por'];
 
-    const form = document.getElementById('form-inventario');
-    const itensContainer = document.getElementById('itens-container');
-    const itensStatusText = document.getElementById('itens-status-text');
-    const msgBox = document.getElementById('mensagem-retorno');
-    const setorSelect = document.getElementById('setor');
-    const timestampInput = document.getElementById('timestamp_cliente');
-    const btnLimpar = document.getElementById('btn-limpar');
-    const inputData = document.getElementById('data');
-    const inputResponsavel = document.getElementById('responsavel');
-
-    form.action = WEBAPP_BASE_URL;
-
-    function hojeEmBr() {
-      const hoje = new Date();
-      const d = String(hoje.getDate()).padStart(2, '0');
-      const m = String(hoje.getMonth() + 1).padStart(2, '0');
-      const a = hoje.getFullYear();
-      return `${d}/${m}/${a}`;
-    }
-
-    function preencherDataHoje() {
-      inputData.value = hojeEmBr();
-    }
-
-    function atualizarTimestampCliente() {
-      timestampInput.value = new Date().toISOString();
-    }
-
-    // Validação básica dd/mm/aaaa
-    function dataBrValida(str) {
-      const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(str);
-      if (!m) return false;
-      const d = parseInt(m[1], 10);
-      const mo = parseInt(m[2], 10) - 1;
-      const y = parseInt(m[3], 10);
-      const dt = new Date(y, mo, d);
-      return (
-        dt.getFullYear() === y &&
-        dt.getMonth() === mo &&
-        dt.getDate() === d
-      );
-    }
-
-    // Coloca primeira letra de cada palavra em maiúscula
     function titleCaseNome(str) {
-      return String(str)
-        .trim()
+      if (!str) return '';
+      return str
         .toLowerCase()
         .split(/\s+/)
-        .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+        .map((p, idx) => {
+          if (preposicoes.includes(p) && idx !== 0) return p;
+          return p.charAt(0).toUpperCase() + p.slice(1);
+        })
         .join(' ');
     }
 
-    inputResponsavel.addEventListener('blur', () => {
-      if (inputResponsavel.value.trim()) {
-        inputResponsavel.value = titleCaseNome(inputResponsavel.value);
-      }
-    });
+    const inputResponsavel = document.getElementById('responsavel');
 
-    // Normaliza texto (igual ao backend, se precisar)
-    function normalizarTexto(texto) {
-      let s = String(texto).toLowerCase();
-      s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      s = s.replace(/[\s\-]+/g, '_');
-      s = s.replace(/[^a-z0-9_]/g, '');
-      return s;
-    }
-
-    async function carregarItensDoSetor(setor) {
-      itensContainer.innerHTML = '';
-      itensStatusText.textContent = 'Carregando itens do setor...';
-
-      try {
-        const url = `${WEBAPP_BASE_URL}?mode=itens&setor=${encodeURIComponent(setor)}`;
-        const resp = await fetch(url, { method: 'GET', cache: 'no-cache' });
-
-        if (!resp.ok) {
-          throw new Error('Erro ao buscar itens. Código: ' + resp.status);
-        }
-
-        const data = await resp.json();
-        const itens = data.itens || [];
-
-        if (!itens.length) {
-          itensStatusText.textContent = 'Nenhum item configurado para este setor.';
-          return;
-        }
-
-        itensStatusText.textContent = `Total de itens: ${itens.length}`;
-
-        const grupos = {};
-        itens.forEach((it) => {
-          const grupo = it.grupo || 'Sem grupo';
-          if (!grupos[grupo]) grupos[grupo] = [];
-          grupos[grupo].push(it);
-        });
-
-        Object.keys(grupos).forEach((grupo) => {
-          grupos[grupo].sort((a, b) => {
-            const oa = Number(a.ordem || 0);
-            const ob = Number(b.ordem || 0);
-            return oa - ob;
-          });
-        });
-
-        Object.keys(grupos).forEach((grupo) => {
-          const grupoTitle = document.createElement('div');
-          grupoTitle.className = 'grupo-title';
-          grupoTitle.textContent = grupo;
-          itensContainer.appendChild(grupoTitle);
-
-          grupos[grupo].forEach((it) => {
-            const labelTexto = it.label || it.campo || 'Item';
-            const nomeCampo = it.campo || normalizarTexto(labelTexto);
-
-            const row = document.createElement('div');
-            row.className = 'item-grid';
-
-            const labelDiv = document.createElement('div');
-            labelDiv.className = 'item-label';
-            labelDiv.textContent = labelTexto;
-
-            const inputDiv = document.createElement('div');
-            inputDiv.className = 'item-input';
-
-            const input = document.createElement('input');
-            input.type = 'number';
-            input.min = '0';
-            input.step = '1';
-            input.name = nomeCampo;
-            input.inputMode = 'numeric';
-            input.placeholder = '0';
-
-            inputDiv.appendChild(input);
-            row.appendChild(labelDiv);
-            row.appendChild(inputDiv);
-            itensContainer.appendChild(row);
-          });
-        });
-      } catch (erro) {
-        console.error(erro);
-        itensStatusText.textContent = 'Erro ao carregar itens. Verifique o backend.';
-      }
-    }
-
-    setorSelect.addEventListener('change', () => {
-      const setor = setorSelect.value || 'SALÃO';
-      carregarItensDoSetor(setor);
-    });
-
-    btnLimpar.addEventListener('click', () => {
-      form.reset();
-      preencherDataHoje();
-      atualizarTimestampCliente();
-      msgBox.style.display = 'none';
-      const setor = setorSelect.value || 'SALÃO';
-      carregarItensDoSetor(setor);
-    });
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      msgBox.style.display = 'none';
-
-      atualizarTimestampCliente();
-
-      if (!form.unidade.value || !form.setor.value || !inputResponsavel.value.trim() || !inputData.value.trim()) {
-        msgBox.textContent = 'Preencha todos os campos obrigatórios.';
-        msgBox.className = 'message error';
-        return;
-      }
-
-      if (!dataBrValida(inputData.value.trim())) {
-        msgBox.textContent = 'Data inválida. Use o formato dd/mm/aaaa.';
-        msgBox.className = 'message error';
-        return;
-      }
-
+    inputResponsavel.addEventListener('input', () => {
+      const cursor = inputResponsavel.selectionStart;
       inputResponsavel.value = titleCaseNome(inputResponsavel.value);
+      inputResponsavel.setSelectionRange(cursor, cursor);
+    });
 
-      itensStatusText.textContent = 'Enviando inventário...';
+    inputResponsavel.addEventListener('blur', () => {
+      inputResponsavel.value = titleCaseNome(inputResponsavel.value);
+    });
 
-      try {
-        const formData = new FormData(form);
+    function hojeEmBr() {
+      const d = new Date();
+      return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+    }
 
-        const resp = await fetch(WEBAPP_BASE_URL, {
-          method: 'POST',
-          body: formData,
+    document.getElementById('data').value = hojeEmBr();
+    document.getElementById('timestamp_cliente').value = new Date().toISOString();
+
+    const WEBAPP = "https://script.google.com/macros/s/AKfycbx7zO5sh3j9bmfnsKCxtKYOmKdXw-3Cnm11XfWCMOPjCRw9Ks1vWf5Y3YLdxxpWITTbMQ/exec";
+    const itensContainer = document.getElementById('itens-container');
+    const itensStatus = document.getElementById('itens-status-text');
+
+    async function carregarItens() {
+      itensStatus.textContent = "Carregando...";
+
+      const resp = await fetch(WEBAPP + "?mode=itens&setor=SALÃO");
+      const json = await resp.json();
+
+      itensContainer.innerHTML = "";
+
+      const grupos = {};
+      json.itens.forEach(it => {
+        if (!grupos[it.grupo]) grupos[it.grupo] = [];
+        grupos[it.grupo].push(it);
+      });
+
+      Object.keys(grupos).forEach(g => {
+        const title = document.createElement("div");
+        title.className = "grupo-title";
+        title.textContent = g;
+        itensContainer.appendChild(title);
+
+        grupos[g].forEach(it => {
+          const row = document.createElement("div");
+          row.className = "item-grid";
+
+          row.innerHTML = `
+            <div class="item-label">${it.label}</div>
+            <div class="item-input">
+              <input type="number" name="${it.campo}" min="0" step="1" placeholder="0" />
+            </div>
+          `;
+
+          itensContainer.appendChild(row);
         });
+      });
 
-        const texto = await resp.text();
-        let data;
-        try {
-          data = JSON.parse(texto);
-        } catch (e) {
-          data = { status: 'desconhecido', message: texto };
-        }
+      itensStatus.textContent = `Total de itens: ${json.itens.length}`;
+    }
 
-        if (data.status === 'ok') {
-          msgBox.textContent = data.message || 'Inventário registrado com sucesso.';
-          msgBox.className = 'message ok';
-          form.reset();
-          preencherDataHoje();
-          atualizarTimestampCliente();
-          const setor = setorSelect.value || 'SALÃO';
-          carregarItensDoSetor(setor);
-        } else {
-          msgBox.textContent = data.message || 'Ocorreu um erro ao registrar o inventário.';
-          msgBox.className = 'message error';
-        }
-      } catch (erro) {
-        console.error(erro);
-        msgBox.textContent = 'Erro de conexão ao enviar o inventário. Tente novamente.';
-        msgBox.className = 'message error';
-      } finally {
-        itensStatusText.textContent = 'Itens do inventário carregados.';
-      }
-    });
-
-    window.addEventListener('DOMContentLoaded', () => {
-      preencherDataHoje();
-      atualizarTimestampCliente();
-      const setorInicial = setorSelect.value || 'SALÃO';
-      carregarItensDoSetor(setorInicial);
-    });
+    carregarItens();
   </script>
 </body>
 </html>
