@@ -1,592 +1,522 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>INVENTÁRIO</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Inventário – Salão</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     :root {
       --cv-green: #106c4a;
       --cv-green-dark: #0b4b33;
       --cv-bg: #f4f8f6;
+      --cv-border: #d7e3dd;
     }
 
     body {
       font-family: Arial, Helvetica, sans-serif;
       background: var(--cv-bg);
       margin: 0;
-      padding: 12px;
+      padding: 16px;
       color: #000;
-      font-size: 16px; /* base desktop */
     }
 
     .page {
-      max-width: 980px;
+      max-width: 1080px;
       margin: 0 auto;
     }
 
     .card {
       background: #fff;
       border-radius: 14px;
-      padding: 24px 18px;
-      box-shadow: 0 0 18px rgba(0,0,0,0.08);
+      padding: 24px 20px;
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.08);
       border-top: 6px solid var(--cv-green);
     }
 
-    header {
+    h1 {
+      margin: 0 0 4px 0;
+      font-size: 22px;
+      color: var(--cv-green-dark);
       text-align: center;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: #555;
       margin-bottom: 18px;
     }
 
-    header h1 {
-      font-size: 26px;
-      margin: 0 0 6px;
-      color: var(--cv-green-dark);
-      font-weight: 900;
-      text-transform: uppercase;
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
     }
 
-    header p {
-      margin: 0;
-      font-size: 16px;
-      color: #555;
-    }
-
-    .row {
+    .form-field {
+      flex: 1 1 160px;
+      min-width: 140px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .field {
-      width: 100%;
+      gap: 4px;
     }
 
     label {
-      display: block;
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 4px;
-      color: #222;
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
     }
 
     select,
     input[type="text"],
-    input[type="number"],
-    input[type="date"] {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #bbb;
-      font-size: 16px;
-      background: #fff;
-      color: #000;
-    }
-
-    .helper {
-      font-size: 14px;
-      color: #666;
-      margin: 4px 0 18px;
-    }
-
-    .section {
-      margin-top: 18px;
-      border-top: 1px solid #dddddd;
-      padding-top: 12px;
-    }
-
-    .section-title {
-      font-size: 18px;
-      text-align: center;
-      font-weight: 900;
-      margin-bottom: 10px;
-      color: var(--cv-green-dark);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .item-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 18px;
-      table-layout: fixed;
-    }
-
-    .item-table th,
-    .item-table td {
-      border: 1px solid #d0d0d0;
-      padding: 8px;
-      font-size: 14px;
-    }
-
-    .item-table th {
-      background: #e8f2ee;
-      font-weight: 700;
-      text-align: left;
-    }
-
-    .item-table th:nth-child(1),
-    .item-table td:nth-child(1) { width: 75%; }
-
-    .item-table th:nth-child(2),
-    .item-table td:nth-child(2) {
-      width: 25%;
-      text-align: center;
-    }
-
-    .item-table td:nth-child(2) input {
-      width: 100%;
-      max-width: 80px;
-      font-size: 16px;
-      padding: 6px;
-      text-align: center;
+    input[type="date"],
+    input[type="number"] {
       border-radius: 8px;
-      border: 1px solid #aaa;
+      border: 1px solid var(--cv-border);
+      padding: 8px 10px;
+      font-size: 14px;
+      outline: none;
+      width: 100%;
+    }
+
+    select:focus,
+    input:focus {
+      border-color: var(--cv-green);
+      box-shadow: 0 0 0 1px rgba(16, 108, 74, 0.15);
+    }
+
+    .itens-card {
+      margin-top: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--cv-border);
+      padding: 12px 10px 4px;
+      background: #ffffff;
+    }
+
+    .itens-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 8px;
+    }
+
+    .itens-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--cv-green-dark);
+    }
+
+    .itens-status {
+      font-size: 11px;
+      color: #777;
+    }
+
+    .grupo-title {
+      margin: 12px 0 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      border-left: 3px solid var(--cv-green);
+      padding-left: 6px;
+    }
+
+    .item-grid {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      gap: 6px 10px;
+      align-items: center;
+      margin-bottom: 4px;
+      padding: 4px 4px;
+      border-radius: 6px;
+    }
+
+    .item-grid:nth-child(odd) {
+      background: #f9fbfa;
+    }
+
+    .item-label {
+      font-size: 13px;
+      color: #333;
+      padding-right: 6px;
+    }
+
+    .item-input input[type="number"] {
+      text-align: right;
     }
 
     .actions {
-      text-align: center;
       margin-top: 18px;
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
-    button {
-      padding: 10px 26px;
+    .btn {
       border-radius: 999px;
       border: none;
-      font-size: 16px;
-      font-weight: 700;
-      background: var(--cv-green);
-      color: #fff;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      min-width: 220px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
-    button:hover:not(:disabled) {
+    .btn-primary {
+      background: var(--cv-green);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
       background: var(--cv-green-dark);
     }
 
-    #btnPdf {
-      background: #444;
+    .btn-secondary {
+      background: #e8f2ed;
+      color: var(--cv-green-dark);
     }
 
-    #btnPdf:hover:not(:disabled) {
-      background: #222;
+    .message {
+      margin-top: 12px;
+      font-size: 13px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      display: none;
     }
 
-    .status-message {
-      margin-top: 6px;
-      font-size: 14px;
-      text-align: center;
+    .message.ok {
+      background: #e6f4ea;
+      color: #185c37;
+      border: 1px solid #b7dec2;
+      display: block;
     }
 
-    .status-ok { color: #008000; }
-    .status-error { color: #c00; }
-
-    /* ======== RESPONSIVIDADE ======== */
-
-    /* Tablets */
-    @media (max-width: 992px) {
-      body { font-size: 17px; }
-
-      header h1 { font-size: 24px; }
-      header p { font-size: 15px; }
-
-      label { font-size: 17px; }
-      select,
-      input[type="text"],
-      input[type="number"],
-      input[type="date"] {
-        font-size: 17px;
-        padding: 12px 14px;
-      }
-
-      .item-table th,
-      .item-table td {
-        font-size: 15px;
-        padding: 8px;
-      }
-
-      .item-table td:nth-child(2) input {
-        max-width: 88px;
-        font-size: 17px;
-      }
-
-      button {
-        font-size: 17px;
-        padding: 12px 28px;
-      }
+    .message.error {
+      background: #fdecea;
+      color: #b3261e;
+      border: 1px solid #f5c2c0;
+      display: block;
     }
 
-    /* Celular */
     @media (max-width: 600px) {
-      body { font-size: 18px; padding: 8px; }
-
-      .card {
-        padding: 18px 10px;
-        border-radius: 10px;
-      }
-
-      header h1 { font-size: 22px; }
-      header p { font-size: 14px; }
-
-      label { font-size: 17px; }
-
-      select,
-      input[type="text"],
-      input[type="number"],
-      input[type="date"] {
-        font-size: 18px;
-        padding: 10px 12px;
-      }
-
-      .section-title { font-size: 17px; }
-
-      .item-table th,
-      .item-table td {
-        font-size: 14px;
-        padding: 6px;
-      }
-
-      .item-table td:nth-child(2) input {
-        max-width: 70px;
-        font-size: 17px;
-        padding: 6px;
-      }
-
-      button {
-        font-size: 18px;
-        padding: 12px 22px;
-        min-width: 200px;
-      }
-    }
-
-    /* ======== IMPRESSÃO EM A4 ======== */
-    @page {
-      size: A4 portrait;
-      margin: 10mm;
-    }
-
-    @media print {
       body {
-        background: #fff;
-        margin: 0;
-        padding: 0;
-        font-size: 10pt;
+        font-size: 14px;
       }
 
-      .page {
-        max-width: 100%;
-        margin: 0;
+      h1 {
+        font-size: 19px;
       }
 
       .card {
-        box-shadow: none;
-        border-radius: 0;
-        border-top: 3px solid var(--cv-green);
-        padding: 4mm;
+        padding: 20px 14px;
       }
 
-      header {
-        margin-bottom: 4mm;
+      .item-grid {
+        grid-template-columns: 2.5fr 1fr;
       }
 
-      header h1 {
-        font-size: 14pt;
-      }
-
-      header p {
-        font-size: 9pt;
-      }
-
-      .row {
-        margin-bottom: 3mm;
-        gap: 2mm;
-      }
-
-      label {
-        font-size: 9pt;
-        margin-bottom: 1mm;
-      }
-
-      select,
-      input[type="text"],
-      input[type="number"],
-      input[type="date"] {
-        font-size: 9pt;
-        padding: 2mm;
-        border-radius: 3px;
-      }
-
-      .helper {
-        font-size: 8pt;
-        margin-bottom: 3mm;
-      }
-
-      .section {
-        margin-top: 3mm;
-        padding-top: 2mm;
-        border-top: 0.5pt solid #ccc;
-      }
-
-      .section-title {
-        font-size: 10pt;
-        margin-bottom: 2mm;
-      }
-
-      .item-table {
-        margin-bottom: 3mm;
-      }
-
-      .item-table th,
-      .item-table td {
-        font-size: 8pt;
-        padding: 1.5mm;
-      }
-
-      .item-table td:nth-child(2) input {
-        max-width: 18mm;
-        font-size: 8pt;
-        padding: 1mm;
-      }
-
-      .actions,
-      #status {
-        display: none !important;
+      .item-label {
+        font-size: 12px;
       }
     }
-
   </style>
 </head>
-
 <body>
   <div class="page">
     <div class="card">
+      <h1>Inventário – Salão</h1>
+      <div class="subtitle">
+        Grupo Coqueiro Verde – Preencha os dados e registre o inventário do setor.
+      </div>
 
-      <header>
-        <h1>INVENTÁRIO</h1>
-        <p>Grupo Coqueiro Verde</p>
-      </header>
-
-      <form id="formContagem">
-
-        <!-- Unidade / Setor / Data -->
-        <div class="row">
-          <div class="field">
-            <label>Unidade *</label>
-            <select name="unidade" required>
-              <option value="" disabled selected>Selecione</option>
-              <option value="P10">P10</option>
-              <option value="P14">P14</option>
+      <form id="form-inventario" method="post">
+        <!-- METADADOS PRINCIPAIS -->
+        <div class="form-row">
+          <div class="form-field">
+            <label for="unidade">Unidade</label>
+            <select id="unidade" name="unidade" required>
+              <option value="" disabled selected>Selecione...</option>
+              <option value="P10">P10 – Parque 10</option>
+              <option value="P14">P14 – Praça 14</option>
+              <!-- Adicione mais unidades aqui se precisar -->
             </select>
           </div>
 
-          <div class="field">
-            <label>Setor *</label>
-            <select name="setor" required>
-              <option value="" disabled selected>Selecione</option>
-              <option value="SALÃO">SALÃO</option>
+          <div class="form-field">
+            <label for="setor">Setor</label>
+            <select id="setor" name="setor" required>
+              <option value="SALÃO" selected>SALÃO</option>
+              <!-- Se no futuro usar COZINHA/BAR:
               <option value="COZINHA">COZINHA</option>
+              <option value="BAR">BAR</option>
+              -->
             </select>
           </div>
 
-          <div class="field">
-            <label>Data *</label>
-            <input type="date" name="data" required>
+          <div class="form-field">
+            <label for="data">Data</label>
+            <input type="date" id="data" name="data" required />
+          </div>
+
+          <div class="form-field">
+            <label for="responsavel">Responsável</label>
+            <input
+              type="text"
+              id="responsavel"
+              name="responsavel"
+              placeholder="Nome de quem está contando"
+              required
+            />
           </div>
         </div>
 
-        <!-- Responsável -->
-        <div class="row">
-          <div class="field">
-            <label>Responsável *</label>
-            <input type="text" name="responsavel" required>
+        <!-- Campo oculto para timestamp do cliente -->
+        <input type="hidden" id="timestamp_cliente" name="timestamp_cliente" />
+
+        <!-- ITENS DO INVENTÁRIO (DINÂMICOS) -->
+        <div class="itens-card">
+          <div class="itens-header">
+            <div class="itens-title">Itens do inventário</div>
+            <div class="itens-status" id="itens-status-text">
+              Carregando itens do setor...
+            </div>
           </div>
-        </div>
 
-        <p class="helper">Preencha todas as quantidades.</p>
-
-        <!-- COPOS -->
-        <div class="section">
-          <div class="section-title">Copos</div>
-          <table class="item-table">
-            <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
-            <tbody>
-              <tr><td>Copo Americano</td><td><input type="number" name="copo_americano" min="0"></td></tr>
-              <tr><td>Copo Avulso</td><td><input type="number" name="copo_avulso" min="0"></td></tr>
-              <tr><td>Copo Caipirinha</td><td><input type="number" name="copo_caipirinha" min="0"></td></tr>
-              <tr><td>Copo Decoração</td><td><input type="number" name="copo_decoracao" min="0"></td></tr>
-              <tr><td>Copo Suco</td><td><input type="number" name="copo_suco" min="0"></td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- GARRAFAS -->
-        <div class="section">
-          <div class="section-title">Garrafas</div>
-          <table class="item-table">
-            <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
-            <tbody>
-              <tr><td>Garrafa Tempero</td><td><input type="number" name="garrafa_tempero" min="0"></td></tr>
-              <tr><td>Garrafa Manteguinha</td><td><input type="number" name="garrafa_manteguinha" min="0"></td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- JARRAS -->
-        <div class="section">
-          <div class="section-title">Jarras</div>
-          <table class="item-table">
-            <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
-            <tbody>
-              <tr><td>Jarra 1/2 L</td><td><input type="number" name="jarra_meio" min="0"></td></tr>
-              <tr><td>Jarra 1 L</td><td><input type="number" name="jarra_1l" min="0"></td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- OUTROS -->
-        <div class="section">
-          <div class="section-title">Outros</div>
-          <table class="item-table">
-            <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
-            <tbody>
-              <tr><td>Caneca Pequena</td><td><input type="number" name="caneca_pequena" min="0"></td></tr>
-              <tr><td>Dispenser Guardanapo</td><td><input type="number" name="disp_guardanapo" min="0"></td></tr>
-              <tr><td>Pires Grande</td><td><input type="number" name="pires_grande" min="0"></td></tr>
-              <tr><td>Pires Pequeno</td><td><input type="number" name="pires_pequeno" min="0"></td></tr>
-              <tr><td>Xícara Grande</td><td><input type="number" name="xicara_grande" min="0"></td></tr>
-              <tr><td>Xícara Pequena</td><td><input type="number" name="xicara_pequena" min="0"></td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- PRATOS -->
-        <div class="section">
-          <div class="section-title">Pratos</div>
-          <table class="item-table">
-            <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
-            <tbody>
-              <tr><td>Prato Branco Grande</td><td><input type="number" name="prato_grande" min="0"></td></tr>
-              <tr><td>Prato Branco Pequeno</td><td><input type="number" name="prato_pequeno" min="0"></td></tr>
-              <tr><td>Prato Marrom</td><td><input type="number" name="prato_marrom" min="0"></td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- TALHERES -->
-        <div class="section">
-          <div class="section-title">Talheres</div>
-          <table class="item-table">
-            <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
-            <tbody>
-              <tr><td>Colher</td><td><input type="number" name="colher" min="0"></td></tr>
-              <tr><td>Colher Sobremesa</td><td><input type="number" name="colher_sobremesa" min="0"></td></tr>
-              <tr><td>Faca</td><td><input type="number" name="faca" min="0"></td></tr>
-              <tr><td>Garfo</td><td><input type="number" name="garfo" min="0"></td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- TAÇAS -->
-        <div class="section">
-          <div class="section-title">Taças</div>
-          <table class="item-table">
-            <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
-            <tbody>
-              <tr><td>Taça Cerveja</td><td><input type="number" name="taca_cerveja" min="0"></td></tr>
-              <tr><td>Taça Champagne</td><td><input type="number" name="taca_champagne" min="0"></td></tr>
-              <tr><td>Taça Gin</td><td><input type="number" name="taca_gin" min="0"></td></tr>
-              <tr><td>Taça Licor</td><td><input type="number" name="taca_licor" min="0"></td></tr>
-              <tr><td>Taça Sobremesa</td><td><input type="number" name="taca_sobremesa" min="0"></td></tr>
-              <tr><td>Taça Vinho</td><td><input type="number" name="taca_vinho" min="0"></td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ITENS EXTRAS -->
-        <div class="section">
-          <div class="section-title">Itens não listados</div>
-          <table class="item-table">
-            <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
-            <tbody>
-              <tr><td><input type="text" name="extra1"></td><td><input type="number" name="extra1_qtd" min="0"></td></tr>
-              <tr><td><input type="text" name="extra2"></td><td><input type="number" name="extra2_qtd" min="0"></td></tr>
-              <tr><td><input type="text" name="extra3"></td><td><input type="number" name="extra3_qtd" min="0"></td></tr>
-            </tbody>
-          </table>
+          <div id="itens-container">
+            <!-- Os grupos e itens serão inseridos aqui via JavaScript -->
+          </div>
         </div>
 
         <div class="actions">
-          <button type="submit" id="btnEnviar">Enviar Contagem</button>
-          <button type="button" id="btnPdf">Salvar em PDF</button>
-          <div id="status" class="status-message"></div>
+          <button type="button" class="btn btn-secondary" id="btn-limpar">
+            Limpar
+          </button>
+          <button type="submit" class="btn btn-primary">
+            Enviar contagem
+          </button>
         </div>
 
+        <div id="mensagem-retorno" class="message"></div>
       </form>
     </div>
   </div>
 
   <script>
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7zO5sh3j9bmfnsKCxtKYOmKdXw-3Cnm11XfWCMOPjCRw9Ks1vWf5Y3YLdxxpWITTbMQ/exec";
+    // 🔗 URL publicada do seu Web App INVENTÁRIO
+    const WEBAPP_BASE_URL = 'https://script.google.com/macros/s/AKfycbx7zO5sh3j9bmfnsKCxtKYOmKdXw-3Cnm11XfWCMOPjCRw9Ks1vWf5Y3YLdxxpWITTbMQ/exec';
 
+    const form = document.getElementById('form-inventario');
+    const itensContainer = document.getElementById('itens-container');
+    const itensStatusText = document.getElementById('itens-status-text');
+    const msgBox = document.getElementById('mensagem-retorno');
+    const setorSelect = document.getElementById('setor');
+    const timestampInput = document.getElementById('timestamp_cliente');
+    const btnLimpar = document.getElementById('btn-limpar');
 
-    const form = document.getElementById('formContagem');
-    const btnEnviar = document.getElementById('btnEnviar');
-    const btnPdf = document.getElementById('btnPdf');
-    const statusEl = document.getElementById('status');
+    // Define o action do formulário
+    form.action = WEBAPP_BASE_URL;
 
-    // Botão "Salvar em PDF" → abre janela de impressão (A4)
-    btnPdf.addEventListener('click', () => {
-      window.print();
-    });
+    // Ajusta a data padrão para hoje
+    function defineDataHoje() {
+      const hoje = new Date();
+      const ano = hoje.getFullYear();
+      const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+      const dia = String(hoje.getDate()).padStart(2, '0');
+      document.getElementById('data').value = `${ano}-${mes}-${dia}`;
+    }
+    defineDataHoje();
 
-    // Envio ao Google Apps Script – JSON + timestamp_cliente
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
+    // Atualiza o timestamp_cliente sempre que a página carrega
+    function atualizarTimestampCliente() {
+      timestampInput.value = new Date().toISOString();
+    }
+    atualizarTimestampCliente();
 
-      const data = {};
-      form.querySelectorAll('[name]').forEach(el => data[el.name] = el.value);
-      data.timestamp_cliente = new Date().toISOString();
+    // Normaliza texto (igual ao backend), se precisar
+    function normalizarTexto(texto) {
+      let s = String(texto).toLowerCase();
+      s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      s = s.replace(/[\s\-]+/g, '_');
+      s = s.replace(/[^a-z0-9_]/g, '');
+      return s;
+    }
 
-      btnEnviar.disabled = true;
-      btnEnviar.textContent = "Enviando…";
-      statusEl.textContent = '';
-      statusEl.className = 'status-message';
+    // Carrega itens a partir do BACKEND para um setor específico
+    async function carregarItensDoSetor(setor) {
+      itensContainer.innerHTML = '';
+      itensStatusText.textContent = 'Carregando itens do setor...';
 
       try {
-        await fetch(WEB_APP_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
+        const url = `${WEBAPP_BASE_URL}?mode=itens&setor=${encodeURIComponent(
+          setor
+        )}`;
+        const resp = await fetch(url, { method: 'GET', cache: 'no-cache' });
+
+        if (!resp.ok) {
+          throw new Error('Erro ao buscar itens. Código: ' + resp.status);
+        }
+
+        const data = await resp.json();
+        const itens = data.itens || [];
+
+        if (!itens.length) {
+          itensStatusText.textContent =
+            'Nenhum item configurado para este setor.';
+          return;
+        }
+
+        itensStatusText.textContent = `Total de itens: ${itens.length}`;
+
+        // Agrupa itens por "grupo" e ordena por "ordem"
+        const grupos = {};
+        itens.forEach(it => {
+          const grupo = it.grupo || 'Sem grupo';
+          if (!grupos[grupo]) grupos[grupo] = [];
+          grupos[grupo].push(it);
         });
 
-        statusEl.textContent = "Contagem enviada!";
-        statusEl.className = "status-message status-ok";
-        form.reset();
+        Object.keys(grupos).forEach(grupo => {
+          grupos[grupo].sort((a, b) => {
+            const oa = Number(a.ordem || 0);
+            const ob = Number(b.ordem || 0);
+            return oa - ob;
+          });
+        });
 
-      } catch (err) {
-        statusEl.textContent = "Erro ao enviar.";
-        statusEl.className = "status-message status-error";
+        // Monta o HTML dos grupos e itens
+        Object.keys(grupos).forEach(grupo => {
+          // Título do grupo
+          const grupoTitle = document.createElement('div');
+          grupoTitle.className = 'grupo-title';
+          grupoTitle.textContent = grupo;
+          itensContainer.appendChild(grupoTitle);
+
+          grupos[grupo].forEach(it => {
+            const labelTexto = it.label || it.campo || 'Item';
+            const nomeCampo = it.campo || normalizarTexto(labelTexto);
+
+            const row = document.createElement('div');
+            row.className = 'item-grid';
+
+            const labelDiv = document.createElement('div');
+            labelDiv.className = 'item-label';
+            labelDiv.textContent = labelTexto;
+
+            const inputDiv = document.createElement('div');
+            inputDiv.className = 'item-input';
+
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.min = '0';
+            input.step = '1';
+            input.name = nomeCampo;
+            input.inputMode = 'numeric';
+            input.placeholder = '0';
+
+            inputDiv.appendChild(input);
+            row.appendChild(labelDiv);
+            row.appendChild(inputDiv);
+
+            itensContainer.appendChild(row);
+          });
+        });
+      } catch (erro) {
+        console.error(erro);
+        itensStatusText.textContent =
+          'Erro ao carregar itens. Verifique o BACKEND.';
+      }
+    }
+
+    // Recarrega itens quando o setor mudar (se no futuro tiver mais de um)
+    setorSelect.addEventListener('change', () => {
+      const setor = setorSelect.value || 'SALÃO';
+      carregarItensDoSetor(setor);
+    });
+
+    // Limpar formulário
+    btnLimpar.addEventListener('click', () => {
+      form.reset();
+      defineDataHoje();
+      atualizarTimestampCliente();
+      msgBox.style.display = 'none';
+      const setor = setorSelect.value || 'SALÃO';
+      carregarItensDoSetor(setor);
+    });
+
+    // Intercepta o submit para enviar via fetch e mostrar mensagem,
+    // mantendo o POST exatamente como o backend espera.
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      msgBox.style.display = 'none';
+
+      // Atualiza timestamp do cliente
+      atualizarTimestampCliente();
+
+      // Validação simples
+      if (!form.unidade.value || !form.setor.value || !form.data.value || !form.responsavel.value) {
+        msgBox.textContent = 'Preencha todos os campos obrigatórios.';
+        msgBox.className = 'message error';
+        return;
       }
 
-      btnEnviar.disabled = false;
-      btnEnviar.textContent = "Enviar Contagem";
+      itensStatusText.textContent = 'Enviando inventário...';
+
+      try {
+        const formData = new FormData(form);
+
+        const resp = await fetch(WEBAPP_BASE_URL, {
+          method: 'POST',
+          body: formData,
+        });
+
+        const texto = await resp.text();
+        let data;
+        try {
+          data = JSON.parse(texto);
+        } catch (e) {
+          // Caso o backend não devolva JSON certinho
+          data = { status: 'desconhecido', message: texto };
+        }
+
+        if (data.status === 'ok') {
+          msgBox.textContent = data.message || 'Inventário registrado com sucesso.';
+          msgBox.className = 'message ok';
+          form.reset();
+          defineDataHoje();
+          atualizarTimestampCliente();
+          // recarrega itens para garantir inputs limpos
+          const setor = setorSelect.value || 'SALÃO';
+          carregarItensDoSetor(setor);
+        } else {
+          msgBox.textContent =
+            data.message || 'Ocorreu um erro ao registrar o inventário.';
+          msgBox.className = 'message error';
+        }
+      } catch (erro) {
+        console.error(erro);
+        msgBox.textContent =
+          'Erro de conexão ao enviar o inventário. Tente novamente.';
+        msgBox.className = 'message error';
+      } finally {
+        itensStatusText.textContent = 'Itens do inventário carregados.';
+      }
+    });
+
+    // Inicialização ao carregar a página
+    window.addEventListener('DOMContentLoaded', () => {
+      const setorInicial = setorSelect.value || 'SALÃO';
+      carregarItensDoSetor(setorInicial);
     });
   </script>
-
 </body>
 </html>
-
-
-
-
