@@ -115,11 +115,18 @@
     }
 
     .grupo-title {
-      margin: 12px 0 6px;
+      margin: 12px 0 4px;
       font-size: 13px;
       font-weight: 600;
       color: #444;
       border-left: 3px solid var(--cv-green);
+      padding-left: 6px;
+    }
+
+    .extras-note {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 4px;
       padding-left: 6px;
     }
 
@@ -162,6 +169,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      transition: opacity 0.15s ease, background 0.15s ease;
     }
 
     .btn-primary {
@@ -174,6 +182,11 @@
     .btn-secondary {
       background: #e8f2ed;
       color: var(--cv-green-dark);
+    }
+
+    .btn[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     .message {
@@ -260,8 +273,10 @@
           </div>
         </div>
 
+        <!-- timestamp do cliente -->
         <input type="hidden" id="timestamp_cliente" name="timestamp_cliente" />
 
+        <!-- ITENS DO INVENTÁRIO -->
         <div class="itens-card">
           <div class="itens-header">
             <div class="itens-title">Itens do inventário</div>
@@ -277,7 +292,7 @@
           <button type="button" class="btn btn-secondary" id="btn-limpar">
             Limpar
           </button>
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-primary" id="btn-enviar">
             Enviar contagem
           </button>
         </div>
@@ -298,10 +313,14 @@
     const setorSelect = document.getElementById('setor');
     const timestampInput = document.getElementById('timestamp_cliente');
     const btnLimpar = document.getElementById('btn-limpar');
+    const btnEnviar = document.getElementById('btn-enviar');
     const inputData = document.getElementById('data');
     const inputResponsavel = document.getElementById('responsavel');
 
     form.action = WEBAPP_BASE_URL;
+
+    // Flag de controle para evitar duplo envio
+    let enviando = false;
 
     const preposicoes = ['de','da','do','das','dos','e','em','para','por'];
 
@@ -318,12 +337,7 @@
         .join(' ');
     }
 
-    inputResponsavel.addEventListener('input', () => {
-      const cursor = inputResponsavel.selectionStart;
-      inputResponsavel.value = titleCaseNome(inputResponsavel.value);
-      inputResponsavel.setSelectionRange(cursor, cursor);
-    });
-
+    // Aplica Title Case ao sair do campo
     inputResponsavel.addEventListener('blur', () => {
       inputResponsavel.value = titleCaseNome(inputResponsavel.value);
     });
@@ -403,6 +417,7 @@
           });
         });
 
+        // Monta grupos e itens
         Object.keys(grupos).forEach(grupo => {
           const grupoTitle = document.createElement('div');
           grupoTitle.className = 'grupo-title';
@@ -439,11 +454,16 @@
           });
         });
 
-        // ITENS EXTRAS – aparecem no PDF/e-mail, mas não criam coluna na planilha
+        // ITENS EXTRAS – APENAS UMA VEZ, NO FINAL
         const extrasTitle = document.createElement('div');
         extrasTitle.className = 'grupo-title';
         extrasTitle.textContent = 'Itens Extras';
         itensContainer.appendChild(extrasTitle);
+
+        const extrasNote = document.createElement('div');
+        extrasNote.className = 'extras-note';
+        extrasNote.textContent = 'Utilize estes campos para itens que não estejam na lista acima.';
+        itensContainer.appendChild(extrasNote);
 
         for (let i = 1; i <= 3; i++) {
           const row = document.createElement('div');
@@ -455,7 +475,7 @@
           const nomeExtra = document.createElement('input');
           nomeExtra.type = 'text';
           nomeExtra.name = `extra_item_${i}`;
-          nomeExtra.placeholder = 'Descreva o item';
+          nomeExtra.placeholder = 'Descreva o item não listado';
           nomeExtra.style.width = '100%';
           nomeExtra.style.border = '1px solid var(--cv-border)';
           nomeExtra.style.borderRadius = '6px';
@@ -480,6 +500,7 @@
 
           itensContainer.appendChild(row);
         }
+
       } catch (erro) {
         console.error(erro);
         itensStatusText.textContent = 'Erro ao carregar itens. Verifique o backend.';
@@ -492,6 +513,7 @@
     });
 
     btnLimpar.addEventListener('click', () => {
+      if (enviando) return; // evita limpar no meio do envio
       form.reset();
       preencherDataHoje();
       atualizarTimestampCliente();
@@ -504,6 +526,11 @@
       event.preventDefault();
       msgBox.style.display = 'none';
 
+      if (enviando) return;
+      enviando = true;
+      btnEnviar.disabled = true;
+      btnLimpar.disabled = true;
+
       atualizarTimestampCliente();
 
       if (
@@ -514,16 +541,31 @@
       ) {
         msgBox.textContent = 'Preencha todos os campos obrigatórios.';
         msgBox.className = 'message error';
+        enviando = false;
+        btnEnviar.disabled = false;
+        btnLimpar.disabled = false;
         return;
       }
 
       if (!dataBrValida(inputData.value.trim())) {
         msgBox.textContent = 'Data inválida. Use o formato dd/mm/aaaa.';
         msgBox.className = 'message error';
+        enviando = false;
+        btnEnviar.disabled = false;
+        btnLimpar.disabled = false;
         return;
       }
 
+      // Title Case no envio
       inputResponsavel.value = titleCaseNome(inputResponsavel.value);
+
+      // Nenhum campo numérico em branco: vira 0
+      const numeros = form.querySelectorAll('input[type="number"]');
+      numeros.forEach(inp => {
+        if (!inp.value || String(inp.value).trim() === '') {
+          inp.value = '0';
+        }
+      });
 
       itensStatusText.textContent = 'Enviando inventário...';
 
@@ -560,6 +602,9 @@
         msgBox.textContent = 'Erro de conexão ao enviar o inventário. Tente novamente.';
         msgBox.className = 'message error';
       } finally {
+        enviando = false;
+        btnEnviar.disabled = false;
+        btnLimpar.disabled = false;
         itensStatusText.textContent = 'Itens do inventário carregados.';
       }
     });
