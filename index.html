@@ -6,9 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     :root {
       --cv-green: #106c4a;
@@ -25,16 +23,13 @@
       color: #000;
     }
 
-    .page {
-      max-width: 1080px;
-      margin: 0 auto;
-    }
+    .page { max-width: 1080px; margin: 0 auto; }
 
     .card {
       background: #fff;
       border-radius: 14px;
       padding: 24px 20px;
-      box-shadow: 0 0 18px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 0 18px rgba(0,0,0,0.08);
       border-top: 6px solid var(--cv-green);
     }
 
@@ -88,7 +83,7 @@
     select:focus,
     input:focus {
       border-color: var(--cv-green);
-      box-shadow: 0 0 0 1px rgba(16, 108, 74, 0.15);
+      box-shadow: 0 0 0 1px rgba(16,108,74,0.15);
     }
 
     .itens-card {
@@ -96,6 +91,7 @@
       border-radius: 12px;
       border: 1px solid var(--cv-border);
       padding: 12px 10px 4px;
+      background: #ffffff;
     }
 
     .itens-header {
@@ -103,12 +99,19 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
+      gap: 8px;
     }
 
     .itens-title {
       font-size: 15px;
       font-weight: 600;
       color: var(--cv-green-dark);
+    }
+
+    .itens-status {
+      font-size: 11px;
+      color: #777;
+      text-align: right;
     }
 
     .grupo-title {
@@ -130,9 +133,7 @@
       border-radius: 6px;
     }
 
-    .item-grid:nth-child(odd) {
-      background: #f9fbfa;
-    }
+    .item-grid:nth-child(odd) { background: #f9fbfa; }
 
     .item-label {
       font-size: 13px;
@@ -158,6 +159,9 @@
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .btn-primary {
@@ -165,9 +169,7 @@
       color: #fff;
     }
 
-    .btn-primary:hover {
-      background: var(--cv-green-dark);
-    }
+    .btn-primary:hover { background: var(--cv-green-dark); }
 
     .btn-secondary {
       background: #e8f2ed;
@@ -197,9 +199,9 @@
     }
 
     @media (max-width: 600px) {
-      .item-grid {
-        grid-template-columns: 2.5fr 1fr;
-      }
+      .item-grid { grid-template-columns: 2.5fr 1fr; }
+      .item-label { font-size: 12px; }
+      .card { padding: 20px 14px; }
     }
   </style>
 </head>
@@ -213,8 +215,7 @@
       </div>
 
       <form id="form-inventario" method="post">
-
-        <!-- LINHA 1 -->
+        <!-- LINHA 1: UNIDADE + SETOR -->
         <div class="form-row">
           <div class="form-field">
             <label for="unidade">Unidade</label>
@@ -227,22 +228,35 @@
 
           <div class="form-field">
             <label for="setor">Setor</label>
-            <select id="setor" name="setor">
+            <select id="setor" name="setor" required>
               <option value="SALÃO" selected>SALÃO</option>
             </select>
           </div>
         </div>
 
-        <!-- LINHA 2 -->
+        <!-- LINHA 2: RESPONSÁVEL + DATA -->
         <div class="form-row">
           <div class="form-field">
             <label for="responsavel">Responsável</label>
-            <input type="text" id="responsavel" name="responsavel" required />
+            <input
+              type="text"
+              id="responsavel"
+              name="responsavel"
+              placeholder="Nome de quem está contando"
+              required
+            />
           </div>
 
           <div class="form-field">
             <label for="data">Data (dd/mm/aaaa)</label>
-            <input type="text" id="data" name="data" required />
+            <input
+              type="text"
+              id="data"
+              name="data"
+              placeholder="dd/mm/aaaa"
+              inputmode="numeric"
+              required
+            />
           </div>
         </div>
 
@@ -251,15 +265,21 @@
         <div class="itens-card">
           <div class="itens-header">
             <div class="itens-title">Itens do inventário</div>
-            <div id="itens-status-text" style="font-size:12px;">Carregando...</div>
+            <div class="itens-status" id="itens-status-text">
+              Carregando itens do setor...
+            </div>
           </div>
 
           <div id="itens-container"></div>
         </div>
 
         <div class="actions">
-          <button type="button" class="btn btn-secondary" id="btn-limpar">Limpar</button>
-          <button type="submit" class="btn btn-primary">Enviar contagem</button>
+          <button type="button" class="btn btn-secondary" id="btn-limpar">
+            Limpar
+          </button>
+          <button type="submit" class="btn btn-primary">
+            Enviar contagem
+          </button>
         </div>
 
         <div id="mensagem-retorno" class="message"></div>
@@ -268,21 +288,35 @@
   </div>
 
   <script>
-    const preposicoes = ['de', 'da', 'do', 'das', 'dos', 'e', 'em', 'para', 'por'];
+    const WEBAPP_BASE_URL =
+      'https://script.google.com/macros/s/AKfycbx7zO5sh3j9bmfnsKCxtKYOmKdXw-3Cnm11XfWCMOPjCRw9Ks1vWf5Y3YLdxxpWITTbMQ/exec';
+
+    const form = document.getElementById('form-inventario');
+    const itensContainer = document.getElementById('itens-container');
+    const itensStatusText = document.getElementById('itens-status-text');
+    const msgBox = document.getElementById('mensagem-retorno');
+    const setorSelect = document.getElementById('setor');
+    const timestampInput = document.getElementById('timestamp_cliente');
+    const btnLimpar = document.getElementById('btn-limpar');
+    const inputData = document.getElementById('data');
+    const inputResponsavel = document.getElementById('responsavel');
+
+    form.action = WEBAPP_BASE_URL;
+
+    const preposicoes = ['de','da','do','das','dos','e','em','para','por'];
 
     function titleCaseNome(str) {
       if (!str) return '';
       return str
         .toLowerCase()
         .split(/\s+/)
+        .filter(p => p.trim() !== '')
         .map((p, idx) => {
           if (preposicoes.includes(p) && idx !== 0) return p;
           return p.charAt(0).toUpperCase() + p.slice(1);
         })
         .join(' ');
     }
-
-    const inputResponsavel = document.getElementById('responsavel');
 
     inputResponsavel.addEventListener('input', () => {
       const cursor = inputResponsavel.selectionStart;
@@ -295,56 +329,247 @@
     });
 
     function hojeEmBr() {
-      const d = new Date();
-      return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+      const hoje = new Date();
+      const d = String(hoje.getDate()).padStart(2, '0');
+      const m = String(hoje.getMonth() + 1).padStart(2, '0');
+      const a = hoje.getFullYear();
+      return `${d}/${m}/${a}`;
     }
 
-    document.getElementById('data').value = hojeEmBr();
-    document.getElementById('timestamp_cliente').value = new Date().toISOString();
+    function preencherDataHoje() {
+      inputData.value = hojeEmBr();
+    }
 
-    const WEBAPP = "https://script.google.com/macros/s/AKfycbx7zO5sh3j9bmfnsKCxtKYOmKdXw-3Cnm11XfWCMOPjCRw9Ks1vWf5Y3YLdxxpWITTbMQ/exec";
-    const itensContainer = document.getElementById('itens-container');
-    const itensStatus = document.getElementById('itens-status-text');
+    function atualizarTimestampCliente() {
+      timestampInput.value = new Date().toISOString();
+    }
 
-    async function carregarItens() {
-      itensStatus.textContent = "Carregando...";
+    function dataBrValida(str) {
+      const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(str);
+      if (!m) return false;
+      const d = parseInt(m[1], 10);
+      const mo = parseInt(m[2], 10) - 1;
+      const y = parseInt(m[3], 10);
+      const dt = new Date(y, mo, d);
+      return (
+        dt.getFullYear() === y &&
+        dt.getMonth() === mo &&
+        dt.getDate() === d
+      );
+    }
 
-      const resp = await fetch(WEBAPP + "?mode=itens&setor=SALÃO");
-      const json = await resp.json();
+    function normalizarTexto(texto) {
+      let s = String(texto).toLowerCase();
+      s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      s = s.replace(/[\s\-]+/g, '_');
+      s = s.replace(/[^a-z0-9_]/g, '');
+      return s;
+    }
 
-      itensContainer.innerHTML = "";
+    async function carregarItensDoSetor(setor) {
+      itensContainer.innerHTML = '';
+      itensStatusText.textContent = 'Carregando itens do setor...';
 
-      const grupos = {};
-      json.itens.forEach(it => {
-        if (!grupos[it.grupo]) grupos[it.grupo] = [];
-        grupos[it.grupo].push(it);
-      });
+      try {
+        const url = `${WEBAPP_BASE_URL}?mode=itens&setor=${encodeURIComponent(setor)}`;
+        const resp = await fetch(url, { method: 'GET', cache: 'no-cache' });
 
-      Object.keys(grupos).forEach(g => {
-        const title = document.createElement("div");
-        title.className = "grupo-title";
-        title.textContent = g;
-        itensContainer.appendChild(title);
+        if (!resp.ok) {
+          throw new Error('Erro ao buscar itens. Código: ' + resp.status);
+        }
 
-        grupos[g].forEach(it => {
-          const row = document.createElement("div");
-          row.className = "item-grid";
+        const data = await resp.json();
+        const itens = data.itens || [];
 
-          row.innerHTML = `
-            <div class="item-label">${it.label}</div>
-            <div class="item-input">
-              <input type="number" name="${it.campo}" min="0" step="1" placeholder="0" />
-            </div>
-          `;
+        if (!itens.length) {
+          itensStatusText.textContent = 'Nenhum item configurado para este setor.';
+          return;
+        }
+
+        itensStatusText.textContent = `Total de itens: ${itens.length}`;
+
+        const grupos = {};
+        itens.forEach(it => {
+          const grupo = it.grupo || 'Sem grupo';
+          if (!grupos[grupo]) grupos[grupo] = [];
+          grupos[grupo].push(it);
+        });
+
+        Object.keys(grupos).forEach(grupo => {
+          grupos[grupo].sort((a, b) => {
+            const oa = Number(a.ordem || 0);
+            const ob = Number(b.ordem || 0);
+            return oa - ob;
+          });
+        });
+
+        Object.keys(grupos).forEach(grupo => {
+          const grupoTitle = document.createElement('div');
+          grupoTitle.className = 'grupo-title';
+          grupoTitle.textContent = grupo;
+          itensContainer.appendChild(grupoTitle);
+
+          grupos[grupo].forEach(it => {
+            const labelTexto = it.label || it.campo || 'Item';
+            const nomeCampo = it.campo || normalizarTexto(labelTexto);
+
+            const row = document.createElement('div');
+            row.className = 'item-grid';
+
+            const labelDiv = document.createElement('div');
+            labelDiv.className = 'item-label';
+            labelDiv.textContent = labelTexto;
+
+            const inputDiv = document.createElement('div');
+            inputDiv.className = 'item-input';
+
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.min = '0';
+            input.step = '1';
+            input.name = nomeCampo;
+            input.inputMode = 'numeric';
+            input.placeholder = '0';
+
+            inputDiv.appendChild(input);
+            row.appendChild(labelDiv);
+            row.appendChild(inputDiv);
+
+            itensContainer.appendChild(row);
+          });
+        });
+
+        // ITENS EXTRAS – aparecem no PDF/e-mail, mas não criam coluna na planilha
+        const extrasTitle = document.createElement('div');
+        extrasTitle.className = 'grupo-title';
+        extrasTitle.textContent = 'Itens Extras';
+        itensContainer.appendChild(extrasTitle);
+
+        for (let i = 1; i <= 3; i++) {
+          const row = document.createElement('div');
+          row.className = 'item-grid';
+
+          const labelDiv = document.createElement('div');
+          labelDiv.className = 'item-label';
+
+          const nomeExtra = document.createElement('input');
+          nomeExtra.type = 'text';
+          nomeExtra.name = `extra_item_${i}`;
+          nomeExtra.placeholder = 'Descreva o item';
+          nomeExtra.style.width = '100%';
+          nomeExtra.style.border = '1px solid var(--cv-border)';
+          nomeExtra.style.borderRadius = '6px';
+          nomeExtra.style.padding = '6px 8px';
+
+          labelDiv.appendChild(nomeExtra);
+
+          const inputDiv = document.createElement('div');
+          inputDiv.className = 'item-input';
+
+          const qtdExtra = document.createElement('input');
+          qtdExtra.type = 'number';
+          qtdExtra.name = `extra_qtd_${i}`;
+          qtdExtra.min = '0';
+          qtdExtra.step = '1';
+          qtdExtra.placeholder = '0';
+
+          inputDiv.appendChild(qtdExtra);
+
+          row.appendChild(labelDiv);
+          row.appendChild(inputDiv);
 
           itensContainer.appendChild(row);
-        });
-      });
-
-      itensStatus.textContent = `Total de itens: ${json.itens.length}`;
+        }
+      } catch (erro) {
+        console.error(erro);
+        itensStatusText.textContent = 'Erro ao carregar itens. Verifique o backend.';
+      }
     }
 
-    carregarItens();
+    setorSelect.addEventListener('change', () => {
+      const setor = setorSelect.value || 'SALÃO';
+      carregarItensDoSetor(setor);
+    });
+
+    btnLimpar.addEventListener('click', () => {
+      form.reset();
+      preencherDataHoje();
+      atualizarTimestampCliente();
+      msgBox.style.display = 'none';
+      const setor = setorSelect.value || 'SALÃO';
+      carregarItensDoSetor(setor);
+    });
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      msgBox.style.display = 'none';
+
+      atualizarTimestampCliente();
+
+      if (
+        !form.unidade.value ||
+        !form.setor.value ||
+        !inputResponsavel.value.trim() ||
+        !inputData.value.trim()
+      ) {
+        msgBox.textContent = 'Preencha todos os campos obrigatórios.';
+        msgBox.className = 'message error';
+        return;
+      }
+
+      if (!dataBrValida(inputData.value.trim())) {
+        msgBox.textContent = 'Data inválida. Use o formato dd/mm/aaaa.';
+        msgBox.className = 'message error';
+        return;
+      }
+
+      inputResponsavel.value = titleCaseNome(inputResponsavel.value);
+
+      itensStatusText.textContent = 'Enviando inventário...';
+
+      try {
+        const formData = new FormData(form);
+
+        const resp = await fetch(WEBAPP_BASE_URL, {
+          method: 'POST',
+          body: formData
+        });
+
+        const texto = await resp.text();
+        let data;
+        try {
+          data = JSON.parse(texto);
+        } catch (e) {
+          data = { status: 'desconhecido', message: texto };
+        }
+
+        if (data.status === 'ok') {
+          msgBox.textContent = data.message || 'Inventário registrado com sucesso.';
+          msgBox.className = 'message ok';
+          form.reset();
+          preencherDataHoje();
+          atualizarTimestampCliente();
+          const setor = setorSelect.value || 'SALÃO';
+          carregarItensDoSetor(setor);
+        } else {
+          msgBox.textContent = data.message || 'Ocorreu um erro ao registrar o inventário.';
+          msgBox.className = 'message error';
+        }
+      } catch (erro) {
+        console.error(erro);
+        msgBox.textContent = 'Erro de conexão ao enviar o inventário. Tente novamente.';
+        msgBox.className = 'message error';
+      } finally {
+        itensStatusText.textContent = 'Itens do inventário carregados.';
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      preencherDataHoje();
+      atualizarTimestampCliente();
+      const setorInicial = setorSelect.value || 'SALÃO';
+      carregarItensDoSetor(setorInicial);
+    });
   </script>
 </body>
 </html>
