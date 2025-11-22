@@ -84,6 +84,7 @@
 
     input[type="text"],
     input[type="number"],
+    input[type="date"],
     select {
       font-size: 14px;
       padding: 7px 9px;
@@ -94,6 +95,7 @@
 
     input[type="text"]:focus,
     input[type="number"]:focus,
+    input[type="date"]:focus,
     select:focus {
       border-color: var(--cv-green);
       box-shadow: 0 0 0 2px rgba(16,108,74,0.15);
@@ -196,6 +198,7 @@
     .status-msg {
       margin-top: 10px;
       font-size: 12px;
+      font-weight: 600;
     }
 
     .status-ok {
@@ -205,35 +208,21 @@
     .status-erro {
       color: #b3261e;
     }
-
-    .badge-setor {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: 11px;
-      background: #e3f2eb;
-      color: var(--cv-green-dark);
-      margin-left: 4px;
-    }
   </style>
 </head>
-
 <body>
   <div class="page">
     <div class="card">
-
       <header class="header">
         <h1 class="title">Inventário – Grupo Coqueiro Verde</h1>
         <p class="subtitle">Registro diário de materiais por unidade e setor.</p>
       </header>
 
       <form id="inventarioForm">
+        <!-- controle interno -->
         <input type="hidden" id="timestamp_cliente" name="timestamp_cliente">
 
         <div class="form-grid">
-
           <div class="field-group">
             <label for="unidade">Unidade *</label>
             <select id="unidade" name="unidade" required>
@@ -252,13 +241,18 @@
           </div>
 
           <div class="field-group">
-            <label for="data">Data *</label>
-            <input type="text" id="data" name="data" placeholder="dd/mm/aaaa" maxlength="10" required>
+            <label for="data_ui">Data *</label>
+            <!-- campo visível (date) -->
+            <input type="date" id="data_ui" required>
+            <!-- campo oculto no formato dd/mm/aaaa para o backend -->
+            <input type="hidden" id="data" name="data">
+            <span class="helper">Data do inventário (padrão: hoje).</span>
           </div>
 
           <div class="field-group">
             <label for="responsavel">Responsável *</label>
             <input type="text" id="responsavel" name="responsavel" placeholder="Nome completo" required>
+            <span class="helper">As primeiras letras de cada nome serão colocadas em maiúsculas.</span>
           </div>
         </div>
 
@@ -270,34 +264,37 @@
 
         <section class="card-section">
           <h2 class="section-title">Itens extras</h2>
-          <p class="section-help">Aparecem apenas no relatório, não vão para a planilha.</p>
+          <p class="section-help">
+            Utilize apenas para materiais que não estejam na lista original.
+            Esses itens aparecem no relatório em PDF e e-mail, mas não são gravados na planilha.
+          </p>
 
           <div class="extras-grid">
             <div class="field-group">
-              <label>Item extra 1</label>
+              <label for="extra_item_1">Item extra 1</label>
               <input type="text" id="extra_item_1" name="extra_item_1">
             </div>
             <div class="field-group">
-              <label>Qtd</label>
-              <input type="number" id="extra_qtd_1" name="extra_qtd_1">
+              <label for="extra_qtd_1">Quantidade</label>
+              <input type="number" id="extra_qtd_1" name="extra_qtd_1" min="0">
             </div>
 
             <div class="field-group">
-              <label>Item extra 2</label>
+              <label for="extra_item_2">Item extra 2</label>
               <input type="text" id="extra_item_2" name="extra_item_2">
             </div>
             <div class="field-group">
-              <label>Qtd</label>
-              <input type="number" id="extra_qtd_2" name="extra_qtd_2">
+              <label for="extra_qtd_2">Quantidade</label>
+              <input type="number" id="extra_qtd_2" name="extra_qtd_2" min="0">
             </div>
 
             <div class="field-group">
-              <label>Item extra 3</label>
+              <label for="extra_item_3">Item extra 3</label>
               <input type="text" id="extra_item_3" name="extra_item_3">
             </div>
             <div class="field-group">
-              <label>Qtd</label>
-              <input type="number" id="extra_qtd_3" name="extra_qtd_3">
+              <label for="extra_qtd_3">Quantidade</label>
+              <input type="number" id="extra_qtd_3" name="extra_qtd_3" min="0">
             </div>
           </div>
         </section>
@@ -307,7 +304,6 @@
         </div>
 
         <div id="statusMsg" class="status-msg"></div>
-
       </form>
     </div>
   </div>
@@ -323,8 +319,36 @@
     const btnEnviar = document.getElementById("btnEnviar");
     const responsavelInput = document.getElementById("responsavel");
     const timestampCliente = document.getElementById("timestamp_cliente");
+    const dataUi = document.getElementById("data_ui");
+    const dataHidden = document.getElementById("data");
 
+    // Timestamp inicial
     timestampCliente.value = new Date().toISOString();
+
+    // Preenche data com hoje (yyyy-mm-dd) e sincroniza dd/mm/aaaa
+    function setHojeNaData() {
+      const hoje = new Date();
+      const yyyy = hoje.getFullYear();
+      const mm = String(hoje.getMonth() + 1).padStart(2, "0");
+      const dd = String(hoje.getDate()).padStart(2, "0");
+      const iso = `${yyyy}-${mm}-${dd}`;
+      dataUi.value = iso;
+      atualizarDataHidden();
+    }
+
+    function atualizarDataHidden() {
+      if (!dataUi.value) {
+        dataHidden.value = "";
+        return;
+      }
+      const partes = dataUi.value.split("-");
+      if (partes.length === 3) {
+        const [yyyy, mm, dd] = partes;
+        dataHidden.value = `${dd}/${mm}/${yyyy}`;
+      }
+    }
+
+    dataUi.addEventListener("change", atualizarDataHidden);
 
     function toTitleCase(str) {
       return String(str)
@@ -338,14 +362,15 @@
 
     function carregarItensPorSetor() {
       const setor = setorSelect.value;
-      itensContainer.innerHTML = "Carregando itens...";
+      itensContainer.innerHTML = "<div class='helper'>Carregando itens...</div>";
 
       fetch(WEB_APP_URL + "?mode=itens&setor=" + encodeURIComponent(setor))
         .then(r => r.json())
         .then(json => montarItens(json.itens))
-        .catch(() => {
+        .catch(err => {
+          console.error("Erro ao carregar itens:", err);
           itensContainer.innerHTML =
-            "<div style='color:#b3261e'>Erro ao carregar itens do setor.</div>";
+            "<div class='helper' style='color:#b3261e'>Erro ao carregar itens do setor.</div>";
         });
     }
 
@@ -353,12 +378,11 @@
       itensContainer.innerHTML = "";
 
       if (!itens || itens.length === 0) {
-        itensContainer.innerHTML = "<div>Nenhum item encontrado.</div>";
+        itensContainer.innerHTML = "<div class='helper'>Nenhum item configurado para este setor.</div>";
         return;
       }
 
       const grupos = {};
-
       itens.forEach(it => {
         const grupo = it.grupo || "Outros";
         if (!grupos[grupo]) grupos[grupo] = [];
@@ -384,7 +408,7 @@
 
               const label = document.createElement("div");
               label.className = "item-label";
-              label.textContent = item.label;
+              label.textContent = item.label || item.campo;
 
               const input = document.createElement("input");
               input.type = "number";
@@ -404,9 +428,13 @@
     }
 
     setorSelect.addEventListener("change", carregarItensPorSetor);
-    window.addEventListener("load", carregarItensPorSetor);
 
-    // Envio sem finally()
+    window.addEventListener("load", () => {
+      setHojeNaData();
+      carregarItensPorSetor();
+    });
+
+    // Envio com feedback e limpeza
     let enviando = false;
 
     form.addEventListener("submit", function (e) {
@@ -416,20 +444,32 @@
       statusMsg.textContent = "";
       statusMsg.className = "status-msg";
 
-      // Campos numéricos → 0 se vazio
-      const nums = form.querySelectorAll('input[type="number"]');
-      nums.forEach(n => { if (n.value === "") n.value = "0"; });
+      // Garante data formatada
+      atualizarDataHidden();
+      if (!dataHidden.value) {
+        statusMsg.textContent = "Informe uma data válida.";
+        statusMsg.classList.add("status-erro");
+        return;
+      }
 
-      // Extras → quantidade = 0 se nome preenchido
+      // Todos os numéricos: se vazio, vira 0
+      const nums = form.querySelectorAll('input[type="number"]');
+      nums.forEach(n => {
+        if (n.value === "") n.value = "0";
+      });
+
+      // Extras: se tiver nome e qtd vazia, força 0
       for (let i = 1; i <= 3; i++) {
         const nome = document.getElementById("extra_item_" + i);
         const qtd = document.getElementById("extra_qtd_" + i);
-        if (nome.value.trim() !== "" && qtd.value === "") qtd.value = "0";
+        if (nome.value.trim() !== "" && qtd.value === "") {
+          qtd.value = "0";
+        }
       }
 
       timestampCliente.value = new Date().toISOString();
-
       const formData = new FormData(form);
+
       enviando = true;
       btnEnviar.disabled = true;
       btnEnviar.textContent = "Enviando...";
@@ -440,19 +480,27 @@
       })
         .then(r => r.json())
         .then(json => {
-          if (json.status === "ok") {
+          if (json && json.status === "ok") {
             statusMsg.textContent =
               "Inventário registrado e relatório enviado com sucesso.";
             statusMsg.classList.add("status-ok");
+
+            // Limpa o formulário e recarrega itens com padrões
+            form.reset();
+            setHojeNaData();
+            timestampCliente.value = new Date().toISOString();
+            // mantém unidade e setor selecionados como estão no HTML (após reset volta para os defaults do select)
+            carregarItensPorSetor();
           } else {
             statusMsg.textContent =
-              "Erro ao enviar: " + (json.message || "tente novamente.");
+              "Erro ao enviar: " + (json && json.message ? json.message : "tente novamente.");
             statusMsg.classList.add("status-erro");
           }
         })
         .catch(err => {
+          console.error("Erro no envio:", err);
           statusMsg.textContent =
-            "Falha na comunicação. Verifique a conexão.";
+            "Falha na comunicação com o servidor. Verifique a conexão.";
           statusMsg.classList.add("status-erro");
         })
         .then(() => {
