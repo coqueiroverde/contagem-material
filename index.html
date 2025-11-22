@@ -219,36 +219,32 @@
     }
   </style>
 </head>
+
 <body>
   <div class="page">
     <div class="card">
+
       <header class="header">
         <h1 class="title">Inventário – Grupo Coqueiro Verde</h1>
-        <p class="subtitle">
-          Registro diário de materiais por unidade e setor.
-        </p>
+        <p class="subtitle">Registro diário de materiais por unidade e setor.</p>
       </header>
 
       <form id="inventarioForm">
-        <!-- Campos ocultos de controle -->
-        <input type="hidden" name="timestamp_cliente" id="timestamp_cliente">
+        <input type="hidden" id="timestamp_cliente" name="timestamp_cliente">
 
         <div class="form-grid">
+
           <div class="field-group">
             <label for="unidade">Unidade *</label>
             <select id="unidade" name="unidade" required>
               <option value="">Selecione...</option>
               <option value="P10">P10</option>
               <option value="P14">P14</option>
-              <!-- se quiser, adicione outras unidades aqui -->
             </select>
           </div>
 
           <div class="field-group">
-            <label for="setor">
-              Setor *
-              <span class="badge-setor">SALÃO / COZINHA</span>
-            </label>
+            <label for="setor">Setor *</label>
             <select id="setor" name="setor" required>
               <option value="SALÃO">Salão</option>
               <option value="COZINHA">Cozinha</option>
@@ -257,276 +253,214 @@
 
           <div class="field-group">
             <label for="data">Data *</label>
-            <input
-              type="text"
-              id="data"
-              name="data"
-              placeholder="dd/mm/aaaa"
-              required
-              inputmode="numeric"
-              maxlength="10"
-            >
-            <span class="helper">Use o formato dia/mês/ano.</span>
+            <input type="text" id="data" name="data" placeholder="dd/mm/aaaa" maxlength="10" required>
           </div>
 
           <div class="field-group">
             <label for="responsavel">Responsável *</label>
-            <input
-              type="text"
-              id="responsavel"
-              name="responsavel"
-              required
-              autocomplete="name"
-              placeholder="Nome completo"
-            >
-            <span class="helper">As primeiras letras de cada nome serão ajustadas para maiúsculas.</span>
+            <input type="text" id="responsavel" name="responsavel" placeholder="Nome completo" required>
           </div>
         </div>
 
         <section class="card-section">
           <h2 class="section-title">Itens do inventário</h2>
-          <p class="section-help">
-            Os itens abaixo são carregados automaticamente conforme o setor selecionado.
-            Use quantidade <strong>0</strong> quando não houver o item.
-          </p>
-
-          <div id="itensContainer" class="items-container">
-            <!-- Grupos e itens serão inseridos via JavaScript -->
-          </div>
+          <p class="section-help">Use 0 onde não houver o item.</p>
+          <div id="itensContainer" class="items-container"></div>
         </section>
 
         <section class="card-section">
           <h2 class="section-title">Itens extras</h2>
-          <p class="section-help">
-            Utilize os itens extras apenas para materiais que não estejam na lista original.
-            Esses itens aparecerão no relatório em PDF e no e-mail, mas não serão gravados na planilha.
-          </p>
+          <p class="section-help">Aparecem apenas no relatório, não vão para a planilha.</p>
 
           <div class="extras-grid">
             <div class="field-group">
-              <label for="extra_item_1">Item extra 1</label>
-              <input type="text" id="extra_item_1" name="extra_item_1" placeholder="Descrição do item">
+              <label>Item extra 1</label>
+              <input type="text" id="extra_item_1" name="extra_item_1">
             </div>
             <div class="field-group">
-              <label for="extra_qtd_1">Quantidade</label>
-              <input type="number" id="extra_qtd_1" name="extra_qtd_1" min="0" step="1" value="">
-            </div>
-
-            <div class="field-group">
-              <label for="extra_item_2">Item extra 2</label>
-              <input type="text" id="extra_item_2" name="extra_item_2" placeholder="Descrição do item">
-            </div>
-            <div class="field-group">
-              <label for="extra_qtd_2">Quantidade</label>
-              <input type="number" id="extra_qtd_2" name="extra_qtd_2" min="0" step="1" value="">
+              <label>Qtd</label>
+              <input type="number" id="extra_qtd_1" name="extra_qtd_1">
             </div>
 
             <div class="field-group">
-              <label for="extra_item_3">Item extra 3</label>
-              <input type="text" id="extra_item_3" name="extra_item_3" placeholder="Descrição do item">
+              <label>Item extra 2</label>
+              <input type="text" id="extra_item_2" name="extra_item_2">
             </div>
             <div class="field-group">
-              <label for="extra_qtd_3">Quantidade</label>
-              <input type="number" id="extra_qtd_3" name="extra_qtd_3" min="0" step="1" value="">
+              <label>Qtd</label>
+              <input type="number" id="extra_qtd_2" name="extra_qtd_2">
+            </div>
+
+            <div class="field-group">
+              <label>Item extra 3</label>
+              <input type="text" id="extra_item_3" name="extra_item_3">
+            </div>
+            <div class="field-group">
+              <label>Qtd</label>
+              <input type="number" id="extra_qtd_3" name="extra_qtd_3">
             </div>
           </div>
         </section>
 
         <div class="actions">
-          <button type="submit" id="btnEnviar" class="btn-primary">
-            Enviar contagem
-          </button>
+          <button type="submit" id="btnEnviar" class="btn-primary">Enviar contagem</button>
         </div>
 
         <div id="statusMsg" class="status-msg"></div>
+
       </form>
     </div>
   </div>
 
   <script>
-    // URL DO SEU WEB APP (BACKEND INVENTÁRIO)
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx7zO5sh3j9bmfnsKCxtKYOmKdXw-3Cnm11XfWCMOPjCRw9Ks1vWf5Y3YLdxxpWITTbMQ/exec';
+    const WEB_APP_URL =
+      "https://script.google.com/macros/s/AKfycbx7zO5sh3j9bmfnsKCxtKYOmKdXw-3Cnm11XfWCMOPjCRw9Ks1vWf5Y3YLdxxpWITTbMQ/exec";
 
-    const form = document.getElementById('inventarioForm');
-    const setorSelect = document.getElementById('setor');
-    const itensContainer = document.getElementById('itensContainer');
-    const btnEnviar = document.getElementById('btnEnviar');
-    const statusMsg = document.getElementById('statusMsg');
-    const responsavelInput = document.getElementById('responsavel');
-    const timestampCliente = document.getElementById('timestamp_cliente');
+    const form = document.getElementById("inventarioForm");
+    const itensContainer = document.getElementById("itensContainer");
+    const setorSelect = document.getElementById("setor");
+    const statusMsg = document.getElementById("statusMsg");
+    const btnEnviar = document.getElementById("btnEnviar");
+    const responsavelInput = document.getElementById("responsavel");
+    const timestampCliente = document.getElementById("timestamp_cliente");
 
-    // Preenche timestamp do cliente
-    if (timestampCliente) {
-      timestampCliente.value = new Date().toISOString();
-    }
+    timestampCliente.value = new Date().toISOString();
 
-    // Ajusta RESPONSÁVEL para Title Case ao sair do campo
     function toTitleCase(str) {
       return String(str)
         .toLowerCase()
         .replace(/(?:^|\s)\S/g, c => c.toUpperCase());
     }
 
-    if (responsavelInput) {
-      responsavelInput.addEventListener('blur', () => {
-        responsavelInput.value = toTitleCase(responsavelInput.value);
-      });
-    }
+    responsavelInput.addEventListener("blur", () => {
+      responsavelInput.value = toTitleCase(responsavelInput.value);
+    });
 
-    // Carrega itens conforme setor selecionado
     function carregarItensPorSetor() {
-      const setor = setorSelect ? setorSelect.value : 'SALÃO';
-      if (!itensContainer) return;
+      const setor = setorSelect.value;
+      itensContainer.innerHTML = "Carregando itens...";
 
-      itensContainer.innerHTML = '<div class="helper">Carregando itens do setor ' + setor + '...</div>';
-
-      fetch(WEB_APP_URL + '?mode=itens&setor=' + encodeURIComponent(setor))
+      fetch(WEB_APP_URL + "?mode=itens&setor=" + encodeURIComponent(setor))
         .then(r => r.json())
-        .then(json => {
-          if (!json || !Array.isArray(json.itens)) {
-            itensContainer.innerHTML = '<div class="helper">Nenhum item configurado para este setor.</div>';
-            return;
-          }
-          montarItens(json.itens);
-        })
-        .catch(err => {
-          console.error('Erro ao carregar itens do setor:', err);
-          itensContainer.innerHTML = '<div class="helper" style="color:#b3261e;">Erro ao carregar itens do setor. Tente novamente.</div>';
+        .then(json => montarItens(json.itens))
+        .catch(() => {
+          itensContainer.innerHTML =
+            "<div style='color:#b3261e'>Erro ao carregar itens do setor.</div>";
         });
     }
 
-    // Monta os itens agrupados por GRUPO
     function montarItens(itens) {
-      itensContainer.innerHTML = '';
+      itensContainer.innerHTML = "";
 
       if (!itens || itens.length === 0) {
-        itensContainer.innerHTML = '<div class="helper">Nenhum item encontrado para o setor selecionado.</div>';
+        itensContainer.innerHTML = "<div>Nenhum item encontrado.</div>";
         return;
       }
 
-      // Agrupa por grupo
       const grupos = {};
+
       itens.forEach(it => {
-        const grupo = it.grupo || 'Outros';
+        const grupo = it.grupo || "Outros";
         if (!grupos[grupo]) grupos[grupo] = [];
         grupos[grupo].push(it);
       });
 
-      // Ordena grupos por nome e itens por ordem
-      Object.keys(grupos).sort().forEach(grNome => {
-        const bloco = document.createElement('div');
-        bloco.className = 'group-block';
+      Object.keys(grupos)
+        .sort()
+        .forEach(grupo => {
+          const bloco = document.createElement("div");
+          bloco.className = "group-block";
 
-        const header = document.createElement('div');
-        header.className = 'group-header';
-        header.textContent = grNome;
-        bloco.appendChild(header);
+          const header = document.createElement("div");
+          header.className = "group-header";
+          header.textContent = grupo;
+          bloco.appendChild(header);
 
-        grupos[grNome]
-          .sort((a, b) => (Number(a.ordem || 0) - Number(b.ordem || 0)))
-          .forEach(item => {
-            const row = document.createElement('div');
-            row.className = 'item-row';
+          grupos[grupo]
+            .sort((a, b) => (Number(a.ordem || 0) - Number(b.ordem || 0)))
+            .forEach(item => {
+              const row = document.createElement("div");
+              row.className = "item-row";
 
-            const label = document.createElement('div');
-            label.className = 'item-label';
-            label.textContent = item.label || item.campo;
+              const label = document.createElement("div");
+              label.className = "item-label";
+              label.textContent = item.label;
 
-            const input = document.createElement('input');
-            input.type = 'number';
-            input.min = '0';
-            input.step = '1';
-            input.value = '0';
-            input.name = item.campo;
-            input.className = 'item-input';
+              const input = document.createElement("input");
+              input.type = "number";
+              input.min = "0";
+              input.step = "1";
+              input.value = "0";
+              input.name = item.campo;
+              input.className = "item-input";
 
-            row.appendChild(label);
-            row.appendChild(input);
-            bloco.appendChild(row);
-          });
+              row.appendChild(label);
+              row.appendChild(input);
+              bloco.appendChild(row);
+            });
 
-        itensContainer.appendChild(bloco);
-      });
+          itensContainer.appendChild(bloco);
+        });
     }
 
-    // Carrega itens ao abrir a página
-    window.addEventListener('load', carregarItensPorSetor);
+    setorSelect.addEventListener("change", carregarItensPorSetor);
+    window.addEventListener("load", carregarItensPorSetor);
 
-    // Recarrega itens ao trocar o setor
-    if (setorSelect) {
-      setorSelect.addEventListener('change', carregarItensPorSetor);
-    }
-
-    // Envio do formulário
+    // Envio sem finally()
     let enviando = false;
 
-    if (form) {
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        if (enviando) return;
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (enviando) return;
 
-        statusMsg.textContent = '';
-        statusMsg.className = 'status-msg';
+      statusMsg.textContent = "";
+      statusMsg.className = "status-msg";
 
-        // Garante que todos os inputs de número tenham valor (0 se vazio)
-        const numInputs = form.querySelectorAll('input[type="number"]');
-        numInputs.forEach(inp => {
-          if (inp.value === '') inp.value = '0';
-        });
+      // Campos numéricos → 0 se vazio
+      const nums = form.querySelectorAll('input[type="number"]');
+      nums.forEach(n => { if (n.value === "") n.value = "0"; });
 
-        // Extras: se tiver nome e quantidade vazia, também coloca 0
-        for (let i = 1; i <= 3; i++) {
-          const nome = form.querySelector('#extra_item_' + i);
-          const qtd  = form.querySelector('#extra_qtd_' + i);
-          if (nome && qtd && nome.value.trim() !== '' && qtd.value === '') {
-            qtd.value = '0';
+      // Extras → quantidade = 0 se nome preenchido
+      for (let i = 1; i <= 3; i++) {
+        const nome = document.getElementById("extra_item_" + i);
+        const qtd = document.getElementById("extra_qtd_" + i);
+        if (nome.value.trim() !== "" && qtd.value === "") qtd.value = "0";
+      }
+
+      timestampCliente.value = new Date().toISOString();
+
+      const formData = new FormData(form);
+      enviando = true;
+      btnEnviar.disabled = true;
+      btnEnviar.textContent = "Enviando...";
+
+      fetch(WEB_APP_URL, {
+        method: "POST",
+        body: formData
+      })
+        .then(r => r.json())
+        .then(json => {
+          if (json.status === "ok") {
+            statusMsg.textContent =
+              "Inventário registrado e relatório enviado com sucesso.";
+            statusMsg.classList.add("status-ok");
+          } else {
+            statusMsg.textContent =
+              "Erro ao enviar: " + (json.message || "tente novamente.");
+            statusMsg.classList.add("status-erro");
           }
-        }
-
-        // Atualiza timestamp_cliente no momento do envio (opcional)
-        if (timestampCliente) {
-          timestampCliente.value = new Date().toISOString();
-        }
-
-        const formData = new FormData(form);
-
-        enviando = true;
-        if (btnEnviar) {
-          btnEnviar.disabled = true;
-          btnEnviar.textContent = 'Enviando...';
-        }
-
-        fetch(WEB_APP_URL, {
-          method: 'POST',
-          body: formData
         })
-          .then(r => r.json())
-          .then(json => {
-            if (json.status === 'ok') {
-              statusMsg.textContent = 'Inventário registrado e relatório enviado com sucesso.';
-              statusMsg.classList.add('status-ok');
-              // Se quiser limpar quantidades, descomente:
-              // form.reset();
-              // carregarItensPorSetor();
-            } else {
-              statusMsg.textContent = 'Erro ao enviar: ' + (json.message || 'tente novamente.');
-              statusMsg.classList.add('status-erro');
-            }
-          })
-          .catch(err => {
-            console.error(err);
-            statusMsg.textContent = 'Falha na comunicação com o servidor. Verifique a conexão.';
-            statusMsg.classList.add('status-erro');
-          })
-          .finally(() => {
-            enviando = false;
-            if (btnEnviar) {
-              btnEnviar.disabled = false;
-              btnEnviar.textContent = 'Enviar contagem';
-            }
-          });
-      });
-    }
+        .catch(err => {
+          statusMsg.textContent =
+            "Falha na comunicação. Verifique a conexão.";
+          statusMsg.classList.add("status-erro");
+        })
+        .then(() => {
+          enviando = false;
+          btnEnviar.disabled = false;
+          btnEnviar.textContent = "Enviar contagem";
+        });
+    });
   </script>
 </body>
 </html>
