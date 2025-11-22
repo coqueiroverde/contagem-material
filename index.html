@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Inventário – Salão</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>Inventário – Grupo Coqueiro Verde</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     * { box-sizing: border-box; }
@@ -12,7 +12,8 @@
       --cv-green: #106c4a;
       --cv-green-dark: #0b4b33;
       --cv-bg: #f4f8f6;
-      --cv-border: #d7e3dd;
+      --cv-border: #cfd8d3;
+      --cv-soft: #eef5f1;
     }
 
     body {
@@ -23,40 +24,53 @@
       color: #000;
     }
 
-    .page { max-width: 1080px; margin: 0 auto; }
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
 
     .card {
       background: #fff;
-      border-radius: 14px;
-      padding: 24px 20px;
+      border-radius: 16px;
+      padding: 20px 18px 24px;
       box-shadow: 0 0 18px rgba(0,0,0,0.08);
       border-top: 6px solid var(--cv-green);
     }
 
-    h1 {
-      margin: 0 0 4px 0;
-      font-size: 22px;
-      color: var(--cv-green-dark);
-      text-align: center;
+    @media (min-width: 768px) {
+      .card {
+        padding: 24px 24px 28px;
+      }
     }
 
-    .subtitle {
-      text-align: center;
-      font-size: 13px;
-      color: #555;
+    .header {
       margin-bottom: 18px;
     }
 
-    .form-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 12px;
+    .title {
+      margin: 0 0 4px;
+      font-size: 20px;
+      color: var(--cv-green-dark);
     }
 
-    .form-field {
-      flex: 1 1 170px;
-      min-width: 150px;
+    .subtitle {
+      margin: 0;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 10px 16px;
+    }
+
+    @media (min-width: 640px) {
+      .form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .field-group {
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -68,553 +82,451 @@
       color: #333;
     }
 
-    select,
     input[type="text"],
-    input[type="number"] {
-      border-radius: 8px;
-      border: 1px solid var(--cv-border);
-      padding: 8px 10px;
+    input[type="number"],
+    select {
       font-size: 14px;
-      outline: none;
-      width: 100%;
-      background: #fff;
-    }
-
-    select:focus,
-    input:focus {
-      border-color: var(--cv-green);
-      box-shadow: 0 0 0 1px rgba(16,108,74,0.15);
-    }
-
-    .itens-card {
-      margin-top: 16px;
-      border-radius: 12px;
+      padding: 7px 9px;
+      border-radius: 10px;
       border: 1px solid var(--cv-border);
-      padding: 12px 10px 4px;
-      background: #ffffff;
+      outline: none;
     }
 
-    .itens-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      gap: 8px;
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      border-color: var(--cv-green);
+      box-shadow: 0 0 0 2px rgba(16,108,74,0.15);
     }
 
-    .itens-title {
+    .helper {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .card-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid #e1e6e3;
+    }
+
+    .section-title {
       font-size: 15px;
-      font-weight: 600;
+      margin: 0 0 6px;
       color: var(--cv-green-dark);
     }
 
-    .itens-status {
-      font-size: 11px;
-      color: #777;
-      text-align: right;
+    .section-help {
+      margin: 0 0 8px;
+      font-size: 12px;
+      color: #555;
     }
 
-    .grupo-title {
-      margin: 12px 0 4px;
+    .items-container {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .group-block {
+      border-radius: 12px;
+      border: 1px solid #dde5e0;
+      background: #fbfdfc;
+      padding: 10px 10px 8px;
+    }
+
+    .group-header {
       font-size: 13px;
-      font-weight: 600;
-      color: #444;
-      border-left: 3px solid var(--cv-green);
-      padding-left: 6px;
+      font-weight: 700;
+      color: var(--cv-green-dark);
+      margin-bottom: 6px;
     }
 
-    .extras-note {
-      font-size: 11px;
-      color: #666;
-      margin-bottom: 4px;
-      padding-left: 6px;
-    }
-
-    .item-grid {
+    .item-row {
       display: grid;
-      grid-template-columns: 3fr 1fr;
-      gap: 6px 10px;
+      grid-template-columns: 1fr 80px;
       align-items: center;
-      margin-bottom: 4px;
-      padding: 4px;
-      border-radius: 6px;
+      gap: 6px;
+      font-size: 13px;
+      padding: 3px 0;
     }
-
-    .item-grid:nth-child(odd) { background: #f9fbfa; }
 
     .item-label {
       font-size: 13px;
-      color: #333;
     }
 
-    .item-input input[type="number"] {
+    .item-input {
       text-align: right;
+    }
+
+    .extras-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    @media (min-width: 640px) {
+      .extras-grid {
+        grid-template-columns: 2fr 1fr;
+      }
     }
 
     .actions {
       margin-top: 18px;
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      border-radius: 999px;
-      border: none;
-      padding: 10px 20px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 0.15s ease, background 0.15s ease;
     }
 
     .btn-primary {
       background: var(--cv-green);
+      border-radius: 999px;
+      border: none;
+      padding: 8px 22px;
       color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
     }
 
-    .btn-primary:hover { background: var(--cv-green-dark); }
-
-    .btn-secondary {
-      background: #e8f2ed;
-      color: var(--cv-green-dark);
-    }
-
-    .btn[disabled] {
+    .btn-primary:disabled {
       opacity: 0.6;
-      cursor: not-allowed;
+      cursor: default;
     }
 
-    .message {
-      margin-top: 12px;
-      font-size: 13px;
-      padding: 8px 10px;
-      border-radius: 8px;
-      display: none;
+    .status-msg {
+      margin-top: 10px;
+      font-size: 12px;
     }
 
-    .message.ok {
-      background: #e6f4ea;
-      color: #185c37;
-      border: 1px solid #b7dec2;
-      display: block;
+    .status-ok {
+      color: #156c3a;
     }
 
-    .message.error {
-      background: #fdecea;
+    .status-erro {
       color: #b3261e;
-      border: 1px solid #f5c2c0;
-      display: block;
     }
 
-    @media (max-width: 600px) {
-      .item-grid { grid-template-columns: 2.5fr 1fr; }
-      .item-label { font-size: 12px; }
-      .card { padding: 20px 14px; }
+    .badge-setor {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e3f2eb;
+      color: var(--cv-green-dark);
+      margin-left: 4px;
     }
   </style>
 </head>
-
 <body>
   <div class="page">
     <div class="card">
-      <h1>Inventário – Salão</h1>
-      <div class="subtitle">
-        Grupo Coqueiro Verde – Preencha os dados e registre o inventário do setor.
-      </div>
+      <header class="header">
+        <h1 class="title">Inventário – Grupo Coqueiro Verde</h1>
+        <p class="subtitle">
+          Registro diário de materiais por unidade e setor.
+        </p>
+      </header>
 
-      <form id="form-inventario" method="post">
-        <!-- LINHA 1: UNIDADE + SETOR -->
-        <div class="form-row">
-          <div class="form-field">
-            <label for="unidade">Unidade</label>
+      <form id="inventarioForm">
+        <!-- Campos ocultos de controle -->
+        <input type="hidden" name="timestamp_cliente" id="timestamp_cliente">
+
+        <div class="form-grid">
+          <div class="field-group">
+            <label for="unidade">Unidade *</label>
             <select id="unidade" name="unidade" required>
-              <option value="" disabled selected>Selecione...</option>
-              <option value="P10">P10 – Parque 10</option>
-              <option value="P14">P14 – Praça 14</option>
+              <option value="">Selecione...</option>
+              <option value="P10">P10</option>
+              <option value="P14">P14</option>
+              <!-- se quiser, adicione outras unidades aqui -->
             </select>
           </div>
 
-          <div class="form-field">
-            <label for="setor">Setor</label>
+          <div class="field-group">
+            <label for="setor">
+              Setor *
+              <span class="badge-setor">SALÃO / COZINHA</span>
+            </label>
             <select id="setor" name="setor" required>
-              <option value="SALÃO" selected>SALÃO</option>
+              <option value="SALÃO">Salão</option>
+              <option value="COZINHA">Cozinha</option>
             </select>
           </div>
-        </div>
 
-        <!-- LINHA 2: RESPONSÁVEL + DATA -->
-        <div class="form-row">
-          <div class="form-field">
-            <label for="responsavel">Responsável</label>
-            <input
-              type="text"
-              id="responsavel"
-              name="responsavel"
-              placeholder="Nome de quem está contando"
-              required
-            />
-          </div>
-
-          <div class="form-field">
-            <label for="data">Data (dd/mm/aaaa)</label>
+          <div class="field-group">
+            <label for="data">Data *</label>
             <input
               type="text"
               id="data"
               name="data"
               placeholder="dd/mm/aaaa"
-              inputmode="numeric"
               required
-            />
+              inputmode="numeric"
+              maxlength="10"
+            >
+            <span class="helper">Use o formato dia/mês/ano.</span>
+          </div>
+
+          <div class="field-group">
+            <label for="responsavel">Responsável *</label>
+            <input
+              type="text"
+              id="responsavel"
+              name="responsavel"
+              required
+              autocomplete="name"
+              placeholder="Nome completo"
+            >
+            <span class="helper">As primeiras letras de cada nome serão ajustadas para maiúsculas.</span>
           </div>
         </div>
 
-        <!-- timestamp do cliente -->
-        <input type="hidden" id="timestamp_cliente" name="timestamp_cliente" />
+        <section class="card-section">
+          <h2 class="section-title">Itens do inventário</h2>
+          <p class="section-help">
+            Os itens abaixo são carregados automaticamente conforme o setor selecionado.
+            Use quantidade <strong>0</strong> quando não houver o item.
+          </p>
 
-        <!-- ITENS DO INVENTÁRIO -->
-        <div class="itens-card">
-          <div class="itens-header">
-            <div class="itens-title">Itens do inventário</div>
-            <div class="itens-status" id="itens-status-text">
-              Carregando itens do setor...
+          <div id="itensContainer" class="items-container">
+            <!-- Grupos e itens serão inseridos via JavaScript -->
+          </div>
+        </section>
+
+        <section class="card-section">
+          <h2 class="section-title">Itens extras</h2>
+          <p class="section-help">
+            Utilize os itens extras apenas para materiais que não estejam na lista original.
+            Esses itens aparecerão no relatório em PDF e no e-mail, mas não serão gravados na planilha.
+          </p>
+
+          <div class="extras-grid">
+            <div class="field-group">
+              <label for="extra_item_1">Item extra 1</label>
+              <input type="text" id="extra_item_1" name="extra_item_1" placeholder="Descrição do item">
+            </div>
+            <div class="field-group">
+              <label for="extra_qtd_1">Quantidade</label>
+              <input type="number" id="extra_qtd_1" name="extra_qtd_1" min="0" step="1" value="">
+            </div>
+
+            <div class="field-group">
+              <label for="extra_item_2">Item extra 2</label>
+              <input type="text" id="extra_item_2" name="extra_item_2" placeholder="Descrição do item">
+            </div>
+            <div class="field-group">
+              <label for="extra_qtd_2">Quantidade</label>
+              <input type="number" id="extra_qtd_2" name="extra_qtd_2" min="0" step="1" value="">
+            </div>
+
+            <div class="field-group">
+              <label for="extra_item_3">Item extra 3</label>
+              <input type="text" id="extra_item_3" name="extra_item_3" placeholder="Descrição do item">
+            </div>
+            <div class="field-group">
+              <label for="extra_qtd_3">Quantidade</label>
+              <input type="number" id="extra_qtd_3" name="extra_qtd_3" min="0" step="1" value="">
             </div>
           </div>
-
-          <div id="itens-container"></div>
-        </div>
+        </section>
 
         <div class="actions">
-          <button type="button" class="btn btn-secondary" id="btn-limpar">
-            Limpar
-          </button>
-          <button type="submit" class="btn btn-primary" id="btn-enviar">
+          <button type="submit" id="btnEnviar" class="btn-primary">
             Enviar contagem
           </button>
         </div>
 
-        <div id="mensagem-retorno" class="message"></div>
+        <div id="statusMsg" class="status-msg"></div>
       </form>
     </div>
   </div>
 
   <script>
-    const WEBAPP_BASE_URL =
-      'https://script.google.com/macros/s/AKfycbx7zO5sh3j9bmfnsKCxtKYOmKdXw-3Cnm11XfWCMOPjCRw9Ks1vWf5Y3YLdxxpWITTbMQ/exec';
+    // URL DO SEU WEB APP (BACKEND INVENTÁRIO)
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx7zO5sh3j9bmfnsKCxtKYOmKdXw-3Cnm11XfWCMOPjCRw9Ks1vWf5Y3YLdxxpWITTbMQ/exec';
 
-    const form = document.getElementById('form-inventario');
-    const itensContainer = document.getElementById('itens-container');
-    const itensStatusText = document.getElementById('itens-status-text');
-    const msgBox = document.getElementById('mensagem-retorno');
+    const form = document.getElementById('inventarioForm');
     const setorSelect = document.getElementById('setor');
-    const timestampInput = document.getElementById('timestamp_cliente');
-    const btnLimpar = document.getElementById('btn-limpar');
-    const btnEnviar = document.getElementById('btn-enviar');
-    const inputData = document.getElementById('data');
-    const inputResponsavel = document.getElementById('responsavel');
+    const itensContainer = document.getElementById('itensContainer');
+    const btnEnviar = document.getElementById('btnEnviar');
+    const statusMsg = document.getElementById('statusMsg');
+    const responsavelInput = document.getElementById('responsavel');
+    const timestampCliente = document.getElementById('timestamp_cliente');
 
-    form.action = WEBAPP_BASE_URL;
+    // Preenche timestamp do cliente
+    if (timestampCliente) {
+      timestampCliente.value = new Date().toISOString();
+    }
 
-    // Flag de controle para evitar duplo envio
-    let enviando = false;
-
-    const preposicoes = ['de','da','do','das','dos','e','em','para','por'];
-
-    function titleCaseNome(str) {
-      if (!str) return '';
-      return str
+    // Ajusta RESPONSÁVEL para Title Case ao sair do campo
+    function toTitleCase(str) {
+      return String(str)
         .toLowerCase()
-        .split(/\s+/)
-        .filter(p => p.trim() !== '')
-        .map((p, idx) => {
-          if (preposicoes.includes(p) && idx !== 0) return p;
-          return p.charAt(0).toUpperCase() + p.slice(1);
+        .replace(/(?:^|\s)\S/g, c => c.toUpperCase());
+    }
+
+    if (responsavelInput) {
+      responsavelInput.addEventListener('blur', () => {
+        responsavelInput.value = toTitleCase(responsavelInput.value);
+      });
+    }
+
+    // Carrega itens conforme setor selecionado
+    function carregarItensPorSetor() {
+      const setor = setorSelect ? setorSelect.value : 'SALÃO';
+      if (!itensContainer) return;
+
+      itensContainer.innerHTML = '<div class="helper">Carregando itens do setor ' + setor + '...</div>';
+
+      fetch(WEB_APP_URL + '?mode=itens&setor=' + encodeURIComponent(setor))
+        .then(r => r.json())
+        .then(json => {
+          if (!json || !Array.isArray(json.itens)) {
+            itensContainer.innerHTML = '<div class="helper">Nenhum item configurado para este setor.</div>';
+            return;
+          }
+          montarItens(json.itens);
         })
-        .join(' ');
+        .catch(err => {
+          console.error('Erro ao carregar itens do setor:', err);
+          itensContainer.innerHTML = '<div class="helper" style="color:#b3261e;">Erro ao carregar itens do setor. Tente novamente.</div>';
+        });
     }
 
-    // Aplica Title Case ao sair do campo
-    inputResponsavel.addEventListener('blur', () => {
-      inputResponsavel.value = titleCaseNome(inputResponsavel.value);
-    });
-
-    function hojeEmBr() {
-      const hoje = new Date();
-      const d = String(hoje.getDate()).padStart(2, '0');
-      const m = String(hoje.getMonth() + 1).padStart(2, '0');
-      const a = hoje.getFullYear();
-      return `${d}/${m}/${a}`;
-    }
-
-    function preencherDataHoje() {
-      inputData.value = hojeEmBr();
-    }
-
-    function atualizarTimestampCliente() {
-      timestampInput.value = new Date().toISOString();
-    }
-
-    function dataBrValida(str) {
-      const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(str);
-      if (!m) return false;
-      const d = parseInt(m[1], 10);
-      const mo = parseInt(m[2], 10) - 1;
-      const y = parseInt(m[3], 10);
-      const dt = new Date(y, mo, d);
-      return (
-        dt.getFullYear() === y &&
-        dt.getMonth() === mo &&
-        dt.getDate() === d
-      );
-    }
-
-    function normalizarTexto(texto) {
-      let s = String(texto).toLowerCase();
-      s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      s = s.replace(/[\s\-]+/g, '_');
-      s = s.replace(/[^a-z0-9_]/g, '');
-      return s;
-    }
-
-    async function carregarItensDoSetor(setor) {
+    // Monta os itens agrupados por GRUPO
+    function montarItens(itens) {
       itensContainer.innerHTML = '';
-      itensStatusText.textContent = 'Carregando itens do setor...';
 
-      try {
-        const url = `${WEBAPP_BASE_URL}?mode=itens&setor=${encodeURIComponent(setor)}`;
-        const resp = await fetch(url, { method: 'GET', cache: 'no-cache' });
+      if (!itens || itens.length === 0) {
+        itensContainer.innerHTML = '<div class="helper">Nenhum item encontrado para o setor selecionado.</div>';
+        return;
+      }
 
-        if (!resp.ok) {
-          throw new Error('Erro ao buscar itens. Código: ' + resp.status);
-        }
+      // Agrupa por grupo
+      const grupos = {};
+      itens.forEach(it => {
+        const grupo = it.grupo || 'Outros';
+        if (!grupos[grupo]) grupos[grupo] = [];
+        grupos[grupo].push(it);
+      });
 
-        const data = await resp.json();
-        const itens = data.itens || [];
+      // Ordena grupos por nome e itens por ordem
+      Object.keys(grupos).sort().forEach(grNome => {
+        const bloco = document.createElement('div');
+        bloco.className = 'group-block';
 
-        if (!itens.length) {
-          itensStatusText.textContent = 'Nenhum item configurado para este setor.';
-          return;
-        }
+        const header = document.createElement('div');
+        header.className = 'group-header';
+        header.textContent = grNome;
+        bloco.appendChild(header);
 
-        itensStatusText.textContent = `Total de itens: ${itens.length}`;
-
-        const grupos = {};
-        itens.forEach(it => {
-          const grupo = it.grupo || 'Sem grupo';
-          if (!grupos[grupo]) grupos[grupo] = [];
-          grupos[grupo].push(it);
-        });
-
-        Object.keys(grupos).forEach(grupo => {
-          grupos[grupo].sort((a, b) => {
-            const oa = Number(a.ordem || 0);
-            const ob = Number(b.ordem || 0);
-            return oa - ob;
-          });
-        });
-
-        // Monta grupos e itens
-        Object.keys(grupos).forEach(grupo => {
-          const grupoTitle = document.createElement('div');
-          grupoTitle.className = 'grupo-title';
-          grupoTitle.textContent = grupo;
-          itensContainer.appendChild(grupoTitle);
-
-          grupos[grupo].forEach(it => {
-            const labelTexto = it.label || it.campo || 'Item';
-            const nomeCampo = it.campo || normalizarTexto(labelTexto);
-
+        grupos[grNome]
+          .sort((a, b) => (Number(a.ordem || 0) - Number(b.ordem || 0)))
+          .forEach(item => {
             const row = document.createElement('div');
-            row.className = 'item-grid';
+            row.className = 'item-row';
 
-            const labelDiv = document.createElement('div');
-            labelDiv.className = 'item-label';
-            labelDiv.textContent = labelTexto;
-
-            const inputDiv = document.createElement('div');
-            inputDiv.className = 'item-input';
+            const label = document.createElement('div');
+            label.className = 'item-label';
+            label.textContent = item.label || item.campo;
 
             const input = document.createElement('input');
             input.type = 'number';
             input.min = '0';
             input.step = '1';
-            input.name = nomeCampo;
-            input.inputMode = 'numeric';
-            input.placeholder = '0';
+            input.value = '0';
+            input.name = item.campo;
+            input.className = 'item-input';
 
-            inputDiv.appendChild(input);
-            row.appendChild(labelDiv);
-            row.appendChild(inputDiv);
-
-            itensContainer.appendChild(row);
+            row.appendChild(label);
+            row.appendChild(input);
+            bloco.appendChild(row);
           });
-        });
 
-        // ITENS EXTRAS – APENAS UMA VEZ, NO FINAL
-        const extrasTitle = document.createElement('div');
-        extrasTitle.className = 'grupo-title';
-        extrasTitle.textContent = 'Itens Extras';
-        itensContainer.appendChild(extrasTitle);
-
-        const extrasNote = document.createElement('div');
-        extrasNote.className = 'extras-note';
-        extrasNote.textContent = 'Utilize estes campos para itens que não estejam na lista acima.';
-        itensContainer.appendChild(extrasNote);
-
-        for (let i = 1; i <= 3; i++) {
-          const row = document.createElement('div');
-          row.className = 'item-grid';
-
-          const labelDiv = document.createElement('div');
-          labelDiv.className = 'item-label';
-
-          const nomeExtra = document.createElement('input');
-          nomeExtra.type = 'text';
-          nomeExtra.name = `extra_item_${i}`;
-          nomeExtra.placeholder = 'Descreva o item não listado';
-          nomeExtra.style.width = '100%';
-          nomeExtra.style.border = '1px solid var(--cv-border)';
-          nomeExtra.style.borderRadius = '6px';
-          nomeExtra.style.padding = '6px 8px';
-
-          labelDiv.appendChild(nomeExtra);
-
-          const inputDiv = document.createElement('div');
-          inputDiv.className = 'item-input';
-
-          const qtdExtra = document.createElement('input');
-          qtdExtra.type = 'number';
-          qtdExtra.name = `extra_qtd_${i}`;
-          qtdExtra.min = '0';
-          qtdExtra.step = '1';
-          qtdExtra.placeholder = '0';
-
-          inputDiv.appendChild(qtdExtra);
-
-          row.appendChild(labelDiv);
-          row.appendChild(inputDiv);
-
-          itensContainer.appendChild(row);
-        }
-
-      } catch (erro) {
-        console.error(erro);
-        itensStatusText.textContent = 'Erro ao carregar itens. Verifique o backend.';
-      }
+        itensContainer.appendChild(bloco);
+      });
     }
 
-    setorSelect.addEventListener('change', () => {
-      const setor = setorSelect.value || 'SALÃO';
-      carregarItensDoSetor(setor);
-    });
+    // Carrega itens ao abrir a página
+    window.addEventListener('load', carregarItensPorSetor);
 
-    btnLimpar.addEventListener('click', () => {
-      if (enviando) return; // evita limpar no meio do envio
-      form.reset();
-      preencherDataHoje();
-      atualizarTimestampCliente();
-      msgBox.style.display = 'none';
-      const setor = setorSelect.value || 'SALÃO';
-      carregarItensDoSetor(setor);
-    });
+    // Recarrega itens ao trocar o setor
+    if (setorSelect) {
+      setorSelect.addEventListener('change', carregarItensPorSetor);
+    }
 
-    form.addEventListener('submit', async event => {
-      event.preventDefault();
-      msgBox.style.display = 'none';
+    // Envio do formulário
+    let enviando = false;
 
-      if (enviando) return;
-      enviando = true;
-      btnEnviar.disabled = true;
-      btnLimpar.disabled = true;
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (enviando) return;
 
-      atualizarTimestampCliente();
+        statusMsg.textContent = '';
+        statusMsg.className = 'status-msg';
 
-      if (
-        !form.unidade.value ||
-        !form.setor.value ||
-        !inputResponsavel.value.trim() ||
-        !inputData.value.trim()
-      ) {
-        msgBox.textContent = 'Preencha todos os campos obrigatórios.';
-        msgBox.className = 'message error';
-        enviando = false;
-        btnEnviar.disabled = false;
-        btnLimpar.disabled = false;
-        return;
-      }
-
-      if (!dataBrValida(inputData.value.trim())) {
-        msgBox.textContent = 'Data inválida. Use o formato dd/mm/aaaa.';
-        msgBox.className = 'message error';
-        enviando = false;
-        btnEnviar.disabled = false;
-        btnLimpar.disabled = false;
-        return;
-      }
-
-      // Title Case no envio
-      inputResponsavel.value = titleCaseNome(inputResponsavel.value);
-
-      // Nenhum campo numérico em branco: vira 0
-      const numeros = form.querySelectorAll('input[type="number"]');
-      numeros.forEach(inp => {
-        if (!inp.value || String(inp.value).trim() === '') {
-          inp.value = '0';
-        }
-      });
-
-      itensStatusText.textContent = 'Enviando inventário...';
-
-      try {
-        const formData = new FormData(form);
-
-        const resp = await fetch(WEBAPP_BASE_URL, {
-          method: 'POST',
-          body: formData
+        // Garante que todos os inputs de número tenham valor (0 se vazio)
+        const numInputs = form.querySelectorAll('input[type="number"]');
+        numInputs.forEach(inp => {
+          if (inp.value === '') inp.value = '0';
         });
 
-        const texto = await resp.text();
-        let data;
-        try {
-          data = JSON.parse(texto);
-        } catch (e) {
-          data = { status: 'desconhecido', message: texto };
+        // Extras: se tiver nome e quantidade vazia, também coloca 0
+        for (let i = 1; i <= 3; i++) {
+          const nome = form.querySelector('#extra_item_' + i);
+          const qtd  = form.querySelector('#extra_qtd_' + i);
+          if (nome && qtd && nome.value.trim() !== '' && qtd.value === '') {
+            qtd.value = '0';
+          }
         }
 
-        if (data.status === 'ok') {
-          msgBox.textContent = data.message || 'Inventário registrado com sucesso.';
-          msgBox.className = 'message ok';
-          form.reset();
-          preencherDataHoje();
-          atualizarTimestampCliente();
-          const setor = setorSelect.value || 'SALÃO';
-          carregarItensDoSetor(setor);
-        } else {
-          msgBox.textContent = data.message || 'Ocorreu um erro ao registrar o inventário.';
-          msgBox.className = 'message error';
+        // Atualiza timestamp_cliente no momento do envio (opcional)
+        if (timestampCliente) {
+          timestampCliente.value = new Date().toISOString();
         }
-      } catch (erro) {
-        console.error(erro);
-        msgBox.textContent = 'Erro de conexão ao enviar o inventário. Tente novamente.';
-        msgBox.className = 'message error';
-      } finally {
-        enviando = false;
-        btnEnviar.disabled = false;
-        btnLimpar.disabled = false;
-        itensStatusText.textContent = 'Itens do inventário carregados.';
-      }
-    });
 
-    window.addEventListener('DOMContentLoaded', () => {
-      preencherDataHoje();
-      atualizarTimestampCliente();
-      const setorInicial = setorSelect.value || 'SALÃO';
-      carregarItensDoSetor(setorInicial);
-    });
+        const formData = new FormData(form);
+
+        enviando = true;
+        if (btnEnviar) {
+          btnEnviar.disabled = true;
+          btnEnviar.textContent = 'Enviando...';
+        }
+
+        fetch(WEB_APP_URL, {
+          method: 'POST',
+          body: formData
+        })
+          .then(r => r.json())
+          .then(json => {
+            if (json.status === 'ok') {
+              statusMsg.textContent = 'Inventário registrado e relatório enviado com sucesso.';
+              statusMsg.classList.add('status-ok');
+              // Se quiser limpar quantidades, descomente:
+              // form.reset();
+              // carregarItensPorSetor();
+            } else {
+              statusMsg.textContent = 'Erro ao enviar: ' + (json.message || 'tente novamente.');
+              statusMsg.classList.add('status-erro');
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            statusMsg.textContent = 'Falha na comunicação com o servidor. Verifique a conexão.';
+            statusMsg.classList.add('status-erro');
+          })
+          .finally(() => {
+            enviando = false;
+            if (btnEnviar) {
+              btnEnviar.disabled = false;
+              btnEnviar.textContent = 'Enviar contagem';
+            }
+          });
+      });
+    }
   </script>
 </body>
 </html>
